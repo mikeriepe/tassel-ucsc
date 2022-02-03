@@ -15,6 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 
+import { Link } from 'react-router-dom';
+
 import logo from '../assets/ucsc.svg';
 import '../stylesheets/NavBar.css';
 
@@ -38,10 +40,21 @@ export default function NavBar() {
     handleMobileMenuClose();
   };
 
+  const handleProfileOpen = () => {
+    // TODO
+    handleMenuClose();
+  }
+
+  const handleLogOut = () => {
+    // TODO
+    handleMenuClose();
+  }
+
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  // MENU FOR PROFILE
   const menuId = 'profile-menu';
   const renderMenu = (
     <Menu
@@ -59,8 +72,13 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      <Link className='link' to="/myprofile">
+        <MenuItem onClick={handleProfileOpen}>My Profile</MenuItem>
+      </Link>
+      {/* TODO: probably don't want to immediately redirect to landing page */}
+      <Link className='link' to="/">
+        <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+      </Link>
     </Menu>
   );
 
@@ -82,12 +100,14 @@ export default function NavBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" color="inherit">
-          <PersonSearchIcon />
-        </IconButton>
-        <p>Browse</p>
-      </MenuItem>
+      <Link className='link' to="/browse">
+        <MenuItem>
+          <IconButton size="large" color="inherit">
+            <PersonSearchIcon />
+          </IconButton>
+          <p>Browse</p>
+        </MenuItem>
+      </Link>
       <MenuItem>
         <IconButton
           size="large"
@@ -131,23 +151,17 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography> */}
           <img className='logo' src={logo}></img>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* mail button */}
-            <Tooltip title="Browse">
-              <IconButton size="large" color="inherit">
-                <PersonSearchIcon />
-              </IconButton>
-            </Tooltip>
+            {/* browse button */}
+            <Link className='link' to="/browse">
+              <Tooltip className="link-displace" title="Browse">
+                <IconButton size="large" color="inherit">
+                  <PersonSearchIcon />
+                </IconButton>
+              </Tooltip>
+            </Link>
             {/* messages button */}
             <Tooltip title="Messages">
               <IconButton
