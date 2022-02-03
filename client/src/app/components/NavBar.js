@@ -15,8 +15,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 
-import logo from '../ucsc.svg';
-import './NavBar.css';
+import logo from '../assets/ucsc.svg';
+import '../stylesheets/NavBar.css';
 
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
