@@ -6,9 +6,14 @@ import { render } from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
+import theme from './app/Theme';
+import { ThemeProvider } from '@mui/material/styles';
+
 render((
   <BrowserRouter>
+    <ThemeProvider theme={theme}>
       <App/>
+    </ThemeProvider>
   </BrowserRouter>
 ), document.getElementById('root'));
 
