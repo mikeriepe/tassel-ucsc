@@ -13,6 +13,10 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Tooltip from '@mui/material/Tooltip';
+
+import logo from '../ucsc.svg';
+import './NavBar.css';
 
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,7 +42,7 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'profile-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -60,7 +64,8 @@ export default function NavBar() {
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  // MOBILE MENU
+  const mobileMenuId = 'navbar-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -110,7 +115,7 @@ export default function NavBar() {
         <IconButton
           size="large"
           aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
+          aria-controls="profile-menu"
           aria-haspopup="true"
           color="inherit"
         >
@@ -121,44 +126,52 @@ export default function NavBar() {
     </Menu>
   );
 
+  // FULL NAVBAR
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
+          {/* <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
             MUI
-          </Typography>
+          </Typography> */}
+          <img className='logo' src={logo}></img>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* mail button */}
-            <IconButton size="large" color="inherit">
-              <PersonSearchIcon />
-            </IconButton>
-            {/* chat button */}
-            <IconButton
-              size="large"
-              aria-label="show 17 new messages"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <ChatBubbleIcon />
-              </Badge>
-            </IconButton>
+            <Tooltip title="Browse">
+              <IconButton size="large" color="inherit">
+                <PersonSearchIcon />
+              </IconButton>
+            </Tooltip>
+            {/* messages button */}
+            <Tooltip title="Messages">
+              <IconButton
+                size="large"
+                aria-label="show 17 new messages"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <ChatBubbleIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
             {/* notification button */}
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Tooltip title="Notifications">
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
             {/* account icon */}
             <IconButton
               size="large"
