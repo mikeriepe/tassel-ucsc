@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class MyProfile extends Component {
-  render() {
+export default function MyProfile() {
     return (
     <div>
       <h1>My Profile</h1>
     </div>
     );
-  }
 }
-export default MyProfile;

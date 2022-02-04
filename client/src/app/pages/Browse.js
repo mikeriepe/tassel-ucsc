@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class Browse extends Component {
-  render() {
+export default function Browse() {
     return (
     <div>
       <h1>Browse</h1>
     </div>
     );
-  }
 }
-export default Browse;

@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class GetStarted extends Component {
-  render() {
+export default function GetStarted() {
     return (
     <div>
       <h1>Get Started</h1>
     </div>
     );
-  }
 }
-export default GetStarted;
