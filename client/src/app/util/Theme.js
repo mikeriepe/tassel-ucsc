@@ -14,4 +14,4 @@ const themeOptions = {
 
 const theme = createTheme(themeOptions);
 
-export default theme
+export default theme;

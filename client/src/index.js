@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
-import theme from './app/Theme';
+import theme from './app/util/Theme';
 import { ThemeProvider } from '@mui/material/styles';
 
 render((

@@ -75,7 +75,7 @@ export default function NavBar() {
       <Link className='link' to="/myprofile">
         <MenuItem onClick={handleProfileOpen}>My Profile</MenuItem>
       </Link>
-      {/* TODO: probably don't want to immediately redirect to landing page */}
+      {/* TODO: just in case we don't want to immediately redirect to landing page */}
       <Link className='link' to="/">
         <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
       </Link>
