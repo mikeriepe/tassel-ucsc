@@ -3,7 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -15,11 +14,15 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import logo from '../assets/ucsc.svg';
 import '../stylesheets/NavBar.css';
 
+/**
+ * creates navbar
+ * @return {HTML} navbar component
+ */
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -43,12 +46,12 @@ export default function NavBar() {
   const handleProfileOpen = () => {
     // TODO
     handleMenuClose();
-  }
+  };
 
   const handleLogOut = () => {
     // TODO
     handleMenuClose();
-  }
+  };
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -75,7 +78,6 @@ export default function NavBar() {
       <Link className='link' to="/myprofile">
         <MenuItem onClick={handleProfileOpen}>My Profile</MenuItem>
       </Link>
-      {/* TODO: just in case we don't want to immediately redirect to landing page */}
       <Link className='link' to="/">
         <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
       </Link>
@@ -148,12 +150,12 @@ export default function NavBar() {
 
   // FULL NAVBAR
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
         <Toolbar>
           <img className='logo' src={logo}></img>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{flexGrow: 1}} />
+          <Box sx={{display: {xs: 'none', md: 'flex'}}}>
             {/* browse button */}
             <Link className='link' to="/browse">
               <Tooltip className="link-displace" title="Browse">
@@ -199,7 +201,7 @@ export default function NavBar() {
               <Avatar alt="Remy Sharp"/>
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{display: {xs: 'flex', md: 'none'}}}>
             <IconButton
               size="large"
               aria-label="show more"
