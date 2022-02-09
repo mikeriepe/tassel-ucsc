@@ -1,4 +1,5 @@
 import * as React from 'react';
+import '../stylesheets/MyProfile.css';
 
 /**
  * creates the profile page
@@ -6,7 +7,7 @@ import * as React from 'react';
  */
 export default function MyProfile() {
   return (
-    <div>
+    <div className='MyProfile'>
       <h1>My Profile</h1>
     </div>
   );

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import '../stylesheets/Landing.css';
 
 /**
  * creates landing page
@@ -6,8 +7,11 @@ import * as React from 'react';
  */
 export default function Landing() {
   return (
-    <div>
-      <h1>Landing Page</h1>
+    <div className='Landing'>
+      <div className='title'>
+        <h1 className='ACmmTitle'>AC Match Maker</h1>
+        <h2 className='secondaryTitle'>connect students with alumni</h2>
+      </div>
     </div>
   );
 }

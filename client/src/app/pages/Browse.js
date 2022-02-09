@@ -1,4 +1,6 @@
 import * as React from 'react';
+import '../stylesheets/Browse.css';
+
 
 /**
  * returns Browsing page
@@ -6,7 +8,7 @@ import * as React from 'react';
  */
 export default function Browse() {
   return (
-    <div>
+    <div className='Browse'>
       <h1>Browse</h1>
     </div>
   );

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import '../stylesheets/GetStarted.css';
 
 /**
  * creates get started page
@@ -6,7 +7,7 @@ import * as React from 'react';
  */
 export default function GetStarted() {
   return (
-    <div>
+    <div className='GetStarted'>
       <h1>Get Started</h1>
     </div>
   );

@@ -1,5 +1,7 @@
-import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import React, {useState} from 'react';
+import {Route, Routes} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './stylesheets/App.css';
 
 import NavBar from './components/NavBar';
@@ -14,16 +16,19 @@ import Browse from './pages/Browse';
  * @return {HTML} App component
  */
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <div>
-      <NavBar/>
-      <Switch>
-        <Route exact path='/' component={Landing}/>
-        <Route exact path='/login' component={Login}/>
-        <Route expact path='/getstarted' component={GetStarted}/>
-        <Route expact path='/myprofile' component={MyProfile}/>
-        <Route expact path='/browse' component={Browse}/>
-      </Switch>
+      <ToastContainer />
+      <NavBar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+      <Routes>
+        <Route path='/' element={<Landing />}/>
+        <Route path='/login' element={<Login />}/>
+        <Route path='/getstarted' element={<GetStarted />}/>
+        <Route path='/myprofile' element={<MyProfile />}/>
+        <Route path='/browse' element={<Browse />}/>
+      </Routes>
     </div>
   );
 }
