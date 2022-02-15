@@ -1,0 +1,89 @@
+
+.LoginPage {
+    background: url("../assets/UCSC_entrance_sign.jpeg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
+
+.LoginPage__link {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    max-height: 18px;
+    
+}
+
+.LoginPage_radio {
+    position: relative;
+    top: 60px;
+} 
+
+.LoginPage__body {
+    z-index: 1;
+    height: 600px;
+    width: 400px;
+    padding-top: 40px;
+    background: #dbd8d8;
+    top: 20%;
+    left: 40%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    border-radius: 8px;
+    -webkit-box-shadow: -3px 5px 8px 0px rgba(84, 84, 84, 0.81); 
+    box-shadow: -3px 5px 8px 0px rgba(84, 84, 84, 0.81);
+}
+
+.LoginPage__label {
+    position: relative;
+    top: 70px;
+    margin-bottom: 20px;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #dbd8d8 inset !important;
+    box-shadow:0 0 0 30px #dbd8d8 inset !important;
+}
+
+.LoginPage__input {
+    position: relative;
+    display: flex;
+    border-top: 1px transparent;
+    border-left: 1px transparent;
+    border-right: 1px transparent;
+    border-bottom: 1px solid #454545;
+    outline: none;
+    font-size: 25px;
+    width: auto;
+    background-color:  transparent;
+    margin-bottom: 15px;
+
+}
+
+.LoginPage__topText {
+    font-size: 50px;
+    position: relative;
+    top: 10px;
+    justify-content: center;
+    display: flex;
+}
+
+.LoginPage__submitButton {
+    cursor: pointer;
+    position: relative;
+    top: 75px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: 1px solid #454545;
+    color: #454545;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 8px;
+}

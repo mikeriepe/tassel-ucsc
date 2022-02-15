@@ -13,7 +13,6 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
-
 import {Link} from 'react-router-dom';
 
 import logo from '../assets/ucsc.svg';
@@ -23,7 +22,7 @@ import '../stylesheets/NavBar.css';
  * creates navbar
  * @return {HTML} navbar component
  */
-export default function NavBar() {
+export default function NavBar({loggedIn, setLoggedIn}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -75,12 +74,30 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link className='link' to="/myprofile">
-        <MenuItem onClick={handleProfileOpen}>My Profile</MenuItem>
-      </Link>
-      <Link className='link' to="/">
-        <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
-      </Link>
+      {!loggedIn &&
+        <div>
+          <Link className='link' to="/login"
+            state={{signUp: false}}
+          >
+            <MenuItem>Log In</MenuItem>
+          </Link>
+          <Link className='link' to="/login"
+            state={{signUp: true}}
+          >
+            <MenuItem>Sign up</MenuItem>
+          </Link>
+        </div>
+      }
+      {loggedIn &&
+        <div>
+          <Link className='link' to="/myprofile">
+            <MenuItem onClick={handleProfileOpen}>My Profile</MenuItem>
+          </Link>
+          <Link className='link' to="/">
+            <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+          </Link>
+        </div>
+      }
     </Menu>
   );
 
