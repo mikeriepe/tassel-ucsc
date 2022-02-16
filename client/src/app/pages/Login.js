@@ -48,13 +48,13 @@ export default function Login() {
 
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
-      login('usertest', 'password');
+      login();
     }
   };
 
   const handleEnterNewAccount = (e) => {
     if (e.key === 'Enter') {
-      login('usertest', 'password');
+      login();
     }
   };
 
