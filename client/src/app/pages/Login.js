@@ -2,13 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Stack} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import {toast} from 'react-toastify';
 import '../stylesheets/Login.css';
+
+import useAuth from '../util/AuthContext';
 
 /**
  * creates login page
@@ -18,6 +15,9 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
+
+  const {user, setUser, setLoggedIn} = useAuth();
+  console.log(user);
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -49,7 +49,7 @@ export default function Login() {
 
   const handleEnterNewAccount = (e) => {
     if (e.key === 'Enter') {
-      login();
+      createUser();
     }
   };
 
@@ -85,6 +85,8 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
+          setUser(json);
+          setLoggedIn(true);
           navigate(`/`);
         });
   };
@@ -113,6 +115,8 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
+          setLoggedIn(true);
+          setUser(json);
           navigate(`/`);
         })
         .catch((err) => {
@@ -188,33 +192,6 @@ export default function Login() {
               onKeyDown={handleEnterNewAccount}
             />
           </label>
-          <FormControl className="LoginPage_radio">
-            <FormLabel id="radio-buttons-group-label">Account Type</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="radio-buttons-group-label"
-              defaultValue="volunteer"
-              name="usertype"
-              value={newAccountCredentials.usertype}
-              onChange={handleChangeNewAccount}
-            >
-              <FormControlLabel
-                value="volunteer"
-                control={<Radio />}
-                label="Volunteer"
-              />
-              <FormControlLabel
-                value="sponsor"
-                control={<Radio />}
-                label="Sponsor"
-              />
-              <FormControlLabel
-                value="admin"
-                control={<Radio />}
-                label="Admin"
-              />
-            </RadioGroup>
-          </FormControl>
 
           <button
             className="LoginPage__submitButton"
