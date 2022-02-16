@@ -10,6 +10,8 @@ import FormLabel from '@mui/material/FormLabel';
 import {toast} from 'react-toastify';
 import '../stylesheets/Login.css';
 
+import useAuth from '../util/AuthContext';
+
 /**
  * creates login page
  * @return {HTML} login page
@@ -18,6 +20,9 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
+
+  const {user, setUser} = useAuth();
+  console.log(user);
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -85,6 +90,7 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
+          setUser(newAccountCredentials.useremail);
           navigate(`/`);
         });
   };
@@ -113,6 +119,7 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
+          setUser(accountLoginCredentials.useremail);
           navigate(`/`);
         })
         .catch((err) => {
