@@ -168,7 +168,13 @@ export default function NavBar({loggedIn, setLoggedIn}) {
   // FULL NAVBAR
   return (
     <Box sx={{flexGrow: 1}}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          background: 'white',
+          borderBottom: '0.5px solid #D1D1D1',
+          boxShadow: '0',
+        }}>
         <Toolbar>
           <img className='logo' src={logo}></img>
           <Box sx={{flexGrow: 1}} />

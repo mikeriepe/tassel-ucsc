@@ -9,7 +9,6 @@ import GetStarted from './pages/GetStarted';
 import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
 import Browse from './pages/Browse';
-
 /**
  * returns basic routes and navbar of app
  * @return {HTML} App component
