@@ -54,7 +54,7 @@ export default function Login() {
 
   const handleEnterNewAccount = (e) => {
     if (e.key === 'Enter') {
-      login();
+      createUser();
     }
   };
 
@@ -195,33 +195,6 @@ export default function Login() {
               onKeyDown={handleEnterNewAccount}
             />
           </label>
-          <FormControl className="LoginPage_radio">
-            <FormLabel id="radio-buttons-group-label">Account Type</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="radio-buttons-group-label"
-              defaultValue="volunteer"
-              name="usertype"
-              value={newAccountCredentials.usertype}
-              onChange={handleChangeNewAccount}
-            >
-              <FormControlLabel
-                value="volunteer"
-                control={<Radio />}
-                label="Volunteer"
-              />
-              <FormControlLabel
-                value="sponsor"
-                control={<Radio />}
-                label="Sponsor"
-              />
-              <FormControlLabel
-                value="admin"
-                control={<Radio />}
-                label="Admin"
-              />
-            </RadioGroup>
-          </FormControl>
 
           <button
             className="LoginPage__submitButton"
