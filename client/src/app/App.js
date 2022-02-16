@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+// import React, {useState} from 'react';
+import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,17 +12,17 @@ import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
 import Browse from './pages/Browse';
 
+import {AuthProvider} from './util/AuthContext';
+
 /**
  * returns basic routes and navbar of app
  * @return {HTML} App component
  */
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-
   return (
-    <div>
+    <AuthProvider>
       <ToastContainer />
-      <NavBar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+      <NavBar/>
       <Routes>
         <Route path='/' element={<Landing />}/>
         <Route path='/login' element={<Login />}/>
@@ -29,6 +30,6 @@ export default function App() {
         <Route path='/myprofile' element={<MyProfile />}/>
         <Route path='/browse' element={<Browse />}/>
       </Routes>
-    </div>
+    </AuthProvider>
   );
 }
