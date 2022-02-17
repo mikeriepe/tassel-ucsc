@@ -16,9 +16,11 @@ export default function Login() {
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
 
+
   const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
   console.log(user);
   console.log(userProfile);
+
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
