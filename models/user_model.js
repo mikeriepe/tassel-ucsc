@@ -34,21 +34,20 @@ exports.getUser = async (email) => {
 };
 
 /**
- * Query to delete a specific user from the user table in
+ * Query to deactivate a specific user from the user table in
  * ACMatchMaker postgreSQL DB
- * retrieves user whos userid = id
  * @param {*} id
  */
-exports.userDelete = async (id) => {
+exports.userDeactivate = async (userid) => {
   const query = {
-    text: `DELETE 
-               FROM users
-               WHERE userid = $1`,
-    values: [id],
+    text: `UPDATE users
+               SET active = $1
+               WHERE userid = $2`,
+    values: [userid.active, userid.userid],
   };
-  const deletedRows = await pool.query(query);
-  console.log(deletedRows);
-  return deletedRows;
+  const rows = await pool.query(query);
+  console.log(rows);
+  return rows;
 };
 
 /**
@@ -59,12 +58,11 @@ exports.userDelete = async (id) => {
 exports.createUser = async (userInfo, newUUID) => {
   const query = {
     text: `INSERT INTO users 
-             (userid, useremail, userpassword, usertype) 
+             (userid, useremail, userpassword, active) 
              VALUES (($1), ($2), ($3), ($4))`,
     values: [newUUID, userInfo.useremail, userInfo.userpassword,
-      userInfo.usertype],
+      userInfo.active],
   };
   const rows = await pool.query(query);
-  console.log(rows);
-  return rows;
+  return rows.rowCount;
 };

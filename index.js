@@ -33,7 +33,7 @@ app.get('/api/users', userApi.userGet);
 
 app.post('/api/login', userApi.userVerifyPost);
 
-app.delete('/api/userDeletion', userApi.userDelete);
+app.post('/api/userDeactivation', userApi.userDeactivate);
 
 app.post('/api/userCreation', userApi.userPost);
 
@@ -42,6 +42,8 @@ app.post('/api/userCreation', userApi.userPost);
 //
 //
 app.post('/api/profileCreation', profileApi.profilePost);
+
+app.get('/api/getProfile/:userid', profileApi.getProfile);
 
 app.put('/api/updateProfile', profileApi.profileUpdate);
 //  Event CRUD operations

@@ -1,5 +1,5 @@
 const userModel = require('./user_model.js');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 
 
@@ -18,8 +18,15 @@ exports.userPost = async (req, res) => {
   req.body.userpassword = hash;
   newUUID = uuid.v4();
 
-  const newUser = await userModel.createUser(req.body, newUUID);
-  res.status(200).send(newUser);
+  const result = await userModel.createUser(req.body, newUUID);
+  if (result == 1)
+  {
+    var user = {useremail: req.body.useremail, userid: newUUID, active: false}
+    res.status(200).send(user);
+  }
+  else {
+    res.status(500).send("user creation failed");
+  }
 };
 
 
@@ -35,14 +42,14 @@ exports.userGet = async (req, res) => {
 
 
 /**
- * DELETEs user objects
+ * Dactivated user account
  * @param {*} req
  * @param {*} res
  */
-exports.userDelete = async (req, res) => {
-  const deletedUsers = await userModel.userDelete(req.body.userid);
-  console.log(deletedUsers);
-  res.status(200).send(deletedUsers);
+exports.userDeactivate = async (req, res) => {
+  const deactivatedUser = await userModel.userDeactivate(req.body);
+  console.log(deactivatedUser);
+  res.status(200).send(deactivatedUser);
 };
 
 
@@ -52,14 +59,31 @@ exports.userDelete = async (req, res) => {
  * @param {*} res
  */
 exports.userVerifyPost = async (req, res) => {
+  console.log(req.body);
   const user = await userModel.getUser(req.body.useremail);
-  // eslint-disable-next-line max-len
-  const crypt = (bcrypt.compare(req.password, user[0].userpassword, function(err) {
-    if (err) return 'error';
-    return true;
-  }));
-  if (crypt != 'error') {
-    delete user[0].userpassword;
-    res.status(200).send(user[0]);
+  console.log('user length = ' + user.length);
+  if (user.length < 1)
+  { 
+    res.status(401).send('Invalid username')
+    return;
   }
+  console.log(user);
+  // eslint-disable-next-line max-len
+  bcrypt.compare(req.body.userpassword, user[0].userpassword, function(err, isMatch) {
+    if (err) {
+      console.log('PW error');
+      throw err;
+
+    }
+    else if (isMatch) {
+      console.log('PW Match');
+      delete user[0].userpassword;
+      res.status(200).send(user[0]);
+    }
+    else {
+      console.log('PW Mismatch');
+      res.status(401).send('Invalid password');
+    }
+  })
+  
 };

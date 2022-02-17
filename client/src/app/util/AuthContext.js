@@ -9,10 +9,18 @@ const AuthContext = createContext();
  * @return {JSX} auth provider for auth context
  */
 export function AuthProvider(props) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider
+      value={{user,
+        setUser,
+        loggedIn,
+        setLoggedIn,
+        userProfile,
+        setUserProfile}}>
       {props.children}
     </AuthContext.Provider>
   );

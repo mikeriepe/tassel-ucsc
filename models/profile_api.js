@@ -7,12 +7,23 @@ const profileModel = require('./profile_model');
  * @param {*} res
  */
 exports.profilePost = async (req, res) => {
-  console.log();
   console.log(req.body.userid);
   const profileId = await profileModel.createProfile(req.body.userid);
   res.status(201).send(profileId);
 };
 
+
+/**
+ * GETs a profile object
+ * retrieves the specified user profile.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getProfile = async (req, res) => {
+  console.log(req.params.userid);
+  const profile = await profileModel.getProfile(req.params.userid);
+  res.status(201).send(profile);
+};
 
 /**
  * POSTs a profile object

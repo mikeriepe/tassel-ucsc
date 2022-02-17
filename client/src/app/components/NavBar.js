@@ -14,6 +14,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import {Link} from 'react-router-dom';
+import useAuth from '../util/AuthContext';
 
 import logo from '../assets/ucsc.svg';
 import '../stylesheets/NavBar.css';
@@ -22,7 +23,12 @@ import '../stylesheets/NavBar.css';
  * creates navbar
  * @return {HTML} navbar component
  */
-export default function NavBar({loggedIn, setLoggedIn}) {
+export default function NavBar() {
+  const {setUser,
+    loggedIn,
+    setLoggedIn,
+    userProfile,
+    setUserProfile} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -50,6 +56,13 @@ export default function NavBar({loggedIn, setLoggedIn}) {
   const handleLogOut = () => {
     // TODO
     handleMenuClose();
+    setUser(null);
+    setLoggedIn(false);
+    setUserProfile(null);
+  };
+
+  const handleError = (e) => {
+    e.target.src = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -168,9 +181,17 @@ export default function NavBar({loggedIn, setLoggedIn}) {
   // FULL NAVBAR
   return (
     <Box sx={{flexGrow: 1}}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          background: 'white',
+          borderBottom: '0.5px solid #D1D1D1',
+          boxShadow: '0',
+        }}>
         <Toolbar>
-          <img className='logo' src={logo}></img>
+          <Link className='link' to="/">
+            <img className='logo' src={logo} alt="ucsc_logo"></img>
+          </Link>
           <Box sx={{flexGrow: 1}} />
           <Box sx={{display: {xs: 'none', md: 'flex'}}}>
             {/* browse button */}
@@ -215,7 +236,13 @@ export default function NavBar({loggedIn, setLoggedIn}) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar alt="Remy Sharp"/>
+              {userProfile && <Avatar src={userProfile.profilepicture}
+                alt="Remy Sharp"
+                onError={handleError}
+              />}
+              {!userProfile && <Avatar
+                alt="Remy Sharp"
+              />}
             </IconButton>
           </Box>
           <Box sx={{display: {xs: 'flex', md: 'none'}}}>

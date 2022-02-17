@@ -2,11 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Stack} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import {toast} from 'react-toastify';
 import '../stylesheets/Login.css';
 
@@ -21,8 +16,11 @@ export default function Login() {
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
 
-  const {user, setUser} = useAuth();
+
+  const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
   console.log(user);
+  console.log(userProfile);
+
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -32,7 +30,7 @@ export default function Login() {
   const [newAccountCredentials, setnewAccountCredentials] = useState({
     useremail: '',
     userpassword: '',
-    usertype: '',
+    active: 'false',
   });
 
 
@@ -66,6 +64,12 @@ export default function Login() {
     setSignUp(location.state.signUp);
   }, [location.key, location.state]);
 
+  useEffect(() => {
+    if (user != null) {
+      getProfile();
+    }
+  }, [user]);
+
   const createUser = () => {
     fetch(`/api/userCreation`, {
       method: 'POST',
@@ -81,6 +85,14 @@ export default function Login() {
           return res.json();
         })
         .then((json) => {
+          console.log(json.userid);
+          fetch(`/api/profileCreation`, {
+            method: 'POST',
+            body: JSON.stringify({userid: json.userid}),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
           toast.success('Account created', {
             position: 'top-right',
             autoClose: 5000,
@@ -90,7 +102,8 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
-          setUser(newAccountCredentials.useremail);
+          setUser(json);
+          setLoggedIn(true);
           navigate(`/`);
         });
   };
@@ -104,10 +117,14 @@ export default function Login() {
       },
     })
         .then((res) => {
-          if (!res.ok) {
+          console.log(res);
+          if (res.status == 200) {
+            return res.json();
+          } else if (res.status == 401) {
+            throw res;
+          } else {
             throw res;
           }
-          return res.json();
         })
         .then((json) => {
           toast.success('Login Success', {
@@ -119,11 +136,41 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
-          setUser(accountLoginCredentials.useremail);
+          setLoggedIn(true);
+          setUser(json);
           navigate(`/`);
         })
         .catch((err) => {
-          alert('Error logging in, please try again');
+          console.log(err);
+          alert('Invalid Username or Password, Please Try Again');
+        });
+  };
+
+
+  const getProfile = () => {
+    fetch(`/api/getProfile/${user.userid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          toast.success('Profile Retrieval Success', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setUserProfile(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving profile, please try again');
         });
   };
 

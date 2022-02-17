@@ -21,10 +21,27 @@ exports.createProfile= async (userid) => {
   // Returns the newly created profile object's id
   const {rows} = await pool.query(query);
   console.log(rows[0].profileid);
-  // const id = await pool.query(query).rows[0];
   return rows[0].profileid;
 };
 
+
+/**
+ * getProfile
+ * gets user profile data based on user id provided
+ * Returns the specified profile
+ * @param {*} userid
+ */
+ exports.getProfile= async (userid) => {
+  const query = {
+    text: `SELECT * FROM profile 
+           WHERE userid = $1`,
+    values: [userid],
+  };
+
+  const {rows} = await pool.query(query);
+  console.log('profileid = ' + rows[0].profileid);
+  return rows[0];
+};
 
 /**
  * updateProfile
