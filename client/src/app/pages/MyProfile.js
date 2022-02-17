@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../stylesheets/MyProfile.css';
 import TabBar from '../components/TabBar';
 import {useNavigate} from 'react-router-dom';
 import useAuth from '../util/AuthContext';

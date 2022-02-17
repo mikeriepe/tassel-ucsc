@@ -181,7 +181,13 @@ export default function NavBar() {
   // FULL NAVBAR
   return (
     <Box sx={{flexGrow: 1}}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          background: 'white',
+          borderBottom: '0.5px solid #D1D1D1',
+          boxShadow: '0',
+        }}>
         <Toolbar>
           <Link className='link' to="/">
             <img className='logo' src={logo} alt="ucsc_logo"></img>
