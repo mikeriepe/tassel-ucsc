@@ -11,9 +11,16 @@ const AuthContext = createContext();
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
   return (
-    <AuthContext.Provider value={{user, setUser, loggedIn, setLoggedIn}}>
+    <AuthContext.Provider
+      value={{user,
+        setUser,
+        loggedIn,
+        setLoggedIn,
+        userProfile,
+        setUserProfile}}>
       {props.children}
     </AuthContext.Provider>
   );

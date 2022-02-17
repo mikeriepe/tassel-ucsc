@@ -16,8 +16,9 @@ export default function Login() {
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
 
-  const {user, setUser, setLoggedIn} = useAuth();
+  const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
   console.log(user);
+  console.log(userProfile);
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -27,7 +28,7 @@ export default function Login() {
   const [newAccountCredentials, setnewAccountCredentials] = useState({
     useremail: '',
     userpassword: '',
-    usertype: '',
+    active: 'false',
   });
 
 
@@ -61,6 +62,12 @@ export default function Login() {
     setSignUp(location.state.signUp);
   }, [location.key, location.state]);
 
+  useEffect(() => {
+    if (user != null) {
+      getProfile();
+    }
+  }, [user]);
+
   const createUser = () => {
     fetch(`/api/userCreation`, {
       method: 'POST',
@@ -76,6 +83,14 @@ export default function Login() {
           return res.json();
         })
         .then((json) => {
+          console.log(json.userid);
+          fetch(`/api/profileCreation`, {
+            method: 'POST',
+            body: JSON.stringify({userid: json.userid}),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
           toast.success('Account created', {
             position: 'top-right',
             autoClose: 5000,
@@ -120,7 +135,36 @@ export default function Login() {
           navigate(`/`);
         })
         .catch((err) => {
+          console.log(err);
           alert('Error logging in, please try again');
+        });
+  };
+
+
+  const getProfile = () => {
+    fetch(`/api/getProfile/${user.userid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          toast.success('Profile Retrieval Success', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setUserProfile(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving profile, please try again');
         });
   };
 

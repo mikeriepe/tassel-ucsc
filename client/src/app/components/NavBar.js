@@ -24,7 +24,7 @@ import '../stylesheets/NavBar.css';
  * @return {HTML} navbar component
  */
 export default function NavBar() {
-  const {loggedIn} = useAuth();
+  const {setUser, loggedIn, setLoggedIn, userProfile} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -52,6 +52,12 @@ export default function NavBar() {
   const handleLogOut = () => {
     // TODO
     handleMenuClose();
+    setUser(null);
+    setLoggedIn(false);
+  };
+
+  const handleError = (e) => {
+    e.target.src = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -219,7 +225,13 @@ export default function NavBar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar alt="Remy Sharp"/>
+              {userProfile && <Avatar src={userProfile.profilepicture}
+                alt="Remy Sharp"
+                onError={handleError}
+              />}
+              {!userProfile && <Avatar
+                alt="Remy Sharp"
+              />}
             </IconButton>
           </Box>
           <Box sx={{display: {xs: 'flex', md: 'none'}}}>
