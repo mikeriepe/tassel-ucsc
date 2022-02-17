@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "node-pg": "^1.0.1",
     "pg": "^8.7.3"

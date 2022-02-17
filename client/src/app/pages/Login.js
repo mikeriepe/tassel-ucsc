@@ -115,10 +115,14 @@ export default function Login() {
       },
     })
         .then((res) => {
-          if (!res.ok) {
+          console.log(res);
+          if (res.status == 200) {
+            return res.json();
+          } else if (res.status == 401) {
+            throw res;
+          } else {
             throw res;
           }
-          return res.json();
         })
         .then((json) => {
           toast.success('Login Success', {
@@ -136,7 +140,7 @@ export default function Login() {
         })
         .catch((err) => {
           console.log(err);
-          alert('Error logging in, please try again');
+          alert('Invalid Username or Password, Please Try Again');
         });
   };
 

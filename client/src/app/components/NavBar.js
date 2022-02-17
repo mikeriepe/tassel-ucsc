@@ -24,7 +24,11 @@ import '../stylesheets/NavBar.css';
  * @return {HTML} navbar component
  */
 export default function NavBar() {
-  const {setUser, loggedIn, setLoggedIn, userProfile} = useAuth();
+  const {setUser,
+    loggedIn,
+    setLoggedIn,
+    userProfile,
+    setUserProfile} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -54,6 +58,7 @@ export default function NavBar() {
     handleMenuClose();
     setUser(null);
     setLoggedIn(false);
+    setUserProfile(null);
   };
 
   const handleError = (e) => {

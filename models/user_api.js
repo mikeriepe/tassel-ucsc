@@ -1,5 +1,5 @@
 const userModel = require('./user_model.js');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 
 
@@ -59,14 +59,31 @@ exports.userDeactivate = async (req, res) => {
  * @param {*} res
  */
 exports.userVerifyPost = async (req, res) => {
+  console.log(req.body);
   const user = await userModel.getUser(req.body.useremail);
-  // eslint-disable-next-line max-len
-  const crypt = (bcrypt.compare(req.password, user.userpassword, function(err) {
-    if (err) return 'error';
-    return true;
-  }));
-  if (crypt != 'error') {
-    delete user.userpassword;
-    res.status(200).send(user[0]);
+  console.log('user length = ' + user.length);
+  if (user.length < 1)
+  { 
+    res.status(401).send('Invalid username')
+    return;
   }
+  console.log(user);
+  // eslint-disable-next-line max-len
+  bcrypt.compare(req.body.userpassword, user[0].userpassword, function(err, isMatch) {
+    if (err) {
+      console.log('PW error');
+      throw err;
+
+    }
+    else if (isMatch) {
+      console.log('PW Match');
+      delete user[0].userpassword;
+      res.status(200).send(user[0]);
+    }
+    else {
+      console.log('PW Mismatch');
+      res.status(401).send('Invalid password');
+    }
+  })
+  
 };

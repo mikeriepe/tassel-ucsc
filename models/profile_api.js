@@ -20,10 +20,8 @@ exports.profilePost = async (req, res) => {
  * @param {*} res
  */
  exports.getProfile = async (req, res) => {
-  console.log('req.params = ');
-  console.log(req.params);
+  console.log(req.params.userid);
   const profile = await profileModel.getProfile(req.params.userid);
-  console.log(profile);
   res.status(201).send(profile);
 };
 
