@@ -1,7 +1,7 @@
 import React from 'react';
 import {Tabs, Tab} from '@mui/material';
 import Profile from './Profile';
-import Events from './Events';
+import Opportunities from './Opportunities';
 import Calendar from './Calendar';
 /**
  * creates tab bar
@@ -15,13 +15,16 @@ export default function TabBar() {
   };
   return (
     <div>
-      <Tabs value={value} onChange={handleTabs}>
+      <Tabs value={value}
+        onChange={handleTabs}
+        sx={{'&& .Mui-selected': {color: '#000000'}}}
+        centered>
         <Tab label="Profile"/>
-        <Tab label="Events"/>
+        <Tab label="Opportunities"/>
         <Tab label="Calendar"/>
       </Tabs>
       <TabPanel value={value} index = {0}>{<Profile/>}</TabPanel>
-      <TabPanel value={value} index = {1}>{<Events/>}</TabPanel>
+      <TabPanel value={value} index = {1}>{<Opportunities/>}</TabPanel>
       <TabPanel value={value} index = {2}>{<Calendar/>}</TabPanel>
     </div>
   );

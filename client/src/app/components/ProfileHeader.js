@@ -1,11 +1,16 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
+import Avatar from '@mui/material/Avatar';
 
 /**
  * creates Profile
  * @return {HTML} Profile component
  */
 export default function ProfileHeader({data}) {
+  const handleError = (e) => {
+    e.target.src = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  };
+
   return (
     <Paper
       className='profile-header'
@@ -18,8 +23,14 @@ export default function ProfileHeader({data}) {
         borderRadius: '10px',
       }}
     >
-      <h1>Profile</h1>
-      <p>{data}</p>
+      <Avatar src={data.profilepicture}
+        sx={{width: '200px', height: '200px'}}
+        alt="Remy Sharp"
+        onError={handleError}
+      />
+      <div>
+        <h1>{data.firstname + ' ' + data.lastname}</h1>
+      </div>
     </Paper>
   );
 }

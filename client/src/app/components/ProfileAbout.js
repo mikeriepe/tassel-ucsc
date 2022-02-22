@@ -19,6 +19,7 @@ export default function ProfileAbout({data}) {
       }}
     >
       <h1>About</h1>
+      {data}
     </Paper>
   );
 }

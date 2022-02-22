@@ -11,7 +11,7 @@ import ProfileVolunteer from '../components/ProfileVolunteer';
  * @return {HTML} Calendar component
  */
 export default function Profile() {
-  const {user} = useAuth();
+  const {userProfile} = useAuth();
   return (
     <div
       className='profile-container'
@@ -21,10 +21,11 @@ export default function Profile() {
         alignItems: 'center',
       }}
     >
-      <ProfileHeader data={user.useremail} />
-      <ProfileAbout />
-      <ProfileWork />
-      <ProfileVolunteer />
+      <ProfileHeader
+        data={userProfile} />
+      <ProfileAbout data={userProfile.about}/>
+      <ProfileWork data={userProfile.experience}/>
+      <ProfileVolunteer data={userProfile.volunteeringexperience}/>
     </div>
   );
 }

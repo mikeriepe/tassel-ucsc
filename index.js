@@ -7,6 +7,12 @@ const userApi = require('./models/user_api');
 // Profile API
 const profileApi = require('./models/profile_api');
 
+// Opportunity API
+const opportunityApi = require('./models/opportunity_api')
+
+// Opportunity API
+const requestApi = require('./models/request_api')
+
 require('dotenv').config();
 
 const app = express();
@@ -46,9 +52,24 @@ app.post('/api/profileCreation', profileApi.profilePost);
 app.get('/api/getProfile/:userid', profileApi.getProfile);
 
 app.put('/api/updateProfile', profileApi.profileUpdate);
-//  Event CRUD operations
+
+app.get('/api/getProfileName/:profileid', profileApi.profileGetName)
+
+//  Opportunity CRUD operations
 //
 //
+app.get('/api/getJoinedOpportunities/:profileid', opportunityApi.getJoinedOpportunities);
+
+app.get('/api/getCreatedOpportunities/:profileid', opportunityApi.getCreatedOpportunities);
+
+app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunities);
+
+app.post('/api/postOpportunity', opportunityApi.postOpportunity);
+
+// Request CRUD operations
+//
+//
+app.get('/api/getPendingOpportunities/:profileid', requestApi.getPendingOpportunities);
 
 //  Preferences CRUD operations
 //

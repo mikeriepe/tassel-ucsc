@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
  * @return {HTML} Profile component
  */
 export default function ProfileVolunteer({data}) {
+  console.log(data.experience1);
   return (
     <Paper
       className='profile-header'

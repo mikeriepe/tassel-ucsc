@@ -51,7 +51,6 @@ export default function MyProfile() {
 
   return (
     <div className='MyProfile'>
-      <h1>My Profile</h1>
       <TabBar />
       {user.active && <button onClick={handleDeactivateAccount}>
         Deactivate Account

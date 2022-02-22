@@ -70,3 +70,22 @@ exports.updateProfile= async (userProfile) => {
   console.log(rows[0].profileid);
   return rows[0].profileid;
 };
+
+
+/**
+ * profileGetName
+ * gets user profile firstname and lastname based on profile id provided
+ * Returns the specified profile's firstname and lastname
+ * @param {*} userid
+ */
+ exports.profileGetName= async (profileid) => {
+  const query = {
+    text: `SELECT firstname, lastname, profilepicture FROM profile 
+           WHERE profileid = $1`,
+    values: [profileid],
+  };
+
+  const {rows} = await pool.query(query);
+  console.log('profile name = ' + rows[0].firstname + ' ' + rows[0].lastname[0] + '.');
+  return rows[0];
+};
