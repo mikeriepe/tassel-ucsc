@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
+import '../stylesheets/MyProfile.css';
 
 /**
  * creates Profile
@@ -8,18 +9,23 @@ import Paper from '@mui/material/Paper';
 export default function ProfileAbout({data}) {
   return (
     <Paper
-      className='profile-header'
       elevation={3}
       sx={{
         marginBottom: '3rem',
-        width: '50vw',
-        height: '500px',
+        width: '55vw',
+        height: 'auto',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <h1>About</h1>
-      {data}
+      <div className='profile-header'>
+        <h3>About</h3>
+      </div>
+      <div className='profile-about-desc'>
+        <p>
+          {data}
+        </p>
+      </div>
     </Paper>
   );
 }
