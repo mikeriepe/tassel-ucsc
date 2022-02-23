@@ -48,10 +48,12 @@ const uuid = require('uuid');
   const newUUID = uuid.v4();
   try {
     const opportunityId = await opportunityModel.postOpportunity(req.body, newUUID);
+    console.log(opportunityId);
     res.status(201).send(opportunityId);
   }
   catch (error) {
     console.log(error);
+    res.status(500).send('error creating opportunity')
   }
   
   

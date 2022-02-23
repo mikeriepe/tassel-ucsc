@@ -12,7 +12,7 @@ const pool = new Pool();
  exports.getJoinedOpportunities = async (profileid) => {
   const query = {
     text: `SELECT * FROM events 
-           WHERE userparticipants ? $1
+           WHERE ($1 = ANY(userparticipants))
            AND active = true`,
     values: [profileid],
   };
@@ -48,14 +48,16 @@ const pool = new Pool();
  * @param {*} profileid
  */
  exports.getPastOpportunities = async (profileid) => {
+  console.log('here ' + profileid);
   const query = {
     text: `SELECT * FROM events 
-           WHERE (userparticipants ? $1 OR usersponsors ? $1)
+           WHERE (($1 = ANY(userparticipants)) OR usersponsors->>'creator' = $1)
            AND active = false`,
     values: [profileid],
   };
 
   const {rows} = await pool.query(query);
+  console.log('here ' + rows)
   return rows;
 };
 
@@ -68,12 +70,12 @@ const pool = new Pool();
  exports.postOpportunity = async (opportunityInfo, newUUID) => {
   const query = {
     text: `INSERT INTO events 
-             (eventid, usersponsors, remote, eventlocation, eventzoomlink, organization, description, eventtype, userparticipants, preferences, eventdata, startdate, enddate, active, eventbanner, eventname) 
+             (eventid, usersponsors, remote, eventlocation, eventzoomlink, organization, description, eventtype, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants) 
              VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16))
              RETURNING eventid`,
-    values: [newUUID, opportunityInfo[0].usersponsors.creator, opportunityInfo[0].remote, opportunityInfo[0].eventlocation, opportunityInfo[0].eventzoomlink, opportunityInfo[0].organization, opportunityInfo[0].description, opportunityInfo[0].eventtype, opportunityInfo[0].userparticipants, opportunityInfo[0].preferences, opportunityInfo[0].eventdata, opportunityInfo[0].startdate, opportunityInfo[0].enddate, true, opportunityInfo[0].eventbanner, opportunityInfo[0].eventname],
+    values: [newUUID, opportunityInfo[0].usersponsors, opportunityInfo[0].remote, opportunityInfo[0].eventlocation, opportunityInfo[0].eventzoomlink, opportunityInfo[0].organization, opportunityInfo[0].description, opportunityInfo[0].eventtype, opportunityInfo[0].preferences, opportunityInfo[0].eventdata, opportunityInfo[0].startdate, opportunityInfo[0].enddate, true, opportunityInfo[0].eventbanner, opportunityInfo[0].eventname, opportunityInfo[0].userparticipants],
   };
-  console.log(opportunityInfo[0]);
+  console.log(opportunityInfo[0].userparticipants);
   const {rows} = await pool.query(query);
   console.log(rows);
   return rows[0].eventid;

@@ -154,3 +154,37 @@
   margin-left: 5px;
   bottom: 17px;
 }
+
+.eventname {
+  display: flex;
+  position: relative; 
+  right: 215px;
+  top: 80px;
+  height: 30px; 
+  justify-content: center;
+  width: 770px;
+}
+
+.eventroles {
+  position: relative;
+  right: 175px;
+  top: 160px;
+}
+
+.details {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  height: 700px;
+  width: 40%;
+  top: 0%;
+  bottom: 465px;
+  left: 71%;
+  border-radius: 10px;
+  background-color: rgb(226, 226, 226);
+}
+
+.creationbuttons {
+  position: relative;
+  top: 550px;
+}
