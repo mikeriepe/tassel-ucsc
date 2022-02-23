@@ -57,16 +57,13 @@ export default function CreatedOpportunities({data}) {
 
         <ListItem button
           sx={{
-            display: 'flex',
-            position: 'relative',
-            left: '35%',
+            margin: 'auto',
             marginTop: '70px',
             height: '60px',
             bottom: '50px',
-            width: '300px',
+            width: '48vw',
             borderRadius: '10px',
             justifyContent: 'center',
-            marginBlockEnd: 'auto',
             color: '#003c6c',
             backgroundColor: 'white',
             fontSize: '16pt'}}
