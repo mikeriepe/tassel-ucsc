@@ -19,7 +19,7 @@ export default function OpportunityCreation({toggle}) {
   const navigate = useNavigate();
   const {userProfile} = useAuth();
 
-  const newOpportunity = useState({
+  const [newOpportunity, setNewOpportunity] = useState({
     eventname: 'Test Opportunity 2/22/2022 attempt 2',
     usersponsors: {'creator': userProfile.profileid},
     remote: true,
@@ -61,6 +61,12 @@ export default function OpportunityCreation({toggle}) {
           console.log(error);
         });
   };
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setNewOpportunity({...newOpportunity, [name]: value});
+  };
+
 
   return (
     <div>
@@ -117,6 +123,9 @@ export default function OpportunityCreation({toggle}) {
                 width: '600px',
               }}
               label='Enter Opportunity Title'
+              name='eventname'
+              value={newOpportunity.eventname}
+              onChange={handleChange}
             />
           </div>
 
