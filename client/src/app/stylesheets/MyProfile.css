@@ -33,18 +33,6 @@
   border-radius: 10px 10px 0 0;
 }
 
-.profile-avatar {
-  background: url('../assets/exampleavatar.png');
-  background-size: cover;
-  position: absolute;
-  left: 3em;
-  top: 42%;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 6px solid white;
-}
-
 .profile-description {
   display: flex;
   flex-direction: column;
@@ -88,4 +76,8 @@
   font-size: 0.8rem;
   line-height: 1.5rem;
   color: rgba(108, 110, 114, 0.8);
+}
+
+.profile-work {
+  margin-left: 25px;
 }

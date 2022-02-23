@@ -21,6 +21,14 @@ export default function ProfileWork({data}) {
       <div className='profile-header'>
         <h3>Work Experience</h3>
       </div>
+      {data && data.job1 &&
+        <div className='profile-work'>
+          <h3>{data.job1.title}</h3>
+          <h4>{data.job1.company}</h4>
+          <h4>{data.job1.location}</h4>
+          <p>{data.job1.start + ' - ' + data.job1.end}</p>
+          <p>{data.job1.description}</p>
+        </div>}
     </Paper>
   );
 }
