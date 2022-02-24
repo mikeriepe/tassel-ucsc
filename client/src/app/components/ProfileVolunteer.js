@@ -41,22 +41,37 @@ export default function ProfileVolunteer({data}) {
         Volunteer Experience
       </div>
       {exampleData1 && exampleData2 &&
-        exampleDataArray.map((exampleData) => (
+        exampleDataArray.map((exampleData, index) => (
           <>
             <div className='experience-text'>
-              <div className='experience-text-title'>
+              <div
+                className='experience-text-title'
+                key={`title-${index}`}
+              >
                 {exampleData.title}
               </div>
-              <div className='experience-text-company'>
+              <div
+                className='experience-text-company'
+                key={`company-${index}`}
+              >
                 {exampleData.company}
               </div>
-              <div className='experience-text-location'>
+              <div
+                className='experience-text-location'
+                key={`location-${index}`}
+              >
                 {exampleData.location}
               </div>
-              <div className='experience-text-date'>
+              <div
+                className='experience-text-date'
+                key={`date-${index}`}
+              >
                 {exampleData.startDate + ' - ' + exampleData.endDate}
               </div>
-              <div className='experience-text-description'>
+              <div
+                className='experience-text-description'
+                key={`description-${index}`}
+              >
                 {exampleData.description}
               </div>
             </div>

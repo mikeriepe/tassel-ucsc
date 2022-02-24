@@ -21,11 +21,10 @@ export default function Profile() {
         alignItems: 'center',
       }}
     >
-      <ProfileHeader
-        data={userProfile} />
-      <ProfileAbout data={userProfile.about}/>
-      <ProfileWork data={userProfile.experience}/>
-      <ProfileVolunteer data={userProfile.volunteeringexperience}/>
+      <ProfileHeader data={userProfile} />
+      <ProfileAbout data={userProfile.about} />
+      <ProfileWork data={userProfile.experience} />
+      <ProfileVolunteer data={userProfile.volunteeringexperience} />
     </div>
   );
 }
