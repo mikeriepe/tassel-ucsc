@@ -13,22 +13,31 @@ export default function ProfileWork({data}) {
       sx={{
         marginBottom: '3rem',
         width: '55vw',
-        height: '500px',
+        height: 'auto',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <div className='profile-header'>
-        <h3>Work Experience</h3>
+      <div className='experience card-title'>
+        Work Experience
       </div>
       {data && data.job1 &&
-        <div className='profile-work'>
-          <h3>{data.job1.title}</h3>
-          <h4>{data.job1.company}</h4>
-          <h4>{data.job1.location}</h4>
-          <p>{data.job1.start + ' - ' + data.job1.end}</p>
-          <p>{data.job1.description}</p>
-        </div>}
+        <div className='experience-text'>
+          <div className='experience-text-title'>{data.job1.title}</div>
+          <div className='experience-text-company'>
+            {data.job1.company}
+          </div>
+          <div className='experience-text-location'>
+            {data.job1.location}
+          </div>
+          <div className='experience-text-date'>
+            {data.job1.start + ' - ' + data.job1.end}
+          </div>
+          <div className='experience-text-description'>
+            {data.job1.description}
+          </div>
+        </div>
+      }
     </Paper>
   );
 }

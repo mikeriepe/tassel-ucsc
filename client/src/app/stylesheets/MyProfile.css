@@ -1,83 +1,127 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-.profile-tab{
-    padding-top: 75px;
+* {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 500;
 }
 
-.profile-head {
-  margin-top: 100px;
-  margin-left: 50px;
+.profile-tab {
+  padding-top: 75px;
 }
 
-.profile-header {
-  font-family: Roboto;
-  margin: 2em;
-  margin-bottom: 0;
-  padding-bottom: 0.7em;
+.card-title {
+  margin-inline: 2rem;
+  padding-block: 2rem;
   border-bottom: 1px solid #D1D1D1;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
-.profile-cover {
+/* ------------------------- */
+/* Header                    */
+/* ------------------------- */
+
+.header-upper {
   width: 100%;
   height: 65%;
   border-radius: 10px;
 }
 
-.profile-cover-image {
-  height: 100%;
-  background: url('../assets/examplecover.png') no-repeat center center; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+.header-upper-cover {
   background-size: cover;
+  background-position: center center;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
   border-radius: 10px 10px 0 0;
 }
 
-.profile-description {
+.header-bottom {
+  height: 35%;
+}
+
+.header-bottom-avatar {
+  width: 220px;
+  height: 220px;
+  position: absolute;
+  left: 50px;
+  top: 42%;
+}
+
+.header-bottom-text {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  margin-left: 19em;
-  margin-top: 1.5em;
+  justify-content: center;
+  margin-left: 20em;
+  height: 100%;
+  width: calc(100% - 20em);
+  line-height: 1.5;
 }
 
-.profile-name {
+.header-bottom-text-name {
+  margin-left: 0;
+  margin-bottom: 10px;
   font-family: Roboto;
-  line-height: 0.5;
-}
-
-.profile-subdescription {
-  font-family: Montserrat;
-  font-style: normal;
   font-weight: 600;
-  color: #6C6E72;
+  font-size: 1.8rem;
+  color: black;
 }
 
-.profile-major {
-  font-size: 0.8rem;
+.header-bottom-text-major {
+  font-weight: 600;
+  font-size: 0.85rem;
   color: #13A5DC;
 }
 
-.profile-year {
-  font-size: 0.7rem;
-}
-
-.profile-location {
-  font-size: 0.7rem;
-  line-height: 30px;
-}
-
-.profile-about-desc {
-  margin: 2.5em;
-  margin-bottom: 3em;
-  font-family: Montserrat;
-  font-style: normal;
+.header-bottom-text-year,
+.header-bottom-text-location {
   font-weight: 500;
+  font-size: 0.75rem;
+  color: rgba(108, 110, 114, 0.8);
+}
+
+/* ------------------------- */
+/* About                     */
+/* ------------------------- */
+
+.about-text-description {
+  margin: 2rem;
   font-size: 0.8rem;
   line-height: 1.5rem;
   color: rgba(108, 110, 114, 0.8);
 }
 
-.profile-work {
-  margin-left: 25px;
+/* ------------------------- */
+/* Experience                */
+/* ------------------------- */
+
+.experience-text {
+  margin: 2rem;
+  line-height: 1.5;
+}
+
+.experience-text-title {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.experience-text-company {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #13A5DC;
+}
+
+.experience-text-location,
+.experience-text-date {
+  font-size: 0.8rem;
+  color: rgba(108, 110, 114, 0.8);
+}
+
+.experience-text-description {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+  color: rgba(108, 110, 114, 0.8);
 }

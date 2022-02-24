@@ -2,6 +2,7 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import '../stylesheets/MyProfile.css';
+import ExampleCover from '../assets/examplecover.png';
 
 /**
  * creates Profile
@@ -17,34 +18,43 @@ export default function ProfileHeader({data}) {
       elevation={3}
       sx={{
         position: 'relative',
-        marginBottom: '3rem',
-        marginTop: '3rem',
+        marginBlock: '3rem',
         width: '55vw',
-        height: '375px',
+        height: '500px',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <div className='profile-head'>
-        <div className='profile-cover'>
-          <div className='profile-cover-image' />
-        </div>
-        <Avatar src={data.profilepicture}
-          sx={{width: '220px',
-            height: '220px',
-            position: 'absolute',
-            left: '70px'}}
-          alt="Remy Sharp"
-          onError={handleError}
+      <div className='header-upper'>
+        <img
+          className='header-upper-cover'
+          src={ExampleCover}
         />
-        <div className='profile-description'>
-          <h1 className='profile-name'>
+      </div>
+      <div className='header-bottom'>
+        <div className='header-bottom-avatar'>
+          <Avatar src={data.profilepicture}
+            sx={{
+              width: '100%',
+              height: '100%',
+              border: '6px solid white',
+            }}
+            alt='Remy Sharp'
+            onError={handleError}
+          />
+        </div>
+        <div className='header-bottom-text'>
+          <div className='header-bottom-text-name'>
             {data.firstname + ' ' + data.lastname}
-          </h1>
-          <div className='profile-subdescription'>
-            <div className='profile-major'>{data.major}</div>
-            <div className='profile-year'>{data.graduationyear}</div>
-            <div className='profile-location'>{data.location}</div>
+          </div>
+          <div className='header-bottom-text-major'>
+            Bachelor of Science, {data.major}
+          </div>
+          <div className='header-bottom-text-year'>
+            Class of {data.graduationyear}
+          </div>
+          <div className='header-bottom-text-location'>
+            California, United States
           </div>
         </div>
       </div>
