@@ -24,8 +24,11 @@ export default function Profile() {
       <ProfileHeader
         data={userProfile} />
       <ProfileAbout data={userProfile.about}/>
-      <ProfileWork data={userProfile.experience}/>
-      <ProfileVolunteer data={userProfile.volunteeringexperience}/>
+      {userProfile.experience && <ProfileWork data={userProfile.experience}/>}
+      {!userProfile.experience && <ProfileWork data=''/>}
+      {userProfile.volunteeringexperience &&
+        <ProfileVolunteer data={userProfile.volunteeringexperience}/>}
+      {!userProfile.volunteeringexperience && <ProfileWork data=''/>}
     </div>
   );
 }
