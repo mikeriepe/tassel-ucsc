@@ -40,7 +40,7 @@ export default function ProfileVolunteer({data}) {
       <div className='experience card-title'>
         Volunteer Experience
       </div>
-      {exampleData1 && exampleData2 &&
+      {exampleDataArray &&
         exampleDataArray.map((exampleData, index) => (
           <>
             <div className='experience-text'>
