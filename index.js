@@ -32,6 +32,10 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
+/** This is for setting up the cookie parser and express jwt
+ */
+ app.use(cookieParser());
+
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader(
