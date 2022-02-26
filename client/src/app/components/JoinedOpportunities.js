@@ -24,7 +24,7 @@ export default function JoinedOpportunities({data}) {
         borderRadius: '10px',
       }}
     >
-      <div className='opportunity__header'>
+      <div className='opportunities__header'>
         <h3>Joined Opportunities</h3>
       </div>
       <List sx={{

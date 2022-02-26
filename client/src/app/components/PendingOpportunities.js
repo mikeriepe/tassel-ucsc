@@ -23,7 +23,7 @@ export default function PendingOpportunities({data}) {
         borderRadius: '10px',
       }}
     >
-      <div className='opportunity__header'>
+      <div className='opportunities__header'>
         <h3>Pending Opportunities</h3>
       </div>
       {data != null && <List sx={{
@@ -37,7 +37,8 @@ export default function PendingOpportunities({data}) {
         ))}
 
       </List>}
-      {(!data || data.length == 0) && <h2 className='no_results_message'>
+      {(!data || data.length == 0) &&
+      <h2 className='opportunities__no-results-message'>
         No Pending Opportunities found
       </h2>}
     </Paper>

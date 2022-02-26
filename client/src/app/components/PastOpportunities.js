@@ -23,7 +23,7 @@ export default function PastOpportunities({data}) {
         borderRadius: '10px',
       }}
     >
-      <div className='opportunity__header'>
+      <div className='opportunities__header'>
         <h3>Past Opportunities</h3>
       </div>
       {data != null && <List sx={{
@@ -37,7 +37,8 @@ export default function PastOpportunities({data}) {
         ))}
 
       </List>}
-      {(!data || data.length == 0) && <h2 className='no_results_message'>
+      {(!data || data.length == 0) &&
+      <h2 className='opportunities__no-results-message'>
         No Past Opportunities found
       </h2>}
     </Paper>

@@ -80,7 +80,7 @@ exports.updateProfile= async (userProfile) => {
  */
  exports.profileGetName= async (profileid) => {
   const query = {
-    text: `SELECT firstname, lastname, profilepicture FROM profile 
+    text: `SELECT firstname, lastname, profilepicture, profileid FROM profile 
            WHERE profileid = $1`,
     values: [profileid],
   };

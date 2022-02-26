@@ -15,65 +15,65 @@ export default function CreatedOpportunities({data}) {
   const [opportunityCreationPopup,
     setOpportunityCreationPopup] = useState(false);
 
-  const handleClick = () => {
+  const handleCancel = () => {
     setOpportunityCreationPopup(!opportunityCreationPopup);
   };
 
   return (
-    <div>
-      <Paper
-        className='created-opportunities'
-        elevation={3}
+    <Paper
+      className='opportunities'
+      elevation={3}
+      sx={{
+        hidden: {opportunityCreationPopup},
+        marginBottom: '3rem',
+        width: '50vw',
+        minHeight: '500px',
+        marginTop: '0px',
+        height: 'auto',
+        maxHeight: '1000px',
+        boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
+        borderRadius: '10px',
+      }}
+    >
+      <div className='opportunities__header'>
+        <h3>Created Opportunities</h3>
+      </div>
+      {data != null && <List sx={{
+        width: '48vw',
+        margin: 'auto',
+        height: 'auto',
+        maxHeight: '800px',
+        overflow: 'auto'}} >
+        {data && data.map((opportunity, index) => (
+          <OpportunityListItem data={opportunity} key={index} />
+        ))}
+
+      </List>}
+
+      {(!data || data.length == 0) &&
+      <h2 className='opportunities__no-results-message'>
+        No Created Opportunities found
+      </h2>}
+
+      <ListItem button
         sx={{
-          hidden: {opportunityCreationPopup},
-          marginBottom: '3rem',
-          width: '50vw',
-          minHeight: '500px',
-          height: 'auto',
-          maxHeight: '1000px',
-          boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
-          borderRadius: '10px',
-        }}
-      >
-        <h2 className='opportunity__tab-title2'>
-        Created Opportunities</h2>
-        <hr className='opportunity__tab-divider'></hr>
-        {data != null && <List sx={{
+          margin: 'auto',
+          marginTop: '70px',
+          height: '60px',
+          bottom: '50px',
           width: '48vw',
-          margin: 'Auto',
-          height: 'auto',
-          maxHeight: '800px',
-          overflow: 'auto'}} >
-          {data && data.map((opportunity, index) => (
-            <OpportunityListItem data={opportunity} key={index} />
-          ))}
-
-        </List>}
-
-        {(!data || data.length == 0) &&
-        <h2 className='no_results_message'>
-          No Created Opportunities found
-        </h2>}
-
-        <ListItem button
-          sx={{
-            margin: 'auto',
-            marginTop: '70px',
-            height: '60px',
-            bottom: '50px',
-            width: '48vw',
-            borderRadius: '10px',
-            justifyContent: 'center',
-            color: '#003c6c',
-            backgroundColor: 'white',
-            fontSize: '16pt'}}
-          onClick={handleClick}
-        >
-          Create New Opportunity
-        </ListItem>
-      </Paper>
+          borderRadius: '10px',
+          justifyContent: 'center',
+          color: '#003c6c',
+          backgroundColor: 'white',
+          fontSize: '16pt'}}
+        onClick={handleCancel}
+      >
+        Create New Opportunity
+      </ListItem>
 
       {(opportunityCreationPopup == true) &&
-      <OpportunityCreation toggle={handleClick}/>}
-    </div>);
+    <OpportunityCreation toggle={handleCancel}/>}
+    </Paper>
+  );
 }

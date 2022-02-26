@@ -8,7 +8,10 @@ import Avatar from '@mui/material/Avatar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {ListItem} from '@mui/material';
+import {IconButton, ListItem} from '@mui/material';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import '../stylesheets/OpportunityListItem.css';
+import useAuth from '../util/AuthContext';
 
 /**
  * OpportunityListItem
@@ -19,6 +22,7 @@ import {ListItem} from '@mui/material';
  */
 export default function OpportunityListItem({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
+  const {userProfile} = useAuth();
 
   const getOpportunityCreator = () => {
     fetch(`/api/getProfileName/${data.usersponsors.creator}`)
@@ -29,7 +33,6 @@ export default function OpportunityListItem({data}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setOpportunityCreator(json);
         })
         .catch((err) => {
@@ -40,89 +43,89 @@ export default function OpportunityListItem({data}) {
 
   useEffect(() => {
     getOpportunityCreator();
-    console.log(opportunityCreator);
   }, []);
 
   const handleClick = () => {
     console.log('');
   };
 
+  const toggleMenu = () => {
+    console.log('clicked');
+  };
+
   return (
     <ListItem onClick={handleClick()} sx={{cursor: 'pointer'}}>
       {data && <Card sx={{
         display: 'flex',
+        flexDirection: 'row',
         marginTop: '5px',
         marginBottom: '5px',
-        height: '200px',
-        width: '48vw'}}>
+        height: 'auto',
+        width: '48vw',
+        maxHeight: '260px'}}>
         <CardMedia
           component='img'
           sx={{
-            height: '200px',
+            height: '300px',
             width: '300px',
-            maxWidth: '300px',
-            marginBlockEnd: 'auto'}}
+            minWidth: '100px',
+            minHeight: '100px'}}
           image={data.eventbanner}/>
         <CardContent>
           <Typography
             variant='h5'
             component='div'
-            color='gold'
-            width='600px'
+            display='flex'
+            flexWrap='wrap'
+            fontSize='16pt'
+            color='#fdc700'
+            width='auto'
+            maxWidth='500px'
             textOverflow='wrap'>
             {data.eventname}
           </Typography>
           <div className='opportunity'>
             {opportunityCreator != null && <div className='opportunity__host'>
-              <Avatar src={opportunityCreator.profilepicture}/>
-              <h5 className='opportunity__hostname'>
-                Hosted by {opportunityCreator.firstname + ' '}
+              <Avatar src={opportunityCreator.profilepicture}
+                sx={{height: '30px',
+                  width: '30px',
+                  maxHeight: '40px',
+                  maxWidth: '40px'}}/>
+              {opportunityCreator.profileid != userProfile.profileid &&
+              <h5 className='opportunity__host-name'>
+                Opportunity Hosted by {opportunityCreator.firstname + ' '}
                 .{opportunityCreator.lastname[0]}
-              </h5>
+              </h5>}
+              {opportunityCreator.profileid == userProfile.profileid &&
+              <h5 className='opportunity__host-name'>
+                Opportunity Hosted by You
+              </h5>}
             </div>}
             <div className='opportunity__location'>
-              <h6 className='opportunity__remote'>
-                {data.remote ? 'Remote' : 'In-Person'}
-              </h6>
-              <LocationOnIcon />
-              <h6 className='opportunity__locationname'>
-                {data.remote ? data.eventzoomlink : data.eventlocation}
+              <LocationOnIcon sx={{color: 'gray'}}/>
+              <h6 className='opportunity__location-or-link'>
+                {data.remote ? 'Virtual on Zoom': data.eventlocation}
               </h6>
             </div>
             {data.startdate && data.startdate.startdate &&
             <div className='opportunity__date'>
-              <CalendarTodayIcon/>
-              <h6 className='opportunity__startdate'>
-                {data.startdate.startdate}
-              </h6>
+              <CalendarTodayIcon sx={{marginRight: '5px', color: 'gray'}}/>
+              {data.startdate.startdate}
             </div>}
             {data.startdate && data.startdate.starttime &&
             <div className='opportunity__time'>
-              <ScheduleIcon/>
-              <h6 className='opportunity__starttime'>
-                {data.startdate.starttime}
-              </h6>
+              <ScheduleIcon sx={{marginRight: '5px', color: 'gray'}}/>
+              {data.startdate.starttime}
             </div>}
-            <div className='opportunity__enddate'>
-              <h6 className='opportunity__timeheader'>Ends:</h6>
-              {data.enddate && data.enddate.enddate &&
-              <div className='opportunity__endingdate'>
-                <CalendarTodayIcon/>
-                <h6 className='opportunity__endday'>
-                  {data.enddate.enddate}
-                </h6>
-              </div>}
-              {data.enddate && data.enddate.endtime &&
-                <div className='opportunity__end'>
-                  <ScheduleIcon/>
-                  <h6 className='opportunity__endtime'>
-                    {data.enddate.endtime}
-                  </h6>
-                </div>}
-            </div>
 
           </div>
         </CardContent>
+        <IconButton sx={{height: '50px'}}>
+          <MoreHorizIcon
+            sx={{margin: '5px'}}
+            onClick={toggleMenu}
+          />
+        </IconButton>
       </Card>}
     </ListItem>
   );
