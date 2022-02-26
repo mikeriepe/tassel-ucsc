@@ -17,8 +17,8 @@ export default function Login() {
 
 
   const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
-  console.log(user);
-  console.log(userProfile);
+  console.log('current user: ', user);
+  console.log('current user profile: ', userProfile);
 
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
