@@ -1,15 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-* {
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 500;
-}
-
 .card-title {
   margin-inline: 2rem;
   padding-block: 2rem;
-  border-bottom: 1px solid #D1D1D1;
+  border-bottom: 1px solid var(--border-primary);
   font-family: Roboto;
   font-weight: bold;
   font-size: 1.2rem;
@@ -21,12 +13,7 @@
   align-items: center;
   height: 5rem;
   width: 100vw;
-  border-bottom: 1px solid #D1D1D1;
-}
-
-.MuiTabs-indicator {
-  background-color: black;
-  color: black;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 /* ------------------------- */
@@ -82,14 +69,14 @@
 .header-bottom-text-major {
   font-weight: 600;
   font-size: 0.85rem;
-  color: #13A5DC;
+  color: var(--primary-blue-main);
 }
 
 .header-bottom-text-year,
 .header-bottom-text-location {
   font-weight: 500;
   font-size: 0.75rem;
-  color: rgba(108, 110, 114, 0.8);
+  color: var(--text-grey-primary);
 }
 
 /* ------------------------- */
@@ -100,7 +87,7 @@
   margin: 2rem;
   font-size: 0.8rem;
   line-height: 1.5rem;
-  color: rgba(108, 110, 114, 0.8);
+  color: var(--text-grey-primary);
 }
 
 /* ------------------------- */
@@ -110,6 +97,7 @@
 .experience-text {
   margin: 2rem;
   line-height: 1.5;
+  color: var(--text-black);
 }
 
 .experience-text-title {
@@ -120,18 +108,18 @@
 .experience-text-company {
   font-weight: 600;
   font-size: 0.8rem;
-  color: #13A5DC;
+  color: var(--primary-blue-main);
 }
 
 .experience-text-location,
 .experience-text-date {
   font-size: 0.8rem;
-  color: rgba(108, 110, 114, 0.8);
+  color: var(--text-grey-primary);
 }
 
 .experience-text-description {
   margin-top: 1rem;
   font-size: 0.8rem;
   line-height: 1.5rem;
-  color: rgba(108, 110, 114, 0.8);
+  color: var(--text-grey-primary);
 }

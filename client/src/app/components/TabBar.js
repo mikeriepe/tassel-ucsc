@@ -33,7 +33,7 @@ export default function TabBar() {
         <Tabs
           value={value}
           onChange={handleTabs}
-          indicatorColor='secondary'
+          indicatorColor='primary'
           sx={{
             '&& .Mui-selected': {
               color: '#000000',
