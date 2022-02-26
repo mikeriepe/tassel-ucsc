@@ -132,49 +132,66 @@ export default function NavBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <Link className='link' to="/browse">
+      {loggedIn && <div>
+        <Link className='link' to="/browse">
+          <MenuItem>
+            <IconButton size="large" color="inherit">
+              <PersonSearchIcon />
+            </IconButton>
+            <p>Browse</p>
+          </MenuItem>
+        </Link>
         <MenuItem>
-          <IconButton size="large" color="inherit">
-            <PersonSearchIcon />
+          <IconButton
+            size="large"
+            aria-label="show 17 new messages"
+            color="inherit"
+          >
+            <Badge badgeContent={17} color="error">
+              <ChatBubbleIcon />
+            </Badge>
           </IconButton>
-          <p>Browse</p>
         </MenuItem>
-      </Link>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new messages"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <ChatBubbleIcon />
-          </Badge>
-        </IconButton>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="profile-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+        <MenuItem>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+          >
+            <Badge badgeContent={17} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <p>Notifications</p>
+        </MenuItem>
+
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </div>}
+      {!loggedIn && <div>
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </div>}
     </Menu>
   );
 
@@ -195,37 +212,39 @@ export default function NavBar() {
           <Box sx={{flexGrow: 1}} />
           <Box sx={{display: {xs: 'none', md: 'flex'}}}>
             {/* browse button */}
-            <Link className='link' to="/browse">
-              <Tooltip className="link-displace" title="Browse">
-                <IconButton size="large" color="inherit">
-                  <PersonSearchIcon />
+            {loggedIn && <div>
+              <Link className='link' to="/browse">
+                <Tooltip className="link-displace" title="Browse">
+                  <IconButton size="large" color="inherit">
+                    <PersonSearchIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+              {/* messages button */}
+              <Tooltip title="Messages">
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new messages"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <ChatBubbleIcon />
+                  </Badge>
                 </IconButton>
               </Tooltip>
-            </Link>
-            {/* messages button */}
-            <Tooltip title="Messages">
-              <IconButton
-                size="large"
-                aria-label="show 17 new messages"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <ChatBubbleIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            {/* notification button */}
-            <Tooltip title="Notifications">
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
+              {/* notification button */}
+              <Tooltip title="Notifications">
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            </div>}
             {/* account icon */}
             <IconButton
               size="large"
