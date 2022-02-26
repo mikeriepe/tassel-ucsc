@@ -61,7 +61,7 @@ export default function OpportunityListItem({data}) {
         marginTop: '5px',
         marginBottom: '5px',
         height: 'auto',
-        width: '48vw',
+        width: '50vw',
         maxHeight: '260px'}}>
         <CardMedia
           component='img'
@@ -71,12 +71,11 @@ export default function OpportunityListItem({data}) {
             minWidth: '100px',
             minHeight: '100px'}}
           image={data.eventbanner}/>
-        <CardContent>
+        <CardContent sx={{width: '48vw'}}>
           <Typography
             variant='h5'
             component='div'
             display='flex'
-            flexWrap='wrap'
             fontSize='16pt'
             color='#fdc700'
             width='auto'
@@ -120,10 +119,13 @@ export default function OpportunityListItem({data}) {
 
           </div>
         </CardContent>
-        <IconButton sx={{height: '50px'}}>
+        <IconButton sx={{height: '50px',
+          display: 'flex',
+          position: 'relative',
+          alignItems: 'flex-end',
+          justifySelf: 'flex-end'}}
+        onClick={toggleMenu}>
           <MoreHorizIcon
-            sx={{margin: '5px'}}
-            onClick={toggleMenu}
           />
         </IconButton>
       </Card>}
