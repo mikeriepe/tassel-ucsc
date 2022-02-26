@@ -23,8 +23,9 @@ export default function PendingOpportunities({data}) {
         borderRadius: '10px',
       }}
     >
-      <h2 className='opportunity__tab-title'>Pending Opportunities</h2>
-      <hr></hr>
+      <div className='opportunity__header'>
+        <h3>Pending Opportunities</h3>
+      </div>
       {data != null && <List sx={{
         width: '48vw',
         margin: 'Auto',

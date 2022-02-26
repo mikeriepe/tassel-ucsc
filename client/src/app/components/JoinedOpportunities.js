@@ -12,7 +12,7 @@ export default function JoinedOpportunities({data}) {
   console.log(data);
   return (
     <Paper
-      className='joined-opportunities'
+      className='opportunities'
       elevation={3}
       sx={{
         marginBottom: '3rem',
@@ -24,8 +24,9 @@ export default function JoinedOpportunities({data}) {
         borderRadius: '10px',
       }}
     >
-      <h2 className='opportunity__tab-title'>Joined Opportunities</h2>
-      <hr></hr>
+      <div className='opportunity__header'>
+        <h3>Joined Opportunities</h3>
+      </div>
       <List sx={{
         width: '48vw',
         margin: 'Auto',
