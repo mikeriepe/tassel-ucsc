@@ -4,11 +4,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import {Menu} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {IconButton, ListItem} from '@mui/material';
+import {IconButton, ListItem, MenuItem} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import '../stylesheets/OpportunityListItem.css';
 import useAuth from '../util/AuthContext';
@@ -22,7 +23,21 @@ import useAuth from '../util/AuthContext';
  */
 export default function OpportunityListItem({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+
   const {userProfile} = useAuth();
+
+  const handleMenuOpen = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuId = 'opportunity-menu';
 
   const getOpportunityCreator = () => {
     fetch(`/api/getProfileName/${data.usersponsors.creator}`)
@@ -49,9 +64,9 @@ export default function OpportunityListItem({data}) {
     console.log('');
   };
 
-  const toggleMenu = () => {
+  /* const toggleMenu = () => {
     console.log('clicked');
-  };
+  }; */
 
   return (
     <ListItem onClick={handleClick()} sx={{cursor: 'pointer'}}>
@@ -71,7 +86,7 @@ export default function OpportunityListItem({data}) {
             minWidth: '100px',
             minHeight: '100px'}}
           image={data.eventbanner}/>
-        <CardContent sx={{width: '48vw'}}>
+        <CardContent>
           <Typography
             variant='h5'
             component='div'
@@ -79,7 +94,7 @@ export default function OpportunityListItem({data}) {
             fontSize='16pt'
             color='#fdc700'
             width='auto'
-            maxWidth='500px'
+            maxWidth='550px'
             textOverflow='wrap'>
             {data.eventname}
           </Typography>
@@ -121,13 +136,34 @@ export default function OpportunityListItem({data}) {
         </CardContent>
         <IconButton sx={{height: '50px',
           display: 'flex',
-          position: 'relative',
-          alignItems: 'flex-end',
-          justifySelf: 'flex-end'}}
-        onClick={toggleMenu}>
-          <MoreHorizIcon
-          />
+          justifyContent: 'flex-end',
+          alignContent: 'end'}}
+        aria-controls={menuId}
+        aria-haspopup="true"
+        onClick={handleMenuOpen}>
+          <MoreHorizIcon>
+          </MoreHorizIcon>
         </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <div>
+            <MenuItem>Edit Opportunity</MenuItem>
+            <MenuItem>Cancel Opportunity</MenuItem>
+          </div>
+        </Menu>
       </Card>}
     </ListItem>
   );
