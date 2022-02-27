@@ -24,6 +24,8 @@ import useAuth from '../util/AuthContext';
 export default function OpportunityListItem({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [startdate, setStartdate] = useState(null);
+  const [starttime, setStarttime] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -64,9 +66,34 @@ export default function OpportunityListItem({data}) {
     console.log('');
   };
 
-  /* const toggleMenu = () => {
-    console.log('clicked');
-  }; */
+  useEffect(() => {
+    if (data && data.startdate) {
+      const date = new Date(data.startdate);
+      const year = (date).getFullYear();
+      let month = (date).getMonth()+1;
+      let dt = (date).getDate();
+
+      if (dt < 10) {
+        dt = '0' + dt;
+      }
+      if (month < 10) {
+        month = '0' + month;
+      }
+      setStartdate(year+'-' + month + '-'+dt);
+    }
+  }, [data.startdate]);
+
+  useEffect(() => {
+    if (data && data.starttime) {
+      const time = new Date(data.starttime);
+      const localtime = time.toLocaleTimeString();
+      setStarttime(localtime);
+      // const hours = time.getUTCHours();
+      // const mins = time.getUTCMinutes();
+
+      // setStarttime(hours + ':' + mins);
+    }
+  }, [data.starttime]);
 
   return (
     <ListItem onClick={handleClick()} sx={{cursor: 'pointer'}}>
@@ -121,15 +148,15 @@ export default function OpportunityListItem({data}) {
                 {data.remote ? 'Virtual on Zoom': data.eventlocation}
               </h6>
             </div>
-            {data.startdate && data.startdate.startdate &&
+            {data.startdate &&
             <div className='opportunity__date'>
               <CalendarTodayIcon sx={{marginRight: '5px', color: 'gray'}}/>
-              {data.startdate.startdate}
+              {startdate}
             </div>}
-            {data.startdate && data.startdate.starttime &&
+            {data.starttime &&
             <div className='opportunity__time'>
               <ScheduleIcon sx={{marginRight: '5px', color: 'gray'}}/>
-              {data.startdate.starttime}
+              {starttime}
             </div>}
 
           </div>

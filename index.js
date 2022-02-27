@@ -19,13 +19,22 @@ const userApi = require('./models/user_api');
 const profileApi = require('./models/profile_api');
 
 // Opportunity API
-const opportunityApi = require('./models/opportunity_api')
+const opportunityApi = require('./models/opportunity_api');
 
-// Opportunity API
-const requestApi = require('./models/request_api')
+// Request API
+const requestApi = require('./models/request_api');
 
 // AUTH API 
 const authApi = require('./models/auth_api');
+
+// Organization Type API
+const organizationTypeApi = require('./models/organizationType_api');
+
+// Organization API
+const organizationApi = require('./models/organization_api');
+
+// OpportunityType API
+const opportunityTypeApi = require('./models/opportunityType_api');
 
 require('dotenv').config();
 
@@ -88,6 +97,21 @@ app.post('/api/postOpportunity', opportunityApi.postOpportunity);
 //
 //
 app.get('/api/getPendingOpportunities/:profileid', requestApi.getPendingOpportunities);
+
+// OrganizationType CRUD operations
+//
+//
+app.get('/api/getOrganizationTypes', organizationTypeApi.getOrganizationTypes);
+
+// Organizations CRUD operations
+//
+//
+app.get('/api/getOrganizations/:type', organizationApi.getOrganizations);
+
+// OpportunityType CRUD operations
+//
+//
+app.get('/api/getOpportunityTypes', opportunityTypeApi.getOpportunityTypes);
 
 //  Preferences CRUD operations
 //

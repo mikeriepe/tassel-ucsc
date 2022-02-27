@@ -2,24 +2,23 @@
   display: flex;
   position: relative; 
   right: 215px;
-  top: 80px;
+  top: 50px;
   height: 60px; 
-  justify-content: center;
   width: 770px;
 }
 
 .opportunity-creation__roles {
   position: relative;
-  right: 175px;
+  right: 215px;
+  bottom: 25px;
   margin-top: 5px;
 }
 
 .opportunity-creation__details-section {
   display: flex;
   position: absolute;
-  justify-content: center;
-  height: 700px;
-  width: 20vw;
+  height: 800px;
+  width: 21.5vw;
   top: 0%;
   bottom: 465px;
   left: 71%;
@@ -30,19 +29,21 @@
 }
 
 .opportunity-creation__details-header {
+  display: flex;
+  position: relative;
   color: gray;
+  margin-left: auto;
+  margin-right: auto;
+  left: 170px;
   font-family: Roboto;
   height: 60px;
-  width: 100px;
-  border-bottom: 1px solid #000000;
 }
 
 .opportunity-creation__roles-header {
   position: relative;
   display: inline-flex;
-  margin-left: 5px;
-  margin-bottom: 15px;
-  margin-top: 10px;
+  margin-bottom: 5px;
+  margin-top: 0px;
 }
 
 .opportunity-creation__additional-role-input {
@@ -52,14 +53,15 @@
 
 .opportunity-creation__creation-buttons {
   position: relative;
-  top: 550px;
+  right: 200px;
+  top: 650px;
 }
 
 .opportunity-creation__sponsor {
   display: flex;
   position: relative; 
-  right: 240px;
-  top: 80px;
+  right: 295px;
+  bottom: 25px;
   height: 60px; 
   justify-content: center;
   width: 770px;
