@@ -6,7 +6,7 @@ import '../stylesheets/MyProfile.css';
  * Creates reusable tab bar
  * @return {HTML} Tab bar component
  */
-export default function TabBar({data, height}) {
+export default function TabBar({data, height, width}) {
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabs = (event, value) => {
@@ -26,7 +26,13 @@ export default function TabBar({data, height}) {
 
   return (
     <div>
-      <div className='tab-container'>
+      <div
+        className='tab-container'
+        style={{
+          height: height ? height : '5rem',
+          width: width ? width : '100%',
+        }}
+      >
         <Tabs
           value={tabValue}
           onChange={handleTabs}
@@ -38,6 +44,8 @@ export default function TabBar({data, height}) {
             '.MuiTabs-indicator': {
               height: '3.5px',
             },
+            'height': '100%',
+            'width': '100%',
           }}
           centered
         >
