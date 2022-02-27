@@ -88,10 +88,6 @@ export default function OpportunityListItem({data}) {
       const time = new Date(data.starttime);
       const localtime = time.toLocaleTimeString();
       setStarttime(localtime);
-      // const hours = time.getUTCHours();
-      // const mins = time.getUTCMinutes();
-
-      // setStarttime(hours + ':' + mins);
     }
   }, [data.starttime]);
 
