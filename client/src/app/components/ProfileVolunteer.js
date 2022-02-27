@@ -31,7 +31,7 @@ export default function ProfileVolunteer({data}) {
       elevation={3}
       sx={{
         marginBottom: '3rem',
-        width: '55vw',
+        width: '850px',
         height: 'auto',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
@@ -42,40 +42,26 @@ export default function ProfileVolunteer({data}) {
       </div>
       {exampleDataArray &&
         exampleDataArray.map((exampleData, index) => (
-          <>
-            <div className='experience-text'>
-              <div
-                className='experience-text-title'
-                key={`title-${index}`}
-              >
-                {exampleData.title}
-              </div>
-              <div
-                className='experience-text-company'
-                key={`company-${index}`}
-              >
-                {exampleData.company}
-              </div>
-              <div
-                className='experience-text-location'
-                key={`location-${index}`}
-              >
-                {exampleData.location}
-              </div>
-              <div
-                className='experience-text-date'
-                key={`date-${index}`}
-              >
-                {exampleData.startDate + ' - ' + exampleData.endDate}
-              </div>
-              <div
-                className='experience-text-description'
-                key={`description-${index}`}
-              >
-                {exampleData.description}
-              </div>
+          <div
+            className='experience-text'
+            key={`volunteer-experience-${index}`}
+          >
+            <div className='experience-text-title'>
+              {exampleData.title}
             </div>
-          </>
+            <div className='experience-text-company'>
+              {exampleData.company}
+            </div>
+            <div className='experience-text-location'>
+              {exampleData.location}
+            </div>
+            <div className='experience-text-date'>
+              {exampleData.startDate + ' - ' + exampleData.endDate}
+            </div>
+            <div className='experience-text-description'>
+              {exampleData.description}
+            </div>
+          </div>
         ))}
     </Paper>
   );

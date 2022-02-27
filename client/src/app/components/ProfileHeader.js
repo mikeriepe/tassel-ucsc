@@ -19,7 +19,7 @@ export default function ProfileHeader({data}) {
       sx={{
         position: 'relative',
         marginBlock: '3rem',
-        width: '55vw',
+        width: '850px',
         height: '500px',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
