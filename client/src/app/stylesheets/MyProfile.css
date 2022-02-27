@@ -12,7 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 5rem;
+  height: auto;
   width: 100vw;
   border-bottom: 1px solid var(--border-primary);
 }

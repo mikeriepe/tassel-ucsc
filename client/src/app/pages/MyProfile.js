@@ -1,8 +1,11 @@
 import * as React from 'react';
-import TabBar from '../components/TabBar';
 import {useNavigate} from 'react-router-dom';
-import useAuth from '../util/AuthContext';
 import {toast} from 'react-toastify';
+import TabBar from '../components/TabBar';
+import Profile from '../components/Profile';
+import Opportunities from '../components/Opportunities';
+import Calendar from '../components/Calendar';
+import useAuth from '../util/AuthContext';
 
 /**
  * creates the profile page
@@ -49,12 +52,20 @@ export default function MyProfile() {
         });
   };
 
+  const data = [
+    {name: 'Profile', component: <Profile />},
+    {name: 'Opportunities', component: <Opportunities />},
+    {name: 'Calendar', component: <Calendar />},
+  ];
+
   return (
     <div className='MyProfile'>
-      <TabBar />
-      {user.active && <button onClick={handleDeactivateAccount}>
-        Deactivate Account
-      </button>}
+      <TabBar data={data} />
+      {user.active &&
+        <button onClick={handleDeactivateAccount}>
+          Deactivate Account
+        </button>
+      }
     </div>
   );
 }

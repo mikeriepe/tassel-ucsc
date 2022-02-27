@@ -1,37 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Tabs, Tab} from '@mui/material';
-import Profile from './Profile';
-import Opportunities from './Opportunities';
-import Calendar from './Calendar';
 import '../stylesheets/MyProfile.css';
 
-const TabStyles = {
-  marginInline: '1em',
-  minHeight: '5rem',
-  textTransform: 'none',
-  fontFamily: 'Montserrat',
-  fontWeight: '600',
-  fontSize: '0.85rem',
-  letterSpacing: '-0.015em',
-  color: 'rgba(108, 110, 114, 0.8)',
-};
-
 /**
- * creates tab bar
- * @return {HTML} tab bar component
+ * Creates reusable tab bar
+ * @return {HTML} Tab bar component
  */
-export default function TabBar() {
-  const [value, setValue]=React.useState(0);
-  const handleTabs=(e, val)=>{
-    // console.log(val);
-    setValue(val);
+export default function TabBar({data, height}) {
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleTabs = (event, value) => {
+    setTabValue(value);
+  };
+
+  const TabStyles = {
+    marginInline: '1em',
+    height: height ? height : '5rem',
+    textTransform: 'none',
+    fontFamily: 'Montserrat',
+    fontWeight: '600',
+    fontSize: '0.85rem',
+    letterSpacing: '-0.015em',
+    color: 'rgba(108, 110, 114, 0.8)',
   };
 
   return (
     <div>
       <div className='tab-container'>
         <Tabs
-          value={value}
+          value={tabValue}
           onChange={handleTabs}
           indicatorColor='primary'
           sx={{
@@ -44,39 +41,41 @@ export default function TabBar() {
           }}
           centered
         >
-          <Tab
-            sx={TabStyles}
-            label='Profile'
-            disableRipple
-          />
-          <Tab
-            sx={TabStyles}
-            label='Opportunities'
-            disableRipple
-          />
-          <Tab
-            sx={TabStyles}
-            label='Calendar'
-            disableRipple
-          />
+          {data.map((object) => (
+            <Tab
+              key={`tab-${object.name}`}
+              label={object.name}
+              sx={TabStyles}
+              disableRipple
+            />
+          ))}
         </Tabs>
       </div>
-      <TabPanel value={value} index={0}>{<Profile/>}</TabPanel>
-      <TabPanel value={value} index={1}>{<Opportunities/>}</TabPanel>
-      <TabPanel value={value} index={2}>{<Calendar/>}</TabPanel>
+
+      {data.map((object, index) => (
+        <TabPanel
+          key={`tab-component-${index}`}
+          value={tabValue}
+          index={index}
+        >
+          {object.component}
+        </TabPanel>
+      ))}
     </div>
   );
 }
+
 /**
- * renders component
- * @return {HTML} tab component
- * @param {object} props
+ * Renders component
+ * @return {HTML} Tab component
+ * @param {object} children
+ * @param {number} value
+ * @param {number} index
  */
-function TabPanel(props) {
-  const {children, value, index}=props;
+function TabPanel({children, value, index}) {
   return (
     <div>
-      {value==index && children}
+      {value === index && children}
     </div>
   );
 }
