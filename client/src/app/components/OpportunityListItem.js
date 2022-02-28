@@ -59,6 +59,25 @@ export default function OpportunityListItem({data}) {
         });
   };
 
+  const deleteOpportunity = (eventid) => {
+    fetch(`/api/deleteOpportunity/${eventid}`, {
+      method: 'DELETE',
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          console.log(res);
+          return res;
+        })
+        .then((json) => {
+          console.log(json);
+          navigate(`/`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
   useEffect(() => {
     getOpportunityCreator();
   }, []);
@@ -203,7 +222,9 @@ export default function OpportunityListItem({data}) {
           >
             <div>
               <MenuItem>Edit Opportunity</MenuItem>
-              <MenuItem>Cancel Opportunity</MenuItem>
+              <MenuItem onClick={() => deleteOpportunity(data.eventid)}>
+                Cancel Opportunity
+              </MenuItem>
             </div>
           </Menu>
         </Card>

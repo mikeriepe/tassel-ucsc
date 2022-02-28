@@ -56,8 +56,26 @@ const uuid = require('uuid');
     res.status(500).send('error creating opportunity')
   }
   
+};
+
+/**
+ * DELETEs a opportunity object
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.deleteOpportunity = async (req, res) => {
+  console.log(req.params);
+  try {
+    const opportunity = await opportunityModel.deleteOpportunity(req.params);
+    res.status(200).json({message: 'opportunity deleted'});
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('error deleting opportunity')
+  }
   
 };
+
 
 
 

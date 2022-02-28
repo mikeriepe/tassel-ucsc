@@ -79,3 +79,20 @@ const pool = new Pool();
   console.log(rows);
   return rows[0].eventid;
 };
+
+/**
+ * getPastOpportunities
+ * deletes opportunity data based on opportunity id provided
+ * Returns the user's past opportunities @param {*} opportunityInfo
+ * @param {*} eventid
+ */
+exports.deleteOpportunity = async (eventid) => {
+  const query = {
+    text: `DELETE FROM events 
+          WHERE eventid = $1`,
+    values: [eventid],
+  };
+  const {rows} = await pool.query(query);
+  console.log(rows[[0]]);
+  return rows[0];
+};
