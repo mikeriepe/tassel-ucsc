@@ -3,8 +3,6 @@ import {useState, useEffect} from 'react';
 import {ListItem} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-// import CardMedia from '@mui/material/CardMedia';
-// import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
@@ -51,6 +49,24 @@ export default function OpportunityListItem({data}) {
 
   const handleClick = () => {
     console.log('');
+  };
+
+  const formatDate = (date) => {
+    const dateOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+
+    const timeOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+
+    const convertDate = new Date(date).toLocaleDateString([], dateOptions);
+    const convertTime = new Date(date).toLocaleTimeString([], timeOptions);
+
+    return {date: convertDate, time: convertTime};
   };
 
   return (
@@ -126,12 +142,14 @@ export default function OpportunityListItem({data}) {
                     <CalendarTodayIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-date-text'>
-                    {data.startdate && data.startdate.startdate &&
+                    {/* {data.startdate && data.startdate.startdate &&
                       `${data.startdate.startdate}`
                     }
                     {data.enddate && data.enddate.enddate &&
                       ` - ${data.startdate.startdate}`
-                    }
+                    } */}
+                    {data.startdate && formatDate(data.startdate).date}
+                    {data.enddate && ` - ${formatDate(data.startdate).date}`}
                   </div>
                 </div>
                 <div className='opportunity-card-right-time'>
@@ -139,9 +157,10 @@ export default function OpportunityListItem({data}) {
                     <ScheduleIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-time-text'>
-                    {data.startdate && data.startdate.starttime &&
+                    {/* {data.startdate && data.startdate.starttime &&
                       `${data.startdate.starttime}`
-                    }
+                    } */}
+                    {data.startdate && formatDate(data.startdate).time}
                   </div>
                 </div>
               </div>
