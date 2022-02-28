@@ -1,120 +1,76 @@
-.opportunity {
-  display: inline-flex;
-  flex-wrap: wrap;
-  height: 100px;
-  max-height: 100px;
-  max-width: 600px;
+.opportunity-card-left {
+  height: 100%;
+  width: 40%;
 }
 
-.opportunity__host {
-  display: inline-flex;
-  width: 570px;
+.opportunity-card-left-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.opportunity-card-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-inline: 1.5em;
+  height: 100%;
+  width: calc(100% - 3em);
+}
+
+.opportunity-card-right-title {
+  margin-block: 0.2em;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--secondary-yellow-main);
+}
+
+.opportunity-card-right-host {
+  display: flex;
   align-items: center;
-  max-height: 30px;
-  max-width: 470px;
-  margin-top: 5px;
+  margin-top: 0.2em;
 }
 
-.opportunity__host-name {
+.opportunity-card-right-host-avatar {
+  height: 30px;
+  width: 30px;
+  left: 50px;
+  top: 42%;
+}
+
+.opportunity-card-right-host-name {
+  margin-inline: 0.8em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-grey-primary);
+}
+
+.opportunity-card-right-group {
   display: flex;
-  position: relative;
-  margin-bottom: 5px;
-  margin-left: 10px;
-  margin-top: 40px;
-  color: gray;
-  max-height: 40px;
-  bottom: 19px;
-  font-size: 10pt;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1em;
+  width: 100%;
 }
 
-.opportunity__location {
-  display: inline-flex;
-  position: relative;
-  margin-top: 15px;
-  max-height: 40px;
-  max-width: 500px;
-  width: 530px;
-  font-size: 10pt;
-}
-
-.opportunity__location-or-link {
-  position: relative;
-  bottom: 35px;
-  max-height: 40px;
-  width: 250px;
-  font-size: 10pt;
-  color: gray;
-  margin-left: 5px;
-  margin-top: 40px;
-}
-
-.opportunity__date {
+.opportunity-card-right-location,
+.opportunity-card-right-date,
+.opportunity-card-right-time {
   display: flex;
-  position: relative;
-  margin-top: 0px;
+  margin-top: 0.2em;
+  width: 90%;
 }
 
-.opportunity__time {
+.opportunity-card-right-location-text,
+.opportunity-card-right-date-text,
+.opportunity-card-right-time-text {
   display: flex;
-  position: relative;
-  margin-top: 15px;
-  width: 500px;
-}
-
-.opportunity__start-date {
-  display: flex;
-  position: relative;
-  margin-left: 5px;
-  margin-right: 10px;
-  bottom: 17px;
-}
-
-.opportunity__start-time {
-  display: flex;
-  position: relative;
-  margin-left: 5px;
-  bottom: 17px;
-}
-
-.opportunity__end-date {
-  display: flex;
-  position: relative;
-  margin-left: 97px;
-  margin-top: 35px;
-}
-
-.opportunity__ending-date {
-  display: flex;
-  position: relative;
-  margin-left: 5px;
-}
-
-.opportunity__end {
-  display: flex;
-  position: relative;
-  bottom: 35px;
-  margin-top: 35px;
-}
-
-.opportunity__end-day {
-  display: flex;
-  position: relative;
-  margin-left: 5px;
-  margin-right: 10px;
-  bottom: 17px;
-}
-
-.opportunity__time-header {
-  display: flex;
-  position: relative;
-  margin-right: 10px;
-  font-size: 14pt;
-  bottom: 45px;
-}
-
-.opportunity__end-time {
-  display: flex;
-  position: relative;
-  margin-left: 5px;
-  bottom: 17px;
+  flex-wrap: wrap;
+  padding-top: 0.35em;
+  padding-inline: 0.5em;
+  font-size: 0.7rem;
+  color: var(--text-grey-primary);
 }

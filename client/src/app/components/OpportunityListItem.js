@@ -1,18 +1,20 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
+import {ListItem, IconButton, Menu, MenuItem} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import {Menu} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {IconButton, ListItem, MenuItem} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import '../stylesheets/OpportunityListItem.css';
-import useAuth from '../util/AuthContext';
+import '../stylesheets/Opportunities.css';
+// import useAuth from '../util/AuthContext';
+
+const IconStyles = {
+  fontSize: '1.3rem',
+  color: '#757575',
+};
 
 /**
  * OpportunityListItem
@@ -24,12 +26,10 @@ import useAuth from '../util/AuthContext';
 export default function OpportunityListItem({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [startdate, setStartdate] = useState(null);
-  const [starttime, setStarttime] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
 
-  const {userProfile} = useAuth();
+  // const {userProfile} = useAuth();
 
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
@@ -50,6 +50,7 @@ export default function OpportunityListItem({data}) {
           return res.json();
         })
         .then((json) => {
+          console.log(json);
           setOpportunityCreator(json);
         })
         .catch((err) => {
@@ -66,128 +67,147 @@ export default function OpportunityListItem({data}) {
     console.log('');
   };
 
-  useEffect(() => {
-    if (data && data.startdate) {
-      const date = new Date(data.startdate);
-      const year = (date).getFullYear();
-      let month = (date).getMonth()+1;
-      let dt = (date).getDate();
+  const formatDate = (date) => {
+    const dateOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
 
-      if (dt < 10) {
-        dt = '0' + dt;
-      }
-      if (month < 10) {
-        month = '0' + month;
-      }
-      setStartdate(year+'-' + month + '-'+dt);
-    }
-  }, [data.startdate]);
+    const timeOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+    };
 
-  useEffect(() => {
-    if (data && data.starttime) {
-      const time = new Date(data.starttime);
-      const localtime = time.toLocaleTimeString();
-      setStarttime(localtime);
-    }
-  }, [data.starttime]);
+    const convertDate = new Date(date).toLocaleDateString([], dateOptions);
+    const convertTime = new Date(date).toLocaleTimeString([], timeOptions);
+
+    return {date: convertDate, time: convertTime};
+  };
 
   return (
-    <ListItem onClick={handleClick()} sx={{cursor: 'pointer'}}>
-      {data && <Card sx={{
+    <ListItem
+      onClick={handleClick()}
+      sx={{
         display: 'flex',
-        flexDirection: 'row',
-        marginTop: '5px',
-        marginBottom: '5px',
-        height: 'auto',
-        width: '50vw',
-        maxHeight: '260px'}}>
-        <CardMedia
-          component='img'
+        cursor: 'pointer',
+      }}
+      disablePadding
+    >
+      {data &&
+        <Card
           sx={{
-            height: '300px',
-            width: '300px',
-            minWidth: '100px',
-            minHeight: '100px'}}
-          image={data.eventbanner}/>
-        <CardContent>
-          <Typography
-            variant='h5'
-            component='div'
-            display='flex'
-            fontSize='16pt'
-            color='#fdc700'
-            width='auto'
-            maxWidth='550px'
-            textOverflow='wrap'>
-            {data.eventname}
-          </Typography>
-          <div className='opportunity'>
-            {opportunityCreator != null && <div className='opportunity__host'>
-              <Avatar src={opportunityCreator.profilepicture}
-                sx={{height: '30px',
-                  width: '30px',
-                  maxHeight: '40px',
-                  maxWidth: '40px'}}/>
-              {opportunityCreator.profileid != userProfile.profileid &&
-              <h5 className='opportunity__host-name'>
-                Opportunity Hosted by {opportunityCreator.firstname + ' '}
-                .{opportunityCreator.lastname[0]}
-              </h5>}
-              {opportunityCreator.profileid == userProfile.profileid &&
-              <h5 className='opportunity__host-name'>
-                Opportunity Hosted by You
-              </h5>}
-            </div>}
-            <div className='opportunity__location'>
-              <LocationOnIcon sx={{color: 'gray'}}/>
-              <h6 className='opportunity__location-or-link'>
-                {data.remote ? 'Virtual on Zoom': data.eventlocation}
-              </h6>
-            </div>
-            {data.startdate &&
-            <div className='opportunity__date'>
-              <CalendarTodayIcon sx={{marginRight: '5px', color: 'gray'}}/>
-              {startdate}
-            </div>}
-            {data.starttime &&
-            <div className='opportunity__time'>
-              <ScheduleIcon sx={{marginRight: '5px', color: 'gray'}}/>
-              {starttime}
-            </div>}
-
-          </div>
-        </CardContent>
-        <IconButton sx={{height: '50px',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignContent: 'end'}}
-        aria-controls={menuId}
-        aria-haspopup="true"
-        onClick={handleMenuOpen}>
-          <MoreHorizIcon>
-          </MoreHorizIcon>
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            display: 'flex',
+            height: '210px',
+            width: '100%',
+            boxShadow: '0',
+            borderRadius: '10px',
+            outline: '0.5px solid #d1d1d1',
           }}
-          id={menuId}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={isMenuOpen}
-          onClose={handleMenuClose}
         >
-          <div>
-            <MenuItem>Edit Opportunity</MenuItem>
-            <MenuItem>Cancel Opportunity</MenuItem>
+          <div className='opportunity-card-left'>
+            <img
+              className='opportunity-card-left-cover'
+              src={data.eventbanner}
+            />
           </div>
-        </Menu>
-      </Card>}
+          <CardContent
+            sx={{
+              padding: '0',
+              height: '100%',
+              width: '60%',
+            }}
+          >
+            <div className='opportunity-card-right'>
+              <div className='opportunity-card-right-title'>
+                {data.eventname}
+              </div>
+              <div className='opportunity-card-right-host'>
+                {opportunityCreator !== null &&
+                  <>
+                    <div className='opportunity-card-right-host-avatar'>
+                      <Avatar
+                        src={opportunityCreator.profilepicture}
+                        sx={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </div>
+                    <div className='opportunity-card-right-host-name'>
+                      {
+                        data.organization &&
+                        data.organization != 'user sponsor' ? `Hosted by 
+                        ${data.organization}` :
+                        `Hosted by 
+                        ${opportunityCreator.firstname} 
+                        ${opportunityCreator.lastname[0]}.`
+                      }
+                    </div>
+                  </>
+                }
+              </div>
+              <div className='opportunity-card-right-group'>
+                <div className='opportunity-card-right-location'>
+                  <div className='opportunity-card-right-location-icon'>
+                    <LocationOnIcon sx={IconStyles} />
+                  </div>
+                  <div className='opportunity-card-right-location-text'>
+                    {data.remote ? data.eventzoomlink : data.eventlocation}
+                  </div>
+                </div>
+                <div className='opportunity-card-right-date'>
+                  <div className='opportunity-card-right-date-icon'>
+                    <CalendarTodayIcon sx={IconStyles} />
+                  </div>
+                  <div className='opportunity-card-right-date-text'>
+                    {data.startdate && formatDate(data.startdate).date}
+                    {data.enddate && ` - ${formatDate(data.enddate).date}`}
+                  </div>
+                </div>
+                <div className='opportunity-card-right-time'>
+                  <div className='opportunity-card-right-time-icon'>
+                    <ScheduleIcon sx={IconStyles} />
+                  </div>
+                  <div className='opportunity-card-right-time-text'>
+                    {data.starttime && formatDate(data.starttime).time}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+          <IconButton sx={{height: '50px',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignContent: 'end'}}
+          aria-controls={menuId}
+          aria-haspopup="true"
+          onClick={handleMenuOpen}>
+            <MoreHorizIcon>
+            </MoreHorizIcon>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+          >
+            <div>
+              <MenuItem>Edit Opportunity</MenuItem>
+              <MenuItem>Cancel Opportunity</MenuItem>
+            </div>
+          </Menu>
+        </Card>
+      }
     </ListItem>
   );
 }

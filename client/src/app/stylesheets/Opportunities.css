@@ -1,18 +1,8 @@
-.opportunities__header {
+.card-title {
+  margin-inline: 2rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--border-primary);
   font-family: Roboto;
-  margin: 2em;
-  margin-top: 0px;
-  margin-bottom: 10px;
-  padding-bottom: 0.7em;
-  border-bottom: 1px solid #D1D1D1;
-}
-
-.opportunities__no-results-message {
-  display: flex;
-  position: relative;
-  justify-content: center;
-}
-
-.opportunities {
-  margin-top: 50px;
+  font-weight: bold;
+  font-size: 1.2rem;
 }

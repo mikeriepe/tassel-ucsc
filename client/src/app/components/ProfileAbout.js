@@ -12,19 +12,17 @@ export default function ProfileAbout({data}) {
       elevation={3}
       sx={{
         marginBottom: '3rem',
-        width: '55vw',
+        width: '850px',
         height: 'auto',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <div className='profile-header'>
-        <h3>About</h3>
+      <div className='about card-title'>
+        About
       </div>
-      <div className='profile-about-desc'>
-        <p>
-          {data}
-        </p>
+      <div className='about-text-description'>
+        {data}
       </div>
     </Paper>
   );

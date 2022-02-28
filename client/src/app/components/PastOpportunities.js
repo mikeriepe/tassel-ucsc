@@ -15,30 +15,32 @@ export default function PastOpportunities({data}) {
       elevation={3}
       sx={{
         marginBottom: '3rem',
-        width: '50vw',
-        minHeight: '500px',
+        width: '850px',
         height: 'auto',
-        maxHeight: '1000px',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <div className='opportunities__header'>
-        <h3>Past Opportunities</h3>
+      <div className='past card-title'>
+        Past Opportunities
       </div>
-      {data != null && <List sx={{
-        width: '48vw',
-        margin: 'Auto',
-        height: 'auto',
-        maxHeight: '800px',
-        overflow: 'auto'}} >
+
+      <List
+        sx={{
+          display: 'grid',
+          gap: '2em',
+          paddingBlock: '3em',
+          width: '785px',
+          margin: 'auto',
+          borderRadius: '10px',
+        }}
+      >
         {data && data.map((opportunity, index) => (
           <OpportunityListItem data={opportunity} key={index} />
         ))}
+      </List>
 
-      </List>}
-      {(!data || data.length == 0) &&
-      <h2 className='opportunities__no-results-message'>
+      {(!data || data.length == 0) && <h2 className='no_results_message'>
         No Past Opportunities found
       </h2>}
     </Paper>

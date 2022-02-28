@@ -15,65 +15,70 @@ export default function CreatedOpportunities({data}) {
   const [opportunityCreationPopup,
     setOpportunityCreationPopup] = useState(false);
 
-  const handleCancel = () => {
+  const handleClick = () => {
     setOpportunityCreationPopup(!opportunityCreationPopup);
   };
 
   return (
-    <Paper
-      className='opportunities'
-      elevation={3}
-      sx={{
-        hidden: {opportunityCreationPopup},
-        marginBottom: '3rem',
-        width: '50vw',
-        minHeight: '500px',
-        marginTop: '0px',
-        height: 'auto',
-        maxHeight: '1000px',
-        boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
-        borderRadius: '10px',
-      }}
-    >
-      <div className='opportunities__header'>
-        <h3>Created Opportunities</h3>
-      </div>
-      {data != null && <List sx={{
-        width: '48vw',
-        margin: 'auto',
-        height: 'auto',
-        maxHeight: '800px',
-        overflow: 'auto'}} >
-        {data && data.map((opportunity, index) => (
-          <OpportunityListItem data={opportunity} key={index} />
-        ))}
-
-      </List>}
-
-      {(!data || data.length == 0) &&
-      <h2 className='opportunities__no-results-message'>
-        No Created Opportunities found
-      </h2>}
-
-      <ListItem button
+    <div>
+      <Paper
+        className='created-opportunities'
+        elevation={3}
         sx={{
-          margin: 'auto',
-          marginTop: '70px',
-          height: '60px',
-          bottom: '50px',
-          width: '48vw',
+          hidden: {opportunityCreationPopup},
+          marginBottom: '3rem',
+          width: '850px',
+          height: 'auto',
+          boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
           borderRadius: '10px',
-          justifyContent: 'center',
-          color: '#003c6c',
-          backgroundColor: 'white',
-          fontSize: '16pt'}}
-        onClick={handleCancel}
+        }}
       >
-        Create New Opportunity
-      </ListItem>
+        <div className='created card-title'>
+          Created Opportunities
+        </div>
+
+        <List
+          sx={{
+            display: 'grid',
+            gap: '2em',
+            paddingTop: '3em',
+            width: '785px',
+            margin: 'auto',
+            borderRadius: '10px',
+          }}
+        >
+          {data && data.map((opportunity, index) => (
+            <OpportunityListItem data={opportunity} key={index} />
+          ))}
+        </List>
+
+        {(!data || data.length === 0) &&
+        <h2 className='no_results_message'>
+          No Created Opportunities found
+        </h2>}
+
+        <ListItem
+          button
+          disableRipple
+          onClick={handleClick}
+          sx={{
+            justifyContent: 'center',
+            paddingTop: '0',
+            height: '80px',
+            width: '100%',
+            borderRadius: '10px',
+            fontWeight: '600',
+            color: '#42a5f5',
+            backgroundColor: 'white',
+          }}
+        >
+          Create New Opportunity
+        </ListItem>
+      </Paper>
 
       {(opportunityCreationPopup == true) &&
-    <OpportunityCreation toggle={handleCancel}/>}
-    </Paper>
+        <OpportunityCreation toggle={handleClick}/>
+      }
+    </div>
   );
 }

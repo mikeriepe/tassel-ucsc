@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Button} from '@mui/material';
-import {FormControl} from '@mui/material';
-import {StepLabel} from '@mui/material';
-import {IconButton} from '@mui/material';
-import {RadioGroup} from '@mui/material';
-import {Radio} from '@mui/material';
-import {FormControlLabel} from '@mui/material';
-import {MenuItem} from '@mui/material';
+import {Button,
+  FormControl,
+  StepLabel,
+  IconButton,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  MenuItem} from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import '../stylesheets/OpportunityCreation.css';
 import useAuth from '../util/AuthContext';
+
 /**
  * OpportunityCreation
  * Displays the opportunity creation prompt
