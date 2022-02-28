@@ -70,12 +70,11 @@ const pool = new Pool();
  exports.postOpportunity = async (opportunityInfo, newUUID) => {
   const query = {
     text: `INSERT INTO events 
-             (eventid, usersponsors, remote, eventlocation, eventzoomlink, organization, description, eventtype, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants) 
-             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16))
+             (eventid, usersponsors, remote, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime) 
+             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16), ($17), ($18), ($19), ($20))
              RETURNING eventid`,
-    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.remote, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.eventtype, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, true, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants],
+    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.remote, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, true, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants, opportunityInfo.organizationtype, opportunityInfo.opportunitytype, opportunityInfo.roles, opportunityInfo.starttime, opportunityInfo.endtime],
   };
-  console.log(opportunityInfo.userparticipants);
   const {rows} = await pool.query(query);
   console.log(rows);
   return rows[0].eventid;

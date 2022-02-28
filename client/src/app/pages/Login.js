@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {Stack} from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
 import {toast} from 'react-toastify';
 import '../stylesheets/Login.css';
 
@@ -18,8 +17,8 @@ export default function Login() {
 
 
   const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
-  console.log(user);
-  console.log(userProfile);
+  console.log('current user: ', user);
+  console.log('current user profile: ', userProfile);
 
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
@@ -157,15 +156,6 @@ export default function Login() {
         })
         .then((json) => {
           console.log(json);
-          toast.success('Profile Retrieval Success', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
           setUserProfile(json);
         })
         .catch((err) => {
@@ -205,11 +195,6 @@ export default function Login() {
           >
             Submit
           </button>
-          <button className="LoginPage__submitButton">
-            <Link className='LoginPage__link' to="/">
-              <MenuItem>Back</MenuItem>
-            </Link>
-          </button>
           <button
             className="LoginPage__submitButton"
             onClick={toggleSignup}
@@ -248,11 +233,6 @@ export default function Login() {
             onClick={createUser}
           >
             Submit
-          </button>
-          <button className="LoginPage__submitButton">
-            <Link className='LoginPage__link' to="/">
-              <MenuItem>Back</MenuItem>
-            </Link>
           </button>
           <button
             className="LoginPage__submitButton"

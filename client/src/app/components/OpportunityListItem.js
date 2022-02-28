@@ -1,13 +1,15 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import {ListItem} from '@mui/material';
+import {ListItem, IconButton, Menu, MenuItem} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import '../stylesheets/Opportunities.css';
+import useAuth from '../util/AuthContext';
 
 const IconStyles = {
   fontSize: '1.3rem',
@@ -23,6 +25,21 @@ const IconStyles = {
  */
 export default function OpportunityListItem({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+
+  const {userProfile} = useAuth();
+
+  const handleMenuOpen = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuId = 'opportunity-menu';
 
   const getOpportunityCreator = () => {
     fetch(`/api/getProfileName/${data.usersponsors.creator}`)
@@ -44,7 +61,6 @@ export default function OpportunityListItem({data}) {
 
   useEffect(() => {
     getOpportunityCreator();
-    console.log(opportunityCreator);
   }, []);
 
   const handleClick = () => {
@@ -120,6 +136,13 @@ export default function OpportunityListItem({data}) {
                     </div>
                     <div className='opportunity-card-right-host-name'>
                       {
+                        data.organization &&
+                        data.organization != 'user sponsor' ?
+                        `Hosted by ${data.organization}` :
+                        data.organization == 'user sponsor' ||
+                        data.organization == null &&
+                        opportunityCreator.profileid == userProfile.profileid ?
+                        `Hosted by You` :
                         `Hosted by 
                         ${opportunityCreator.firstname} 
                         ${opportunityCreator.lastname[0]}.`
@@ -142,14 +165,8 @@ export default function OpportunityListItem({data}) {
                     <CalendarTodayIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-date-text'>
-                    {/* {data.startdate && data.startdate.startdate &&
-                      `${data.startdate.startdate}`
-                    }
-                    {data.enddate && data.enddate.enddate &&
-                      ` - ${data.startdate.startdate}`
-                    } */}
                     {data.startdate && formatDate(data.startdate).date}
-                    {data.enddate && ` - ${formatDate(data.startdate).date}`}
+                    {data.enddate && ` - ${formatDate(data.enddate).date}`}
                   </div>
                 </div>
                 <div className='opportunity-card-right-time'>
@@ -157,15 +174,42 @@ export default function OpportunityListItem({data}) {
                     <ScheduleIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-time-text'>
-                    {/* {data.startdate && data.startdate.starttime &&
-                      `${data.startdate.starttime}`
-                    } */}
-                    {data.startdate && formatDate(data.startdate).time}
+                    {data.starttime && formatDate(data.starttime).time}
                   </div>
                 </div>
               </div>
             </div>
           </CardContent>
+          <IconButton sx={{height: '50px',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignContent: 'end'}}
+          aria-controls={menuId}
+          aria-haspopup="true"
+          onClick={handleMenuOpen}>
+            <MoreHorizIcon>
+            </MoreHorizIcon>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+          >
+            <div>
+              <MenuItem>Edit Opportunity</MenuItem>
+              <MenuItem>Cancel Opportunity</MenuItem>
+            </div>
+          </Menu>
         </Card>
       }
     </ListItem>
