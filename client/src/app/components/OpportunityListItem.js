@@ -9,7 +9,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import '../stylesheets/Opportunities.css';
-// import useAuth from '../util/AuthContext';
+import useAuth from '../util/AuthContext';
 
 const IconStyles = {
   fontSize: '1.3rem',
@@ -29,7 +29,7 @@ export default function OpportunityListItem({data}) {
 
   const isMenuOpen = Boolean(anchorEl);
 
-  // const {userProfile} = useAuth();
+  const {userProfile} = useAuth();
 
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
@@ -58,7 +58,6 @@ export default function OpportunityListItem({data}) {
           alert('Error retrieving opportunity creators profile');
         });
   };
-
   const deleteOpportunity = (eventid) => {
     fetch(`/api/deleteOpportunity/${eventid}`, {
       method: 'DELETE',
@@ -156,8 +155,12 @@ export default function OpportunityListItem({data}) {
                     <div className='opportunity-card-right-host-name'>
                       {
                         data.organization &&
-                        data.organization != 'user sponsor' ? `Hosted by 
-                        ${data.organization}` :
+                        data.organization != 'user sponsor' ?
+                        `Hosted by ${data.organization}` :
+                        data.organization == 'user sponsor' ||
+                        data.organization == null &&
+                        opportunityCreator.profileid == userProfile.profileid ?
+                        `Hosted by You` :
                         `Hosted by 
                         ${opportunityCreator.firstname} 
                         ${opportunityCreator.lastname[0]}.`
