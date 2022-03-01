@@ -1,3 +1,76 @@
 .Browse {
     padding-top: 75px;
 }
+
+.people-card-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-block: 1.5em;
+  margin-inline: 2em;
+  width: 25%;
+}
+
+.people-card-left-avatar {
+  display: flex;
+  justify-content: center;
+}
+
+.people-card-left-events,
+.people-card-left-recommendations,
+.people-card-left-time {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.people-card-left-icons {
+  vertical-align: bottom;
+  margin: 0;
+  color: var(--secondary-yellow-main);
+}
+
+.people-card-left-text {
+  margin-left: 0.5em;
+}
+
+.people-card-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 75%;
+  margin-block: 1.5em;
+}
+
+.people-card-right-name {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--secondary-yellow-main);
+}
+
+.people-card-right-group {
+  display: grid;
+  justify-content: start;
+  align-content: space-evenly;
+  height: 100%;
+}
+
+.people-card-right-work,
+.people-card-right-volunteer {
+  display: flex;
+}
+
+.people-card-right-icon {
+  vertical-align: bottom;
+  margin: 0;
+}
+
+.people-card-right-text {
+  margin-left: 1em;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+}
+
+.people-card-right-text-inner {
+  display: flex;
+}

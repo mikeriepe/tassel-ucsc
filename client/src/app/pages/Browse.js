@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {List} from '@mui/material';
+import PeopleCard from '../components/PeopleCard';
 import '../stylesheets/Browse.css';
 
 import useAuth from '../util/AuthContext';
@@ -15,6 +17,18 @@ export default function Browse() {
   return (
     <div className='Browse'>
       <h1>Browse</h1>
+      <List
+        sx={{
+          display: 'grid',
+          gap: '2em',
+          paddingBlock: '3em',
+          width: '785px',
+          margin: 'auto',
+          borderRadius: '10px',
+        }}
+      >
+        <PeopleCard />
+      </List>
     </div>
   );
 }
