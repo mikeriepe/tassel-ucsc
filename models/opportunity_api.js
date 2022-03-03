@@ -64,9 +64,9 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.deleteOpportunity = async (req, res) => {
-  console.log(req.params);
+  console.log(req.params.eventid);
   try {
-    const opportunity = await opportunityModel.deleteOpportunity(req.params);
+    const opportunity = await opportunityModel.deleteOpportunity(req.params.eventid);
     res.status(200).json({message: 'opportunity deleted'});
   }
   catch (error) {

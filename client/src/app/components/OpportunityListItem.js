@@ -58,6 +58,7 @@ export default function OpportunityListItem({data}) {
           alert('Error retrieving opportunity creators profile');
         });
   };
+
   const deleteOpportunity = (eventid) => {
     fetch(`/api/deleteOpportunity/${eventid}`, {
       method: 'DELETE',
@@ -68,10 +69,6 @@ export default function OpportunityListItem({data}) {
           }
           console.log(res);
           return res;
-        })
-        .then((json) => {
-          console.log(json);
-          navigate(`/`);
         })
         .catch((error) => {
           console.log(error);

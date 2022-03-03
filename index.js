@@ -93,6 +93,8 @@ app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunit
 
 app.post('/api/postOpportunity', opportunityApi.postOpportunity);
 
+app.delete('/api/deleteOpportunity/:eventid', opportunityApi.deleteOpportunity);
+
 // Request CRUD operations
 //
 //
