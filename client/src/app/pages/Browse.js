@@ -27,8 +27,83 @@ export default function Browse() {
           borderRadius: '10px',
         }}
       >
-        <PeopleCard />
+        {exampleData && exampleData.map((person, index) => (
+          <PeopleCard
+            key={`people-list-item-${index}`}
+            data={person}
+          />
+        ))}
       </List>
     </div>
   );
 }
+
+const exampleData = [
+  {
+    name: 'Frederick Douglass',
+    major: 'Bachelor of Arts, Arts and Crafts',
+    events: '6',
+    recommendations: '4',
+    availability: '3',
+    work: [
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+    ],
+    volunteer: [
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+    ],
+  },
+  {
+    name: 'Frederick Douglass',
+    major: 'Bachelor of Arts, Arts and Crafts',
+    events: '6',
+    recommendations: '4',
+    availability: '3',
+    work: [
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+    ],
+    volunteer: [
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+      {
+        organization: 'Amazon',
+        position: 'Data Engineer',
+        years: '2020-2021',
+      },
+    ],
+  },
+];

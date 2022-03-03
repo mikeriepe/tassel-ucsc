@@ -16,47 +16,6 @@ import '../stylesheets/Opportunities.css';
  * @return {HTML} People card component
  */
 export default function PeopleCard({data}) {
-  const exampleData = {
-    name: 'Frederick Douglass',
-    events: '6',
-    recommendations: '4',
-    availability: '3',
-    work: [
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-    ],
-    volunteer: [
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-      {
-        organization: 'Amazon',
-        position: 'Data Engineer',
-        years: '2020-2021',
-      },
-    ],
-  };
-
   return (
     <ListItem
       sx={{
@@ -98,25 +57,28 @@ export default function PeopleCard({data}) {
             <div className='people-card-left-events'>
               <EventNoteOutlined className='people-card-left-icons' />
               <div className='people-card-left-text'>
-                {`${exampleData.events} Events`}
+                {`${data.events} Events`}
               </div>
             </div>
             <div className='people-card-left-recommendations'>
               <StarOutlineOutlined className='people-card-left-icons' />
               <div className='people-card-left-text'>
-                {`${exampleData.recommendations} Recommendations`}
+                {`${data.recommendations} Recommendations`}
               </div>
             </div>
             <div className='people-card-left-time'>
               <AccessTimeOutlined className='people-card-left-icons' />
               <div className='people-card-left-text'>
-                {`Within ${exampleData.availability} Hours`}
+                {`Within ${data.availability} Hours`}
               </div>
             </div>
           </div>
           <div className='people-card-right'>
             <div className='people-card-right-name'>
-              {exampleData.name}
+              {data.name}
+            </div>
+            <div className='people-card-right-major'>
+              {data.major}
             </div>
             <div className='people-card-right-group'>
               <div className='people-card-right-work'>
@@ -124,7 +86,7 @@ export default function PeopleCard({data}) {
                   <BusinessCenterOutlined />
                 </div>
                 <div className='people-card-right-text'>
-                  {exampleData.work.map((experience, index) => (
+                  {data.work.map((experience, index) => (
                     <div
                       className='people-card-right-text-inner'
                       key={`volunteer-${index}`}
@@ -147,7 +109,7 @@ export default function PeopleCard({data}) {
                   <VolunteerActivismOutlined />
                 </div>
                 <div className='people-card-right-text'>
-                  {exampleData.volunteer.map((experience, index) => (
+                  {data.volunteer.map((experience, index) => (
                     <div
                       className='people-card-right-text-inner'
                       key={`work-${index}`}

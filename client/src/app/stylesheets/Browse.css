@@ -37,27 +37,42 @@
 .people-card-right {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 75%;
   margin-block: 1.5em;
 }
 
 .people-card-right-name {
+  display: flex;
+  align-items: center;
   font-weight: 600;
   font-size: 1.5rem;
   color: var(--secondary-yellow-main);
 }
 
+.people-card-right-major {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-grey-primary);
+}
+
 .people-card-right-group {
-  display: grid;
-  justify-content: start;
-  align-content: space-evenly;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 1.5em);
 }
 
 .people-card-right-work,
 .people-card-right-volunteer {
   display: flex;
+  padding-top: 1em;
+}
+
+.organization {
+  font-weight: 600;
+}
+
+.years {
+  color: var(--text-grey-secondary);
 }
 
 .people-card-right-icon {
@@ -67,7 +82,7 @@
 
 .people-card-right-text {
   margin-left: 1em;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.5rem;
 }
 
