@@ -6,8 +6,15 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+// import Popover from '@mui/material/Popover';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import Divider from '@mui/material/Divider';
+// import ListItemText from '@mui/material/ListItemText';
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -15,7 +22,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import {Link} from 'react-router-dom';
 import useAuth from '../util/AuthContext';
-
+import Notification from './Notification';
 import logo from '../assets/ucsc.svg';
 import '../stylesheets/NavBar.css';
 
@@ -31,10 +38,10 @@ export default function NavBar() {
     setUserProfile} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  const showNotification = Boolean(notificationAnchorEl);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -69,13 +76,92 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  // const [showNotification, setShowNotification] = useState(false);
+  const handleNotificationOpen = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+  // const handleNotificationClose = () => {
+  //   setNotificationAnchorEl(null);
+  // };
+  const notificationId = 'notification-popover';
+  const renderNotification = (
+    <Notification
+      props={{
+        notificationAnchorEl: notificationAnchorEl,
+        notificationId: notificationId,
+        showNotification: showNotification,
+        // handleNotificationClose: handleNotificationClose,
+        setNotificationAnchorEl: setNotificationAnchorEl,
+      }}
+    />
+  );
+  console.log(showNotification);
+  // const renderNotification = (
+  //   <Popover
+  //     id={notificationId}
+  //     open={showNotification}
+  //     anchorEl={notificationAnchorEl}
+  //     onClose={handleNotificationClose}
+  //     anchorOrigin={{
+  //       vertical: 'bottom',
+  //       horizontal: 'left',
+  //     }}
+  //   >
+  //     <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
+  //       <ListItem alignItems="flex-start">
+  //         <ListItemAvatar>
+  //           <Avatar alt="Remy Sharp" src="" />
+  //         </ListItemAvatar>
+  //         <ListItemText
+  //           primary="Request from volunteer [Gracehack Event]"
+  //           secondary={
+  //             <React.Fragment>
+  //               <Typography
+  //                 sx={{display: 'inline'}}
+  //                 component="span"
+  //                 variant="body2"
+  //                 color="text.primary"
+  //               >
+  //               Jessica Wong
+  //               </Typography>
+  //               {' Hi I would like to volunteer for [Gracehack event] '}
+  //               {'as a [speaker]'}
+  //             </React.Fragment>
+  //           }
+  //         />
+  //       </ListItem>
+  //       <Divider variant="inset" component="li" />
+  //       <ListItem alignItems="flex-start">
+  //         <ListItemAvatar>
+  //           <Avatar alt="Remy Sharp" src="" />
+  //         </ListItemAvatar>
+  //         <ListItemText
+  //           primary="Request from organizer [Gracehack Event]"
+  //           secondary={
+  //             <React.Fragment>
+  //               <Typography
+  //                 sx={{display: 'inline'}}
+  //                 component="span"
+  //                 variant="body2"
+  //                 color="text.primary"
+  //               >
+  //               Gracehack team
+  //               </Typography>
+  //               {' Hi you are a good fit for our speaker role of Gracehack'}
+  //             </React.Fragment>
+  //           }
+  //         />
+  //       </ListItem>
+  //     </List>
+  //   </Popover>
+  // );
   // MENU FOR PROFILE
   const menuId = 'profile-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
       id={menuId}
@@ -235,15 +321,19 @@ export default function NavBar() {
               {/* notification button */}
               <Tooltip title="Notifications">
                 <IconButton
+                  aria-controls={notificationId}
                   size="large"
+                  aria-haspopup="true"
                   aria-label="show 17 new notifications"
                   color="inherit"
+                  onClick = {handleNotificationOpen}
                 >
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
               </Tooltip>
+              {renderNotification}
             </div>}
             {/* account icon */}
             <IconButton
