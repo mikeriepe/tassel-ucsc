@@ -1,19 +1,25 @@
 import React from 'react';
-import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import ListItemButton from '@mui/material/ListItemButton';
 /**
  * Notification Item
  * Displays the notification items
  * @return {HTML} notification items
  */
 export default function NotificationItem({data}) {
+  const gotoNotificationDetail = (id) => {
+
+  };
   return (
     <div>
-      <ListItem alignItems="flex-start">
+      <ListItemButton
+        alignItems="flex-start"
+        onClick={gotoNotificationDetail(data.requestid)}
+      >
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src="" />
         </ListItemAvatar>
@@ -27,13 +33,13 @@ export default function NotificationItem({data}) {
                 variant="body2"
                 color="text.primary"
               >
-                {/* Jessica Wong */}
+                {data.requestopportunity}
               </Typography>
-              {`${data.requestmessage}`}
+              {` ${data.requestmessage}`}
             </React.Fragment>
           }
         />
-      </ListItem>
+      </ListItemButton>
       <Divider variant="inset" component="li" />
     </div>
   );
