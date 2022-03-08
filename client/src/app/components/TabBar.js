@@ -4,10 +4,17 @@ import '../stylesheets/MyProfile.css';
 
 /**
  * Creates reusable tab bar
+ * @param {object} data
+ * @param {string} height Default to 5rem if no input
+ * @param {string} width Default to 100% if no input
  * @return {HTML} Tab bar component
  */
-export default function TabBar({data, height, width}) {
-  const [tabValue, setTabValue] = useState(0);
+export default function TabBar({data, state, height, width}) {
+  const [tabValue, setTabValue] = useState(state);
+
+  React.useEffect(()=> {
+    setTabValue(state);
+  }, [state]);
 
   const handleTabs = (event, value) => {
     setTabValue(value);
