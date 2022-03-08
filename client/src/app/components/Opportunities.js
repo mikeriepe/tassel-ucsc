@@ -23,7 +23,7 @@ export default function Opportunities() {
     pendingOpportunities,
     setPendingOpportunities} = useAuth();
 
-  console.log(userProfile);
+  // console.log(userProfile);
 
   const getJoinedOpportunities = () => {
     fetch(`/api/getJoinedOpportunities/${userProfile.profileid}`)
@@ -34,7 +34,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setJoinedOpportunities(json);
         })
         .catch((err) => {
@@ -52,7 +52,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setCreatedOpportunities(json);
         })
         .catch((err) => {
@@ -70,7 +70,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setPastOpportunities(json);
         })
         .catch((err) => {
@@ -88,7 +88,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setPendingOpportunities(json);
         })
         .catch((err) => {

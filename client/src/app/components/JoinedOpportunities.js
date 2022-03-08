@@ -9,7 +9,7 @@ import '../stylesheets/Opportunities.css';
  * @return {HTML} Profile component
  */
 export default function JoinedOpportunities({data}) {
-  console.log(data);
+  // console.log(data);
 
   return (
     <Paper

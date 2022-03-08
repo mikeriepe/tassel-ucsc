@@ -11,7 +11,7 @@ import OpportunityCreation from './OpportunityCreation';
  * @return {HTML} Profile component
  */
 export default function CreatedOpportunities({data}) {
-  console.log(data);
+  // console.log(data);
   const [opportunityCreationPopup,
     setOpportunityCreationPopup] = useState(false);
 

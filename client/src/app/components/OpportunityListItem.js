@@ -50,7 +50,7 @@ export default function OpportunityListItem({data}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setOpportunityCreator(json);
         })
         .catch((err) => {
@@ -64,7 +64,7 @@ export default function OpportunityListItem({data}) {
   }, []);
 
   const handleClick = () => {
-    console.log('');
+    // console.log('');
   };
 
   const formatDate = (date) => {
