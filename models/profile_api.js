@@ -36,3 +36,16 @@ exports.profileUpdate = async (req, res) => {
   const profileId = await profileModel.updateProfile(req.body);
   res.status(200).send(profileId);
 };
+
+
+/**
+ * GETs a profile first and last name
+ * retrieves the specified user profile's firstname and lastname.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.profileGetName = async (req, res) => {
+  console.log(req.params.profileid);
+  const profile = await profileModel.profileGetName(req.params.profileid);
+  res.status(201).send(profile);
+};

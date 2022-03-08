@@ -12,6 +12,13 @@ export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [joinedOpportunities, setJoinedOpportunities] = useState(null);
+  const [createdOpportunities,
+    setCreatedOpportunities] = useState(null);
+  const [pendingOpportunities,
+    setPendingOpportunities] = useState(null);
+  const [pastOpportunities,
+    setPastOpportunities] = useState(null);
 
   return (
     <AuthContext.Provider
@@ -20,7 +27,16 @@ export function AuthProvider(props) {
         loggedIn,
         setLoggedIn,
         userProfile,
-        setUserProfile}}>
+        setUserProfile,
+        joinedOpportunities,
+        setJoinedOpportunities,
+        createdOpportunities,
+        setCreatedOpportunities,
+        pendingOpportunities,
+        setPendingOpportunities,
+        pastOpportunities,
+        setPastOpportunities,
+      }}>
       {props.children}
     </AuthContext.Provider>
   );

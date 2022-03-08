@@ -1,0 +1,123 @@
+.card-title {
+  margin-inline: 2rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--border-primary);
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* ------------------------- */
+/* Opportunity Card          */
+/* ------------------------- */
+
+.opportunity-card-left {
+  height: 100%;
+  width: 40%;
+}
+
+.opportunity-card-left-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.opportunity-card-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-inline: 1.5em;
+  height: 100%;
+  width: calc(100% - 3em);
+}
+
+.opportunity-card-right-title {
+  margin-block: 0.2em;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--secondary-yellow-main);
+}
+
+.opportunity-card-right-host {
+  display: flex;
+  align-items: center;
+  margin-top: 0.2em;
+}
+
+.opportunity-card-right-host-avatar {
+  height: 30px;
+  width: 30px;
+  left: 50px;
+  top: 42%;
+}
+
+.opportunity-card-right-host-name {
+  margin-inline: 0.8em;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-grey-primary);
+}
+
+.opportunity-card-right-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1em;
+  width: 100%;
+}
+
+.opportunity-card-right-location,
+.opportunity-card-right-date,
+.opportunity-card-right-time {
+  display: flex;
+  margin-top: 0.2em;
+  width: 90%;
+}
+
+.opportunity-card-right-location-text,
+.opportunity-card-right-date-text,
+.opportunity-card-right-time-text {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0.35em;
+  padding-inline: 0.5em;
+  font-size: 0.7rem;
+  color: var(--text-grey-primary);
+}
+
+.eventname {
+  display: flex;
+  position: relative; 
+  right: 215px;
+  top: 80px;
+  height: 30px; 
+  justify-content: center;
+  width: 770px;
+}
+
+.eventroles {
+  position: relative;
+  right: 175px;
+  top: 160px;
+}
+
+.details {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  height: 700px;
+  width: 40%;
+  top: 0%;
+  bottom: 465px;
+  left: 71%;
+  border-radius: 10px;
+  background-color: rgb(226, 226, 226);
+}
+
+.creationbuttons {
+  position: relative;
+  top: 550px;
+}
