@@ -23,6 +23,7 @@ export default function Landing() {
         <button
           className="LoginPage__submitButton"
           onClick={authTest}
+          hidden={true}
         >
           Test Auth
         </button>

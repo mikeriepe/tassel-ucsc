@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import TabBar from '../components/TabBar';
 import Profile from '../components/Profile';
@@ -12,6 +12,7 @@ import useAuth from '../util/AuthContext';
  * @return {HTML} my profile page
  */
 export default function MyProfile() {
+  const location = useLocation();
   const navigate = useNavigate();
   const {user, setUser} = useAuth();
   const [tab, setTab] = React.useState(0);
