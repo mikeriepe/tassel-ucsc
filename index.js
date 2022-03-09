@@ -62,7 +62,7 @@ app.use(function (req, res, next) {
 //   User CRUD operations
 //
 //
-app.get('/api/users', userApi.userGet);
+app.get('/api/users', userApi.getActiveUsers);
 
 app.post('/api/login', userApi.userVerifyPost);
 
@@ -74,6 +74,8 @@ app.post('/api/userCreation', userApi.userPost);
 //  Profile CRUD operations
 //
 //
+app.get('/api/getActiveProfiles', profileApi.getActiveProfiles);
+
 app.post('/api/profileCreation', profileApi.profilePost);
 
 app.get('/api/getProfile/:userid', profileApi.getProfile);
@@ -85,6 +87,8 @@ app.get('/api/getProfileName/:profileid', profileApi.profileGetName)
 //  Opportunity CRUD operations
 //
 //
+app.get('/api/getOpportunities', opportunityApi.getOpportunities);
+
 app.get('/api/getJoinedOpportunities/:profileid', opportunityApi.getJoinedOpportunities);
 
 app.get('/api/getCreatedOpportunities/:profileid', opportunityApi.getCreatedOpportunities);

@@ -4,6 +4,22 @@ const Pool = require('pg').Pool;
 const pool = new Pool();
 
 /**
+ * getOpportunities
+ * gets opportunities
+ * @param {*} profileid
+ */
+ exports.getOpportunities = async () => {
+  const query = {
+    text: `SELECT * FROM events 
+           WHERE active = true`,
+    values: [],
+  };
+
+  const {rows} = await pool.query(query);
+  return rows;
+};
+
+/**
  * getJoinedOpportunities
  * gets opportunity data based on user profileid provided
  * Returns the specified user's joined opportunities
@@ -70,10 +86,10 @@ const pool = new Pool();
  exports.postOpportunity = async (opportunityInfo, newUUID) => {
   const query = {
     text: `INSERT INTO events 
-             (eventid, usersponsors, remote, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime) 
+             (eventid, usersponsors, locationtype, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime) 
              VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16), ($17), ($18), ($19), ($20))
              RETURNING eventid`,
-    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.remote, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, true, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants, opportunityInfo.organizationtype, opportunityInfo.opportunitytype, opportunityInfo.roles, opportunityInfo.starttime, opportunityInfo.endtime],
+    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.locationtype, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, true, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants, opportunityInfo.organizationtype, opportunityInfo.opportunitytype, opportunityInfo.roles, opportunityInfo.starttime, opportunityInfo.endtime],
   };
   const {rows} = await pool.query(query);
   console.log(rows);

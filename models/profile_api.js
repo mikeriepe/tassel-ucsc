@@ -1,4 +1,5 @@
 const profileModel = require('./profile_model');
+const userModel = require('./user_model');
 
 /**
  * POSTs a profile object
@@ -12,6 +13,15 @@ exports.profilePost = async (req, res) => {
   res.status(201).send(profileId);
 };
 
+exports.getActiveProfiles = async (_, res) => {
+  const activeUsers = await userModel.getActiveUsers();
+  const activeProfiles = [];
+  for (let ind = 0; ind < activeUsers.length; ind++) {
+    const profile = await profileModel.getProfile(activeUsers[ind].userid);
+    activeProfiles.push(profile);
+  }
+  res.status(201).send(activeProfiles);
+};
 
 /**
  * GETs a profile object

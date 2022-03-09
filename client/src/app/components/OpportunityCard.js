@@ -17,15 +17,16 @@ const IconStyles = {
 };
 
 /**
- * OpportunityListItem
+ * OpportunityCard
  * Opportunity ListItem Component
  * display events with pertinent information clearly visible
  * @param {*} data
- * @return {HTML} OpportunityListItem component
+ * @return {HTML} OpportunityCard component
  */
-export default function OpportunityListItem({data}) {
+export default function OpportunityCard({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [creatorName, setCreatorName] = useState('');
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -50,8 +51,10 @@ export default function OpportunityListItem({data}) {
           return res.json();
         })
         .then((json) => {
-          // console.log(json);
+          const creator =
+            `${json.firstname} ${json.lastname[0]}`;
           setOpportunityCreator(json);
+          setCreatorName(creator);
         })
         .catch((err) => {
           console.log(err);
@@ -136,16 +139,13 @@ export default function OpportunityListItem({data}) {
                     </div>
                     <div className='opportunity-card-right-host-name'>
                       {
-                        data.organization &&
-                        data.organization != 'user sponsor' ?
-                        `Hosted by ${data.organization}` :
-                        data.organization == 'user sponsor' ||
-                        data.organization == null &&
+                        // check if you created opp
                         opportunityCreator.profileid == userProfile.profileid ?
                         `Hosted by You` :
-                        `Hosted by 
-                        ${opportunityCreator.firstname} 
-                        ${opportunityCreator.lastname[0]}.`
+                        // check if user sponsored opp
+                        data.organization ?
+                        `Hosted by ${data.organization}` :
+                        `Hosted by ${creatorName}`
                       }
                     </div>
                   </>
@@ -157,7 +157,10 @@ export default function OpportunityListItem({data}) {
                     <LocationOnIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-location-text'>
-                    {data.remote ? data.eventzoomlink : data.eventlocation}
+                    {
+                      data.locationtype ?
+                      data.eventzoomlink : data.eventlocation
+                    }
                   </div>
                 </div>
                 <div className='opportunity-card-right-date'>

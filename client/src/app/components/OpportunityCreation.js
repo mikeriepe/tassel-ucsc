@@ -33,7 +33,7 @@ export default function OpportunityCreation({toggle}) {
   const [newOpportunity, setNewOpportunity] = useState({
     eventname: '',
     usersponsors: {'creator': userProfile.profileid},
-    remote: null,
+    locationtype: null,
     eventlocation: '',
     eventzoomlink: 'https://zoom.com/link',
     organization: null,
@@ -293,13 +293,13 @@ export default function OpportunityCreation({toggle}) {
           </div>
 
 
-          <div className='opportunity-creation__remote'>
+          <div className='opportunity-creation__locationtype'>
             <TextField
-              value={newOpportunity.remote}
+              value={newOpportunity.locationtype}
               defaultValue={null}
-              name='remote'
+              name='locationtype'
               select
-              label='Remote or In-Person'
+              label='Location Type'
               onChange={handleChange}
               sx={{backgroundColor: 'rgb(255, 255, 255)',
                 display: 'flex',

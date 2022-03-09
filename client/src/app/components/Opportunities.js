@@ -6,7 +6,7 @@ import CreatedOpportunities from './CreatedOpportunities';
 import JoinedOpportunities from './JoinedOpportunities';
 import PastOpportunities from './PastOpportunities';
 import PendingOpportunities from './PendingOpportunities';
-import '../stylesheets/OpportunityListItem.css';
+import '../stylesheets/OpportunityCard.css';
 
 /**
  * creates Opportunities

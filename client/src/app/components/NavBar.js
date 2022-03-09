@@ -199,11 +199,12 @@ export default function NavBar() {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar
-        position="static"
+        position="relative"
         sx={{
           background: 'white',
           borderBottom: '0.5px solid #D1D1D1',
           boxShadow: '0',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}>
         <Toolbar>
           <Link className='link' to="/">

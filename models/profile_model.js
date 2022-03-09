@@ -24,7 +24,6 @@ exports.createProfile= async (userid) => {
   return rows[0].profileid;
 };
 
-
 /**
  * getProfile
  * gets user profile data based on user id provided
@@ -39,7 +38,8 @@ exports.createProfile= async (userid) => {
   };
 
   const {rows} = await pool.query(query);
-  console.log('profileid = ' + rows[0].profileid);
+  // caused errors with undefined .profileid
+  // console.log('profileid = ' + rows[0].profileid);
   return rows[0];
 };
 

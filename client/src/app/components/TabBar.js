@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+// import React, {useState} from 'react';
+import React from 'react';
 import {Tabs, Tab} from '@mui/material';
 import '../stylesheets/MyProfile.css';
 
@@ -9,15 +10,9 @@ import '../stylesheets/MyProfile.css';
  * @param {string} width Default to 100% if no input
  * @return {HTML} Tab bar component
  */
-export default function TabBar({data, state, height, width}) {
-  const [tabValue, setTabValue] = useState(state);
-
-  React.useEffect(()=> {
-    setTabValue(state);
-  }, [state]);
-
-  const handleTabs = (event, value) => {
-    setTabValue(value);
+export default function TabBar({data, tab, setTab, height, width}) {
+  const handleTabs = (_, value) => {
+    setTab(value);
   };
 
   const TabStyles = {
@@ -41,7 +36,7 @@ export default function TabBar({data, state, height, width}) {
         }}
       >
         <Tabs
-          value={tabValue}
+          value={tab}
           onChange={handleTabs}
           indicatorColor='primary'
           sx={{
@@ -70,7 +65,7 @@ export default function TabBar({data, state, height, width}) {
       {data.map((object, index) => (
         <TabPanel
           key={`tab-component-${index}`}
-          value={tabValue}
+          value={tab}
           index={index}
         >
           {object.component}
