@@ -9,11 +9,11 @@ const pool = new Pool();
  * Returns the specified profiles requests sent to or from the user that are still active
  * @param {*} profileid
  */
- exports.getPendingOpportunities= async (profileid) => {
+ exports.getUserRequests= async (profileid) => {
   const query = {
-    text: `SELECT requests.requester, requests.requestee, requests.requeststatus, events.*
+    text: `SELECT *
            FROM requests
-           INNER JOIN events ON ((requests.requester=events.eventid OR requests.requestee=events.eventid) AND (requests.requester = $1 OR requests.requestee = $1))`,
+           WHERE requester = ($1) OR requestee = ($1)`,
     values: [profileid],
   };
 
@@ -21,3 +21,22 @@ const pool = new Pool();
   console.log(rows);
   return rows;
 };
+
+// /**
+//  * getRequestsToUser
+//  * gets request data associated with profile id
+//  * Returns the specified profiles requests sent to the user
+//  * @param {*} profileid
+//  */
+//  exports.getUserRequests = async (profileid) => {
+//   const query = {
+//     text: `SELECT *
+//            FROM requests
+//            WHERE requestee = ($1)`,
+//     values: [profileid],
+//   };
+
+//   const {rows} = await pool.query(query);
+//   console.log(rows);
+//   return rows;
+// };

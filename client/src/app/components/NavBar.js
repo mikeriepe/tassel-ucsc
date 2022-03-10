@@ -6,13 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-// import Popover from '@mui/material/Popover';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import Divider from '@mui/material/Divider';
-// import ListItemText from '@mui/material/ListItemText';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
@@ -333,7 +326,7 @@ export default function NavBar() {
                   </Badge>
                 </IconButton>
               </Tooltip>
-              {renderNotification}
+              {showNotification && renderNotification}
             </div>}
             {/* account icon */}
             <IconButton

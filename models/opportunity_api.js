@@ -59,6 +59,18 @@ const uuid = require('uuid');
 };
 
 /**
+ * GETs specified opportunity
+ * retrieves opportunity based on the provided opportunity id.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getOpportunity = async (req, res) => {
+  console.log(req.params.opportunityid);
+  const opportunity = await opportunityModel.getOpportunity(req.params.opportunityid);
+  res.status(201).send(opportunity);
+};
+
+/**
  * DELETEs a opportunity object
  * @param {*} req
  * @param {*} res
