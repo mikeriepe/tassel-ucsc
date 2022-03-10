@@ -69,13 +69,10 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  // const [showNotification, setShowNotification] = useState(false);
   const handleNotificationOpen = (event) => {
     setNotificationAnchorEl(event.currentTarget);
   };
-  // const handleNotificationClose = () => {
-  //   setNotificationAnchorEl(null);
-  // };
+
   const notificationId = 'notification-popover';
   const renderNotification = (
     <Notification
@@ -83,71 +80,12 @@ export default function NavBar() {
         notificationAnchorEl: notificationAnchorEl,
         notificationId: notificationId,
         showNotification: showNotification,
-        // handleNotificationClose: handleNotificationClose,
         setNotificationAnchorEl: setNotificationAnchorEl,
       }}
     />
   );
   console.log(showNotification);
-  // const renderNotification = (
-  //   <Popover
-  //     id={notificationId}
-  //     open={showNotification}
-  //     anchorEl={notificationAnchorEl}
-  //     onClose={handleNotificationClose}
-  //     anchorOrigin={{
-  //       vertical: 'bottom',
-  //       horizontal: 'left',
-  //     }}
-  //   >
-  //     <List sx={{width: '100%', maxWidth: 400, bgcolor: 'background.paper'}}>
-  //       <ListItem alignItems="flex-start">
-  //         <ListItemAvatar>
-  //           <Avatar alt="Remy Sharp" src="" />
-  //         </ListItemAvatar>
-  //         <ListItemText
-  //           primary="Request from volunteer [Gracehack Event]"
-  //           secondary={
-  //             <React.Fragment>
-  //               <Typography
-  //                 sx={{display: 'inline'}}
-  //                 component="span"
-  //                 variant="body2"
-  //                 color="text.primary"
-  //               >
-  //               Jessica Wong
-  //               </Typography>
-  //               {' Hi I would like to volunteer for [Gracehack event] '}
-  //               {'as a [speaker]'}
-  //             </React.Fragment>
-  //           }
-  //         />
-  //       </ListItem>
-  //       <Divider variant="inset" component="li" />
-  //       <ListItem alignItems="flex-start">
-  //         <ListItemAvatar>
-  //           <Avatar alt="Remy Sharp" src="" />
-  //         </ListItemAvatar>
-  //         <ListItemText
-  //           primary="Request from organizer [Gracehack Event]"
-  //           secondary={
-  //             <React.Fragment>
-  //               <Typography
-  //                 sx={{display: 'inline'}}
-  //                 component="span"
-  //                 variant="body2"
-  //                 color="text.primary"
-  //               >
-  //               Gracehack team
-  //               </Typography>
-  //               {' Hi you are a good fit for our speaker role of Gracehack'}
-  //             </React.Fragment>
-  //           }
-  //         />
-  //       </ListItem>
-  //     </List>
-  //   </Popover>
-  // );
+
   // MENU FOR PROFILE
   const menuId = 'profile-menu';
   const renderMenu = (
