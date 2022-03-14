@@ -3,9 +3,9 @@ import {useParams} from 'react-router-dom';
 import {IconButton} from '@mui/material';
 import {Link} from 'react-router-dom';
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
-import OpportunityRequests from './OpportunityRequests';
-import OpportunityDetails from './OpportunityDetails';
-import TabBar from './TabBar';
+import OpportunityRequests from '../components/OpportunityRequests';
+import OpportunityDetails from '../components/OpportunityDetails';
+import TabBar from '../components/TabBar';
 
 /**
  * OpportunityPage component
@@ -15,7 +15,7 @@ export default function OpportunityPage() {
   const params = useParams();
   console.log(params);
   const [opportunity, setOpportunity] = React.useState(null);
-
+  const [tab, setTab] = React.useState(0);
 
   const getOpportunity = () => {
     fetch(`/api/getOpportunity/${params.opportunityid}`)
@@ -46,7 +46,7 @@ export default function OpportunityPage() {
 
   return (
     <div>
-      {opportunity && <TabBar data={tabs} state={0}/>}
+      {opportunity && <TabBar data={tabs} tab={tab} setTab={setTab}/>}
       <IconButton sx={{display: 'flex', position: 'absolute', bottom: '600px',
         left: '100px'}}>
         <Link className='link' to="/myprofile"

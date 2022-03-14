@@ -10,7 +10,7 @@ import GetStarted from './pages/GetStarted';
 import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
 import Browse from './pages/Browse';
-import OpportunityPage from './components/OpportunityPage';
+import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
 
 import {AuthProvider} from './util/AuthContext';
@@ -30,8 +30,8 @@ export default function App() {
         <Route path='/getstarted' element={<GetStarted />}/>
         <Route path='/myprofile' element={<MyProfile />} />
         <Route path='/browse' element={<Browse />}/>
-        <Route path='/Opportunity/:opportunityid'
-          element={<OpportunityPage/>}/>
+        <Route path='/opportunity/:opportunityid'
+          element={<Opportunity/>}/>
         <Route path='/profile/:profileid' element={<Profile />} />
       </Routes>
     </AuthProvider>
