@@ -4,12 +4,17 @@ import {ListItem, IconButton, Menu, MenuItem} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
+import Paper from '@mui/material/Paper';
+import Modal from '@mui/material/Modal';
+import Skeleton from '@mui/material/Skeleton';
+import Divider from '@mui/material/Divider';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import '../stylesheets/Opportunities.css';
 import useAuth from '../util/AuthContext';
+import ThemedButton from './ThemedButton';
 
 const IconStyles = {
   fontSize: '1.3rem',
@@ -26,11 +31,19 @@ const IconStyles = {
 export default function OpportunityCard({data}) {
   const [opportunityCreator, setOpportunityCreator] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentItem, setCurrentItem] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [requestMessage, setRequestMessage] = React.useState('');
   const [creatorName, setCreatorName] = useState('');
 
   const isMenuOpen = Boolean(anchorEl);
+  const menuId = 'opportunity-menu';
 
   const {userProfile} = useAuth();
+
+  const handleClick = () => {
+    // console.log('');
+  };
 
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
@@ -40,7 +53,37 @@ export default function OpportunityCard({data}) {
     setAnchorEl(null);
   };
 
-  const menuId = 'opportunity-menu';
+  const handleMenuItemClick = (event, action) => {
+    setCurrentItem(action);
+    setIsModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handleModalClose = () => {
+    setCurrentItem(null);
+    setIsModalOpen(false);
+    setRequestMessage('');
+  };
+
+  const handleRequestMessage = (e) => {
+    setRequestMessage(e.target.value);
+  };
+
+  const handleRequestClick = (e) => {
+    // Send request here
+    // Access opportunity data with:
+    // data
+    // opportunityCreator
+    // requestMessage
+
+    console.log(data);
+    console.log(opportunityCreator);
+    console.log(requestMessage);
+
+    setCurrentItem(null);
+    setIsModalOpen(false);
+    setRequestMessage('');
+  };
 
   const getOpportunityCreator = () => {
     fetch(`/api/getProfileName/${data.usersponsors.creator}`)
@@ -62,14 +105,6 @@ export default function OpportunityCard({data}) {
         });
   };
 
-  useEffect(() => {
-    getOpportunityCreator();
-  }, []);
-
-  const handleClick = () => {
-    // console.log('');
-  };
-
   const formatDate = (date) => {
     const dateOptions = {
       year: 'numeric',
@@ -88,6 +123,10 @@ export default function OpportunityCard({data}) {
     return {date: convertDate, time: convertTime};
   };
 
+  useEffect(() => {
+    getOpportunityCreator();
+  }, []);
+
   return (
     <ListItem
       onClick={handleClick()}
@@ -97,7 +136,12 @@ export default function OpportunityCard({data}) {
       }}
       disablePadding
     >
-      {data &&
+      {
+        !data || !opportunityCreator &&
+        <Skeleton variant="rectangular" width={785} height={210} />
+      }
+      {
+        data && opportunityCreator &&
         <Card
           sx={{
             display: 'flex',
@@ -183,16 +227,19 @@ export default function OpportunityCard({data}) {
               </div>
             </div>
           </CardContent>
-          <IconButton sx={{height: '50px',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignContent: 'end'}}
-          aria-controls={menuId}
-          aria-haspopup="true"
-          onClick={handleMenuOpen}>
-            <MoreHorizIcon>
-            </MoreHorizIcon>
-          </IconButton>
+          <div>
+            <IconButton
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleMenuOpen}
+              sx={{
+                margin: '0.5em',
+              }}
+            >
+              <MoreHorizIcon>
+              </MoreHorizIcon>
+            </IconButton>
+          </div>
           <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
@@ -209,12 +256,108 @@ export default function OpportunityCard({data}) {
             onClose={handleMenuClose}
           >
             <div>
-              <MenuItem>Edit Opportunity</MenuItem>
-              <MenuItem>Cancel Opportunity</MenuItem>
+              {
+                opportunityCreator.profileid !== userProfile.profileid &&
+                <MenuItem onClick={(e) => handleMenuItemClick(e, 'Request')}>
+                  Request to Join
+                </MenuItem>
+              }
+              {
+                opportunityCreator.profileid === userProfile.profileid &&
+                <div>
+                  <MenuItem>Edit Opportunity</MenuItem>
+                  <Divider />
+                  <MenuItem>Cancel Opportunity</MenuItem>
+                </div>
+              }
             </div>
           </Menu>
+          {currentItem && currentItem === 'Request' ? (
+            <RequestModal
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+              requestMessage={requestMessage}
+              handleRequestMessage={handleRequestMessage}
+              handleRequestClick={handleRequestClick}
+            />
+          ) : null}
         </Card>
       }
     </ListItem>
+  );
+}
+
+/**
+ * Modal for request request
+ * @param {Object} props
+ * @return {Object} JSX
+ */
+function RequestModal(props) {
+  const {
+    isModalOpen,
+    handleModalClose,
+    requestMessage,
+    handleRequestMessage,
+    handleRequestClick,
+  } = props;
+
+  return (
+    <Modal
+      open={isModalOpen}
+      onClose={handleModalClose}
+    >
+      <Paper
+        sx={{
+          position: 'absolute',
+          padding: '1.5em',
+          top: '50%',
+          left: '50%',
+          height: 'auto',
+          width: '600px',
+          transform: 'translate(-50%, -50%)',
+          boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
+          borderRadius: '10px',
+        }}
+      >
+        <div className='request-title'>
+          Request to Join
+        </div>
+        <div className='request-subtitle'>
+          Your Request Message:
+        </div>
+        <div className='request-message'>
+          <textarea
+            value={requestMessage}
+            onChange={handleRequestMessage}
+            style={{
+              resize: 'none',
+              height: '200px',
+              width: '595px',
+              outline: 'none',
+            }}
+          />
+        </div>
+        <div className='request-buttons'>
+          <div className='request-buttons-request'>
+            <ThemedButton
+              color={'yellow'}
+              variant={'themed'}
+              onClick={handleRequestClick}
+            >
+              Send Request to Join
+            </ThemedButton>
+          </div>
+          <div className='request-buttons-cancel'>
+            <ThemedButton
+              color={'gray'}
+              variant={'cancel'}
+              onClick={handleModalClose}
+            >
+              Cancel
+            </ThemedButton>
+          </div>
+        </div>
+      </Paper>
+    </Modal>
   );
 }

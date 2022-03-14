@@ -121,3 +121,33 @@
   position: relative;
   top: 550px;
 }
+
+.request-title {
+  padding-bottom: 1.5em;
+  border-bottom: 0.5px solid var(--border-primary);
+  font-weight: 600;
+  color: var(--text-black);
+}
+
+.request-subtitle {
+  padding-top: 1.5em;
+  font-size: 0.9rem;
+}
+
+.request-message {
+  padding-top: 0.5em;
+  padding-bottom: 1.5em;
+}
+
+.request-buttons {
+  display: flex;
+}
+
+.request-buttons-cancel {
+  padding-inline: 1em;
+}
+
+.request-checkboxes {
+  padding-block: 1em;
+  font-size: 0.9rem;
+}

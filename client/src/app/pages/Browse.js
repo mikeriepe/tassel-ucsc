@@ -62,7 +62,7 @@ export default function Browse() {
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
         />
-        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+        <Box component="main" sx={{flexGrow: 1}}>
           <TabBar
             data={data}
             tab={tab}
