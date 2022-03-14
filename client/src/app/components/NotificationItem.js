@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import useAuth from '../util/AuthContext';
-// requester/requestee id -> user name
-// opportunityid -> event name
+import {useNavigate} from 'react-router-dom';
+
 /**
  * Notification Item
  * Displays the notification items
@@ -17,7 +17,7 @@ export default function NotificationItem({data}) {
   const {userProfile} = useAuth();
   const [requesterProfile, setProfile] = React.useState(null);
   const [opportunity, setOpportunity] = React.useState(null);
-
+  const navigate = useNavigate();
   const getProfile = () => {
     fetch(`/api/getProfileByProfileId/${data.requester}`)
         .then((res) => {
@@ -54,9 +54,18 @@ export default function NotificationItem({data}) {
         });
   };
 
-  const gotoNotificationDetail = (id) => {
-
+  const gotoNotificationDetail = (e) => {
+    // todo data.requestid
   };
+
+  const handleClickRequester = (e) => {
+    navigate(`/profile/${data.requester}`);
+  };
+
+  const handleClickOpportunity = (e) => {
+    navigate(`/Opportunity/${data.opportunityid}`);
+  };
+
 
   React.useEffect(() => {
     if (data.requester != null) {
@@ -77,9 +86,26 @@ export default function NotificationItem({data}) {
           </ListItemAvatar>
           <ListItemText
             primary={
-              `Request from 
-              ${requesterProfile &&
-                requesterProfile.firstname + ' ' + requesterProfile.lastname}`
+              <React.Fragment>
+                <Typography
+                  sx={{display: 'inline'}}
+                  component="span"
+                  variant="body"
+                  color="text.primary"
+                >
+                  {'Request from '}
+                </Typography>
+                <Typography
+                  sx={{display: 'inline'}}
+                  component="span"
+                  variant="body"
+                  color='#fbc02d'
+                  onClick={handleClickRequester}
+                >
+                  {requesterProfile &&
+                requesterProfile.firstname + ' ' + requesterProfile.lastname}
+                </Typography>
+              </React.Fragment>
             }
             secondary={
               <React.Fragment>
@@ -89,7 +115,16 @@ export default function NotificationItem({data}) {
                   variant="body2"
                   color="text.primary"
                 >
-                  for {opportunity && opportunity.eventname}
+                  {'for '}
+                </Typography>
+                <Typography
+                  sx={{display: 'inline'}}
+                  component="span"
+                  variant="body2"
+                  color="#42a5f5"
+                  onClick={handleClickOpportunity}
+                >
+                  {opportunity && opportunity.eventname}
                 </Typography>
                 {` ${data.requestmessage}`}
               </React.Fragment>
@@ -101,15 +136,41 @@ export default function NotificationItem({data}) {
       data.requeststatus != 'pending' &&
       <ListItemButton
         alignItems="flex-start"
-        onClick={gotoNotificationDetail(data.requestid)}
+        onClick={gotoNotificationDetail}
       >
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src="" />
         </ListItemAvatar>
         <ListItemText
           primary={
-            `Your Request for ${opportunity && opportunity.eventname}
-            is ${data.requeststatus}`}
+            <React.Fragment>
+              <Typography
+                sx={{display: 'inline'}}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {'Your Request for '}
+              </Typography>
+              <Typography
+                sx={{display: 'inline'}}
+                component="span"
+                variant="body2"
+                color="#42a5f5"
+                onClick={handleClickOpportunity}
+              >
+                {opportunity && opportunity.eventname}
+              </Typography>
+              <Typography
+                sx={{display: 'inline'}}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {` is ${data.requeststatus}`}
+              </Typography>
+            </React.Fragment>
+          }
           secondary={
             <React.Fragment>
               <Typography
