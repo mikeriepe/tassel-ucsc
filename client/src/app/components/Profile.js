@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import Button from '@mui/material/Button';
 import useAuth from '../util/AuthContext';
@@ -14,7 +15,34 @@ import ProfileVolunteer from '../components/ProfileVolunteer';
  */
 export default function Profile() {
   const {user, userProfile} = useAuth();
+  const [profile, setProfile] = useState(null);
+  const params = useParams();
+  console.log(params);
   const navigate = useNavigate();
+
+  const getProfile = () => {
+    fetch(`/api/getProfileByProfileId/${params.profileid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          setProfile(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving profile, please try again');
+        });
+  };
+
+  React.useEffect(() => {
+    if (params && params.profileid != null) {
+      getProfile();
+    }
+  }, []);
 
   const handleDeactivateAccount = () => {
     fetch(`/api/userDeactivation`, {
@@ -62,20 +90,38 @@ export default function Profile() {
         alignItems: 'center',
       }}
     >
-      <ProfileHeader
-        data={userProfile} />
-      <ProfileAbout data={userProfile.about}/>
-      {userProfile.experience && <ProfileWork data={userProfile.experience}/>}
-      {!userProfile.experience && <ProfileWork data=''/>}
-      {userProfile.volunteeringexperience &&
-        <ProfileVolunteer data={userProfile.volunteeringexperience}/>}
-      {!userProfile.volunteeringexperience && <ProfileWork data=''/>}
-      {user &&
-        <Button sx={{display: 'flex', paddingBottom: '2rem'}}
-          onClick={handleDeactivateAccount}>
-            Deactivate Account
-        </Button>
-      }
+      {profile == null && <>
+        {userProfile && <ProfileHeader
+          data={userProfile} />}
+        {!userProfile && <ProfileHeader
+          data='' />}
+        {userProfile.about && <ProfileAbout data={userProfile.about}/>}
+        {!userProfile.about && <ProfileAbout data=''/>}
+        {userProfile.experience && <ProfileWork data={userProfile.experience}/>}
+        {!userProfile.experience && <ProfileWork data=''/>}
+        {userProfile.volunteeringexperience &&
+          <ProfileVolunteer data={userProfile.volunteeringexperience}/>}
+        {!userProfile.volunteeringexperience && <ProfileVolunteer data=''/>}
+        {user && user.userid == userProfile.userid &&
+          <Button sx={{display: 'flex', paddingBottom: '2rem'}}
+            onClick={handleDeactivateAccount}>
+              Deactivate Account
+          </Button>
+        }
+      </>}
+      {profile && profile != null && <>
+        {profile && <ProfileHeader
+          data={profile} />}
+        {!profile && <ProfileHeader
+          data={profile} />}
+        {profile.about && <ProfileAbout data={profile.about}/>}
+        {!profile.about && <ProfileAbout data={profile.about}/>}
+        {profile.experience && <ProfileWork data={profile.experience}/>}
+        {!profile.experience && <ProfileWork data=''/>}
+        {profile.volunteeringexperience &&
+          <ProfileVolunteer data={profile.volunteeringexperience}/>}
+        {!profile.volunteeringexperience && <ProfileVolunteer data=''/>}
+      </>}
     </div>
   );
 }

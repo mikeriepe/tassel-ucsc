@@ -43,6 +43,25 @@ exports.createProfile= async (userid) => {
   return rows[0];
 };
 
+
+/**
+ * getProfile
+ * gets user profile data based on profile id provided
+ * Returns the specified profile
+ * @param {*} userid
+ */
+ exports.getProfileByProfileId= async (profileid) => {
+  const query = {
+    text: `SELECT * FROM profile 
+           WHERE profileid = $1`,
+    values: [profileid],
+  };
+
+  const {rows} = await pool.query(query);
+  console.log('profileid = ' + rows[0].profileid);
+  return rows[0];
+};
+
 /**
  * updateProfile
  *      updates a profile in the database

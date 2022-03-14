@@ -17,11 +17,12 @@
 .opportunity-creation__details-section {
   display: flex;
   position: absolute;
-  height: 800px;
+  height: 870px;
   width: 21.5vw;
   top: 0%;
   bottom: 465px;
   left: 71%;
+  flex-direction: column;
   border-radius: 10px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 0px;
@@ -30,11 +31,9 @@
 
 .opportunity-creation__details-header {
   display: flex;
-  position: relative;
   color: gray;
   margin-left: auto;
   margin-right: auto;
-  left: 170px;
   font-family: Roboto;
   height: 60px;
 }
@@ -52,9 +51,11 @@
 }
 
 .opportunity-creation__creation-buttons {
+  display: flex;
   position: relative;
-  right: 200px;
-  top: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
 }
 
 .opportunity-creation__sponsor {
@@ -65,4 +66,33 @@
   height: 60px; 
   justify-content: center;
   width: 770px;
+}
+
+.datetime-row {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.location-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.subject {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.opportunity-creation__other {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;;
 }

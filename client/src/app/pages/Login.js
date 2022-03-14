@@ -137,7 +137,6 @@ export default function Login() {
           });
           setLoggedIn(true);
           setUser(json);
-          navigate(`/`);
         })
         .catch((err) => {
           console.log(err);
@@ -157,6 +156,7 @@ export default function Login() {
         .then((json) => {
           console.log(json);
           setUserProfile(json);
+          navigate(`/myprofile`);
         })
         .catch((err) => {
           console.log(err);

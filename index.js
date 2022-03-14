@@ -80,6 +80,8 @@ app.post('/api/profileCreation', profileApi.profilePost);
 
 app.get('/api/getProfile/:userid', profileApi.getProfile);
 
+app.get('/api/getProfileByProfileId/:profileid', profileApi.getProfileByProfileId);
+
 app.put('/api/updateProfile', profileApi.profileUpdate);
 
 app.get('/api/getProfileName/:profileid', profileApi.profileGetName)
@@ -97,10 +99,30 @@ app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunit
 
 app.post('/api/postOpportunity', opportunityApi.postOpportunity);
 
+app.get('/api/getOpportunity/:opportunityid', opportunityApi.getOpportunity);
+
 // Request CRUD operations
 //
 //
 app.get('/api/getPendingOpportunities/:profileid', requestApi.getPendingOpportunities);
+
+app.get('/api/getPendingRequest/:profileid/:eventid', requestApi.getPendingRequest);
+
+app.get('/api/getPendingRequestsReceived/:profileid/:eventid', requestApi.getPendingRequestsReceived);
+
+app.get('/api/getPendingRequestsSent/:profileid/:eventid', requestApi.getPendingRequestsSent);
+
+app.get('/api/getApprovedRequests/:profileid/:eventid', requestApi.getApprovedRequests);
+
+app.get('/api/getRejectedRequests/:profileid/:eventid', requestApi.getRejectedRequests);
+
+app.post('/api/postRequest', requestApi.postRequest);
+
+app.post('/api/cancelRequest', requestApi.cancelRequest);
+
+app.post('/api/approveRequest', requestApi.approveRequest);
+
+app.post('/api/rejectRequest', requestApi.rejectRequest);
 
 // OrganizationType CRUD operations
 //

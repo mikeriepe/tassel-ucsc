@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 
 import useAuth from '../util/AuthContext';
 import CreatedOpportunities from './CreatedOpportunities';
@@ -13,17 +13,13 @@ import '../stylesheets/OpportunityCard.css';
  * @return {HTML} Opportunities component
  */
 export default function Opportunities() {
-  const {userProfile,
-    joinedOpportunities,
-    setJoinedOpportunities,
-    createdOpportunities,
-    setCreatedOpportunities,
-    pastOpportunities,
-    setPastOpportunities,
-    pendingOpportunities,
-    setPendingOpportunities} = useAuth();
+  const {userProfile} = useAuth();
 
-  // console.log(userProfile);
+  console.log(userProfile);
+  const [joinedOpportunities, setJoinedOpportunities] = useState([]);
+  const [createdOpportunities, setCreatedOpportunities] = useState([]);
+  const [pastOpportunities, setPastOpportunities] = useState([]);
+  const [pendingOpportunities, setPendingOpportunities] = useState([]);
 
   const getJoinedOpportunities = () => {
     fetch(`/api/getJoinedOpportunities/${userProfile.profileid}`)

@@ -67,8 +67,38 @@ const uuid = require('uuid');
     res.status(500).send('error creating opportunity')
   }
   
+};
+
+/**
+ * GETs specified opportunity
+ * retrieves opportunity based on the provided opportunity id.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getOpportunity = async (req, res) => {
+  console.log(req.params.opportunityid);
+  const opportunity = await opportunityModel.getOpportunity(req.params.opportunityid);
+  res.status(201).send(opportunity);
+};
+
+/**
+ * DELETEs a opportunity object
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.deleteOpportunity = async (req, res) => {
+  console.log(req.params);
+  try {
+    const opportunity = await opportunityModel.deleteOpportunity(req.params);
+    res.status(200).json({message: 'opportunity deleted'});
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('error deleting opportunity')
+  }
   
 };
+
 
 
 

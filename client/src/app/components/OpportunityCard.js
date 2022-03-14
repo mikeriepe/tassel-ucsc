@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {ListItem, IconButton, Menu, MenuItem} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -29,21 +30,19 @@ const IconStyles = {
  * @return {HTML} OpportunityCard component
  */
 export default function OpportunityCard({data}) {
-  const [opportunityCreator, setOpportunityCreator] = useState(null);
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [opportunityCreator, setOpportunityCreator] = useState(null);
   const [currentItem, setCurrentItem] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [requestMessage, setRequestMessage] = React.useState('');
   const [creatorName, setCreatorName] = useState('');
+  const [location, setLocation] = useState('TBD');
 
   const isMenuOpen = Boolean(anchorEl);
   const menuId = 'opportunity-menu';
 
   const {userProfile} = useAuth();
-
-  const handleClick = () => {
-    // console.log('');
-  };
 
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
@@ -104,6 +103,28 @@ export default function OpportunityCard({data}) {
           alert('Error retrieving opportunity creators profile');
         });
   };
+  const deleteOpportunity = (eventid) => {
+    fetch(`/api/deleteOpportunity/${eventid}`, {
+      method: 'DELETE',
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          console.log(res);
+          return res;
+        })
+        .then((json) => {
+          console.log(json);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
+  const handleClick = (e) => {
+    navigate(`/Opportunity/${data.eventid}`);
+  };
 
   const formatDate = (date) => {
     const dateOptions = {
@@ -113,7 +134,7 @@ export default function OpportunityCard({data}) {
     };
 
     const timeOptions = {
-      hour: '2-digit',
+      hour: 'numeric',
       minute: '2-digit',
     };
 
@@ -123,13 +144,33 @@ export default function OpportunityCard({data}) {
     return {date: convertDate, time: convertTime};
   };
 
+  const getLocation = () => {
+    switch (data.locationtype) {
+      case 'remote':
+        const zoom = data.eventzoomlink ?
+          data.eventzoomlink :
+          'TBD';
+        setLocation(zoom);
+        break;
+      case 'hybrid':
+      case 'in-person':
+        // TODO: location fields should be error checked elsewhere
+        // so that we don't have to check it here
+        const address = data.eventlocation.city && data.eventlocation.state ?
+          `${data.eventlocation.city}, ${data.eventlocation.state}` :
+          'TBD';
+        setLocation(address);
+        break;
+    }
+  };
+
   useEffect(() => {
     getOpportunityCreator();
+    getLocation();
   }, []);
 
   return (
     <ListItem
-      onClick={handleClick()}
       sx={{
         display: 'flex',
         cursor: 'pointer',
@@ -156,9 +197,11 @@ export default function OpportunityCard({data}) {
             <img
               className='opportunity-card-left-cover'
               src={data.eventbanner}
+              onClick={handleClick}
             />
           </div>
           <CardContent
+            onClick={handleClick}
             sx={{
               padding: '0',
               height: '100%',
@@ -170,17 +213,24 @@ export default function OpportunityCard({data}) {
                 {data.eventname}
               </div>
               <div className='opportunity-card-right-host'>
-                {opportunityCreator !== null &&
+                {
+                  opportunityCreator &&
                   <>
-                    <div className='opportunity-card-right-host-avatar'>
-                      <Avatar
-                        src={opportunityCreator.profilepicture}
-                        sx={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    </div>
+                    {
+                      opportunityCreator && opportunityCreator.profilepicture ?
+                      <div className='opportunity-card-right-host-avatar'>
+                        <Avatar
+                          src={opportunityCreator.profilepicture}
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        />
+                      </div> :
+                      <div className='opportunity-card-right-host-avatar'>
+                        <Skeleton variant="circular" width={30} height={30} />
+                      </div>
+                    }
                     <div className='opportunity-card-right-host-name'>
                       {
                         // check if you created opp
@@ -201,10 +251,7 @@ export default function OpportunityCard({data}) {
                     <LocationOnIcon sx={IconStyles} />
                   </div>
                   <div className='opportunity-card-right-location-text'>
-                    {
-                      data.locationtype ?
-                      data.eventzoomlink : data.eventlocation
-                    }
+                    {location}
                   </div>
                 </div>
                 <div className='opportunity-card-right-date'>
@@ -267,7 +314,9 @@ export default function OpportunityCard({data}) {
                 <div>
                   <MenuItem>Edit Opportunity</MenuItem>
                   <Divider />
-                  <MenuItem>Cancel Opportunity</MenuItem>
+                  <MenuItem onClick={() => deleteOpportunity(data.eventid)}>
+                    Cancel Opportunity
+                  </MenuItem>
                 </div>
               }
             </div>
