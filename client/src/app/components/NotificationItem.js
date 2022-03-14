@@ -63,14 +63,12 @@ export default function NotificationItem({data}) {
   };
 
   const handleClickOpportunity = (e) => {
-    navigate(`/Opportunity/${data.opportunityid}`);
+    navigate(`/opportunity/${data.opportunityid}`);
   };
 
 
   React.useEffect(() => {
-    if (data.requester != null) {
-      getProfile();
-    }
+    getProfile();
     getOpportunity();
   }, []);
 
@@ -79,10 +77,13 @@ export default function NotificationItem({data}) {
       {(data.requester != userProfile.profileid) &&
         <ListItemButton
           alignItems="flex-start"
-          onClick={gotoNotificationDetail(data.requestid)}
+          onClick={gotoNotificationDetail()}
         >
           <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="" />
+            <Avatar
+              alt={requesterProfile.firstname + ' ' + requesterProfile.lastname}
+              src={requesterProfile.profilepicture}
+            />
           </ListItemAvatar>
           <ListItemText
             primary={
@@ -139,7 +140,7 @@ export default function NotificationItem({data}) {
         onClick={gotoNotificationDetail}
       >
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="" />
+          <Avatar alt={opportunity.eventname} src={opportunity.eventbanner} />
         </ListItemAvatar>
         <ListItemText
           primary={

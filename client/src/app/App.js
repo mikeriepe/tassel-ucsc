@@ -30,7 +30,7 @@ export default function App() {
         <Route path='/getstarted' element={<GetStarted />}/>
         <Route path='/myprofile' element={<MyProfile />} />
         <Route path='/browse' element={<Browse />}/>
-        <Route path='/Opportunity/:opportunityid'
+        <Route path='/opportunity/:opportunityid'
           element={<OpportunityPage/>}/>
         <Route path='/profile/:profileid' element={<Profile />} />
       </Routes>
