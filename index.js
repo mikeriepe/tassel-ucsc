@@ -95,16 +95,22 @@ app.get('/api/getJoinedOpportunities/:profileid', opportunityApi.getJoinedOpport
 
 app.get('/api/getCreatedOpportunities/:profileid', opportunityApi.getCreatedOpportunities);
 
+app.get('/api/getPendingOpportunities/:profileid', opportunityApi.getPendingOpportunities);
+
 app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunities);
 
 app.post('/api/postOpportunity', opportunityApi.postOpportunity);
 
 app.get('/api/getOpportunity/:opportunityid', opportunityApi.getOpportunity);
 
+app.delete('/api/deleteOpportunity/:eventid', opportunityApi.deleteOpportunity);
+
 // Request CRUD operations
 //
 //
-app.get('/api/getPendingOpportunities/:profileid', requestApi.getPendingOpportunities);
+app.get('/api/getUserOutgoingRequests/:profileid', requestApi.getUserOutgoingRequests);
+
+app.get('/api/getUserIncomingRequests/:profileid', requestApi.getUserIncomingRequests);
 
 app.get('/api/getPendingRequest/:profileid/:eventid', requestApi.getPendingRequest);
 

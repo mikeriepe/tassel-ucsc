@@ -115,7 +115,7 @@ const pool = new Pool();
 };
 
 /**
- * getPastOpportunities
+ * deleteOpportunities
  * deletes opportunity data based on opportunity id provided
  * Returns the user's past opportunities @param {*} opportunityInfo
  * @param {*} eventid

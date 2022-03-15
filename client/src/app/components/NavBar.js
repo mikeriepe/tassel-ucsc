@@ -6,8 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -15,7 +15,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import {Link} from 'react-router-dom';
 import useAuth from '../util/AuthContext';
-
+import Notification from './Notification';
 import logo from '../assets/ucsc.svg';
 import '../stylesheets/NavBar.css';
 
@@ -31,10 +31,11 @@ export default function NavBar() {
     setUserProfile} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  const showNotification = Boolean(notificationAnchorEl);
+  // const [notificationCount, setNotificationCount] = React.useState(0);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -69,13 +70,31 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleNotificationOpen = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const notificationId = 'notification-popover';
+  const renderNotification = (
+    <Notification
+      props={{
+        notificationAnchorEl: notificationAnchorEl,
+        notificationId: notificationId,
+        showNotification: showNotification,
+        setNotificationAnchorEl: setNotificationAnchorEl,
+        // setNotificationCount: setNotificationCount,
+      }}
+    />
+  );
+  console.log(showNotification);
+
   // MENU FOR PROFILE
   const menuId = 'profile-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
       id={menuId}
@@ -236,15 +255,19 @@ export default function NavBar() {
               {/* notification button */}
               <Tooltip title="Notifications">
                 <IconButton
+                  aria-controls={notificationId}
                   size="large"
+                  aria-haspopup="true"
                   aria-label="show 17 new notifications"
                   color="inherit"
+                  onClick = {handleNotificationOpen}
                 >
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
               </Tooltip>
+              {showNotification && renderNotification}
             </div>}
             {/* account icon */}
             <IconButton

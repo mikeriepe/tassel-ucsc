@@ -1,4 +1,5 @@
 const opportunityModel = require('./opportunity_model');
+const requestModel = require('./request_model');
 const uuid = require('uuid');
 
 /**
@@ -34,6 +35,24 @@ const uuid = require('uuid');
   console.log(req.params.profileid);
   const opportunities = await opportunityModel.getCreatedOpportunities(req.params.profileid);
   res.status(201).send(opportunities);
+};
+
+/**
+ * GETs pending opportunities
+ * retrieves opportunites that user requested to join
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getPendingOpportunities = async (req, res) => {
+  console.log(req.params.profileid);
+  const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
+  const pendingOpps = [];
+  for (let index = 0; index < requests.length; index++) {
+    const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
+    pendingOpps.push(opportunity);
+  }
+  console.log(pendingOpps);
+  res.status(201).send(pendingOpps);
 };
 
 /**
@@ -87,9 +106,9 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.deleteOpportunity = async (req, res) => {
-  console.log(req.params);
+  console.log(req.params.eventid);
   try {
-    const opportunity = await opportunityModel.deleteOpportunity(req.params);
+    const opportunity = await opportunityModel.deleteOpportunity(req.params.eventid);
     res.status(200).json({message: 'opportunity deleted'});
   }
   catch (error) {
