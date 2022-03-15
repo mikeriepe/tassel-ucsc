@@ -95,6 +95,8 @@ app.get('/api/getJoinedOpportunities/:profileid', opportunityApi.getJoinedOpport
 
 app.get('/api/getCreatedOpportunities/:profileid', opportunityApi.getCreatedOpportunities);
 
+app.get('/api/getPendingOpportunities/:profileid', opportunityApi.getPendingOpportunities);
+
 app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunities);
 
 app.post('/api/postOpportunity', opportunityApi.postOpportunity);
@@ -107,8 +109,6 @@ app.delete('/api/deleteOpportunity/:eventid', opportunityApi.deleteOpportunity);
 //
 //
 app.get('/api/getUserRequests/:profileid', requestApi.getUserRequests);
-
-app.get('/api/getPendingOpportunities/:profileid', requestApi.getPendingOpportunities);
 
 app.get('/api/getPendingRequest/:profileid/:eventid', requestApi.getPendingRequest);
 

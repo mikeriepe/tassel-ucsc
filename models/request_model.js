@@ -4,7 +4,7 @@ const Pool = require('pg').Pool;
 const pool = new Pool();
 
 /**
- * getPendingOpportunities
+ * getUserRequests
  * gets request data associated with profile id provided
  * Returns the specified profiles requests sent to or from the user that are still active
  * @param {*} profileid
@@ -13,7 +13,7 @@ const pool = new Pool();
   const query = {
     text: `SELECT *
            FROM requests
-           WHERE requester = ($1) OR requestee = ($1)`,
+           WHERE requester = ($1) AND toEvent = true`,
     values: [profileid],
   };
 
