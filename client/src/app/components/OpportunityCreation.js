@@ -18,6 +18,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
+import AddressForm from './AddressForm';
 import '../stylesheets/OpportunityCreation.css';
 import useAuth from '../util/AuthContext';
 
@@ -30,15 +32,19 @@ export default function OpportunityCreation({toggle}) {
   const navigate = useNavigate();
   const {userProfile} = useAuth();
 
+  const [opportunityTypes, setOpportunityTypes] = useState(null);
+  const [organizationTypes, setOrganizationTypes] = useState(null);
+  const [organizations, setOrganizations] = useState(null);
+
   const [newOpportunity, setNewOpportunity] = useState({
     eventname: '',
     usersponsors: {'creator': userProfile.profileid},
-    remote: null,
-    eventlocation: '',
-    eventzoomlink: 'https://zoom.com/link',
+    locationtype: 'in-person',
+    eventlocation: {},
+    eventzoomlink: '',
     organization: null,
     description: null,
-    userparticipants: [userProfile.profileid],
+    userparticipants: [],
     preferences: null,
     eventdata: null,
     startdate: (new Date()),
@@ -51,49 +57,51 @@ export default function OpportunityCreation({toggle}) {
     roles: null,
     starttime: null,
     endtime: null,
-
+    subject: null,
+    assignedroles: {},
   });
 
-  const [additionalRole, setAdditionalRole] = useState(0);
   const [sponsorType, setSponsorType] = useState(null);
-  const [opportunityTypes, setOpportunityTypes] = useState(null);
-  const [organizationTypes, setOrganizationTypes] = useState(null);
-  const [organizations, setOrganizations] = useState(null);
+
+  const [roleCount, setRoleCount] = useState(0);
+  const [roles, setRoles] = useState([]);
+  // TODO: need error messages when trying to add over max roles
+  const maxRoles = 3;
+
+  const [triggerCreate, setTriggerCreate] = useState(false);
 
   const handleAdditionalRoleClick = () => {
-    if (additionalRole < 2) {
-      setAdditionalRole(additionalRole+1);
+    if (roleCount < maxRoles) {
+      const newRoleCount = roleCount + 1;
+      setRoleCount(newRoleCount);
+      const rolesCopy = [...roles];
+      rolesCopy.push('');
+      console.log(rolesCopy);
+      setRoles(rolesCopy);
     }
   };
 
-  const handleRemoveRoleClick = () => {
-    if (additionalRole > 0) {
-      setAdditionalRole(additionalRole-1);
-    }
+  const handleRemoveRoleClick = (e) => {
+    const newRoleCount = roleCount - 1;
+    setRoleCount(newRoleCount);
+    const rolesCopy = [...roles];
+    const roleIndex = parseInt(e.target.parentElement.id, 10);
+    rolesCopy.splice(roleIndex, 1);
+    setRoles(rolesCopy);
+  };
+
+  const handleRoleChange = (e) => {
+    const roleIndex = parseInt(e.target.id, 10);
+    const rolesCopy = [...roles];
+    rolesCopy[roleIndex] = e.target.value;
+    setRoles(rolesCopy);
   };
 
   const createOpportunity = () => {
-    fetch(`/api/postOpportunity`, {
-      method: 'POST',
-      body: JSON.stringify(newOpportunity),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          console.log(res);
-          return res;
-        })
-        .then((json) => {
-          console.log(json);
-          navigate(`/`);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    // TODO: error check roles
+    setNewOpportunity({...newOpportunity, roles: roles});
+    console.log(newOpportunity);
+    setTriggerCreate(true);
   };
 
   const getOpportunityTypes = () => {
@@ -105,7 +113,6 @@ export default function OpportunityCreation({toggle}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setOpportunityTypes(json);
         })
         .catch((err) => {
@@ -123,7 +130,6 @@ export default function OpportunityCreation({toggle}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setOrganizationTypes(json);
         })
         .catch((err) => {
@@ -141,7 +147,6 @@ export default function OpportunityCreation({toggle}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setOrganizations(json);
         })
         .catch((err) => {
@@ -162,11 +167,35 @@ export default function OpportunityCreation({toggle}) {
   }, [newOpportunity.organizationtype]);
 
   const handleChange = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
     const {name, value} = e.target;
     setNewOpportunity({...newOpportunity, [name]: value});
   };
+
+  useEffect(() => {
+    console.log(newOpportunity);
+    if (triggerCreate) {
+      fetch(`/api/postOpportunity`, {
+        method: 'POST',
+        body: JSON.stringify(newOpportunity),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res;
+          })
+          .then((json) => {
+            // TODO: should just toggle close instead of navigating to home
+            navigate(`/`);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
+  }, [triggerCreate]);
 
   const handleSponsorChange = (e) => {
     const value = e.target.value;
@@ -208,13 +237,13 @@ export default function OpportunityCreation({toggle}) {
         sx={{
           display: 'flex',
           position: 'fixed',
-          top: '10vh',
-          right: '17vw',
+          top: '3vh',
+          right: '16vw',
           alignContent: 'center',
           justifyContent: 'center',
           marginBottom: '3rem',
           width: '70vw',
-          minHeight: '800px',
+          minHeight: '870px',
           height: 'auto',
           maxHeight: '700px',
           zIndex: '10',
@@ -284,22 +313,26 @@ export default function OpportunityCreation({toggle}) {
                 marginBottom: '10px',
               }}
             >
-              {opportunityTypes && opportunityTypes.map((type, index) => (
-                <MenuItem value={type.name} key={index}>
-                  {type.name}
-                </MenuItem>
-              ))}
+              {
+                opportunityTypes ?
+                opportunityTypes.map((type, index) => (
+                  <MenuItem value={type.name} key={index}>
+                    {type.name}
+                  </MenuItem>
+                )) :
+                <Skeleton variant="rectangular" width={325} height={26} />
+              }
             </TextField>
           </div>
 
 
-          <div className='opportunity-creation__remote'>
+          <div className='opportunity-creation__locationtype'>
             <TextField
-              value={newOpportunity.remote}
-              defaultValue={null}
-              name='remote'
+              value={newOpportunity.locationtype}
+              defaultValue='in-person'
+              name='locationtype'
               select
-              label='Remote or In-Person'
+              label='Location Type'
               onChange={handleChange}
               sx={{backgroundColor: 'rgb(255, 255, 255)',
                 display: 'flex',
@@ -310,13 +343,13 @@ export default function OpportunityCreation({toggle}) {
                 marginBottom: '10px',
               }}
             >
-              <MenuItem value={true}>
+              <MenuItem value='remote'>
                 Remote
               </MenuItem>
-              <MenuItem value={false}>
+              <MenuItem value='in-person'>
                 In-Person
               </MenuItem>
-              <MenuItem value={null} placeholder='Hybrid'>
+              <MenuItem value='hybrid'>
                 Hybrid
               </MenuItem>
             </TextField>
@@ -448,58 +481,43 @@ export default function OpportunityCreation({toggle}) {
                 <AddCircleIcon />
               </IconButton>
             </div>
-            <TextField
-              sx={{display: 'flex',
-                position: 'relative',
-                width: '600px',
-                backgroundColor: 'rgb(255, 255, 255)',
-              }}
-              label='New Role'
-            />
-
-            {additionalRole >= 1 &&
-            <div className='opportunity-creation__additional-role-input'>
-              <TextField
-                sx={{display: 'flex',
-                  position: 'relative',
-                  marginTop: '10px',
-                  width: '600px',
-                  backgroundColor: 'rgb(255, 255, 255)',
-                }}
-              />
-              <IconButton
-                aria-label="remove opportunity role"
-                color="inherit"
-                sx = {{position: 'relative',
-                  marginTop: '12px',
-                  marginLeft: '5px'}}
-                onClick={handleRemoveRoleClick}
-              >
-                <RemoveCircleOutlineIcon sx={{color: 'red'}} fontSize="large"/>
-              </IconButton>
-            </div>}
-
-            {additionalRole >= 2 &&
-            <div className='opportunity-creation__additional-role-input'>
-              <TextField
-                sx={{display: 'flex',
-                  position: 'relative',
-                  marginTop: '10px',
-                  width: '600px',
-                  backgroundColor: 'rgb(255, 255, 255)',
-                }}
-              />
-              <IconButton
-                aria-label="remove opportunity role"
-                color="inherit"
-                sx = {{position: 'relative',
-                  marginTop: '12px',
-                  marginLeft: '5px'}}
-                onClick={handleRemoveRoleClick}
-              >
-                <RemoveCircleOutlineIcon sx={{color: 'red'}} fontSize="large"/>
-              </IconButton>
-            </div>}
+            {
+              roles.length > 0 &&
+              roles.map((role, index) => (
+                <div
+                  className='opportunity-creation__additional-role-input'
+                  key={`role${index}`}
+                  id={index.toString()}
+                >
+                  <TextField
+                    sx={{display: 'flex',
+                      position: 'relative',
+                      marginTop: '10px',
+                      width: '600px',
+                      backgroundColor: 'rgb(255, 255, 255)',
+                    }}
+                    name={`role${index}`}
+                    id={index.toString()}
+                    value={role}
+                    onChange={handleRoleChange}
+                  />
+                  <IconButton
+                    id={index.toString()}
+                    aria-label="remove opportunity role"
+                    color="inherit"
+                    sx = {{position: 'relative',
+                      marginTop: '12px',
+                      marginLeft: '5px'}}
+                    onClick={handleRemoveRoleClick}
+                  >
+                    <RemoveCircleOutlineIcon
+                      sx={{color: 'red'}}
+                      fontSize="large"
+                    />
+                  </IconButton>
+                </div>
+              ))
+            }
           </div>
 
 
@@ -508,7 +526,7 @@ export default function OpportunityCreation({toggle}) {
               <h4>Details</h4>
             </div>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <div>
+              <div className='datetime-row'>
                 <DesktopDatePicker
                   label="Start Date"
                   inputFormat="MM/dd/yyyy"
@@ -519,8 +537,7 @@ export default function OpportunityCreation({toggle}) {
                     sx={{width: '150px',
                       display: 'flex',
                       position: 'relative',
-                      mt: '70px',
-                      mb: '15px',
+                      mr: '5px',
                     }}/>}
                 />
                 <DesktopDatePicker
@@ -533,10 +550,10 @@ export default function OpportunityCreation({toggle}) {
                     sx={{width: '150px',
                       display: 'flex',
                       position: 'relative',
-                      ml: '155px',
-                      bottom: '71px',
                     }}/>}
                 />
+              </div>
+              <div className='datetime-row'>
                 <TimePicker
                   label="Start time"
                   timeFormat="HH:mm"
@@ -547,7 +564,7 @@ export default function OpportunityCreation({toggle}) {
                     sx={{width: '150px',
                       display: 'flex',
                       position: 'relative',
-                      bottom: '50px',
+                      mr: '5px',
                     }}/>}
                 />
                 <TimePicker
@@ -560,24 +577,101 @@ export default function OpportunityCreation({toggle}) {
                     sx={{width: '150px',
                       display: 'flex',
                       position: 'relative',
-                      bottom: '106px',
-                      left: '155px',
                     }}/>}
                 />
               </div>
             </LocalizationProvider>
 
+            <div className='location-details'>
+              {newOpportunity.locationtype == 'in-person' &&
+                <AddressForm
+                  newOpportunity={newOpportunity}
+                  setNewOpportunity={setNewOpportunity} />}
 
+              {newOpportunity.locationtype == 'remote' &&
+                <TextField
+                  name='eventzoomlink'
+                  label='Enter locationtype Meeting Link'
+                  value={newOpportunity.eventzoomlink}
+                  onChange={handleChange}
+                  sx={{display: 'flex',
+                    width: '305px',
+                    height: 'auto',
+                    backgroundColor: 'rgb(255, 255, 255)',
+                  }}
+                />}
+
+
+              {newOpportunity.locationtype == 'hybrid' &&
+              <div>
+                <AddressForm
+                  newOpportunity={newOpportunity}
+                  setNewOpportunity={setNewOpportunity}/>
+                <TextField
+                  name='eventzoomlink'
+                  label='Enter locationtype Meeting Link'
+                  value={newOpportunity.eventzoomlink}
+                  onChange={handleChange}
+                  sx={{display: 'flex',
+                    position: 'relative',
+                    width: '305px',
+                    height: 'auto',
+                    mt: '10px',
+                    backgroundColor: 'rgb(255, 255, 255)',
+                  }}
+                />
+              </div>}
+            </div>
+
+            <div className='subject'>
+              <TextField
+                defaultValue=''
+                name='subject'
+                select
+                label='Event subject'
+                onChange={handleChange}
+                sx={{backgroundColor: 'rgb(255, 255, 255)',
+                  display: 'flex',
+                  width: '305px',
+                }}
+              >
+                <MenuItem value='computer science'>
+                  Computer Science
+                </MenuItem>
+                <MenuItem value='computer engineering'>
+                  Computer Engineering
+                </MenuItem>
+                <MenuItem value='art'>
+                  Art
+                </MenuItem>
+              </TextField>
+            </div>
+
+            <div className='opportunity-creation__other'>
+              <TextField multiline
+                rows={5}
+                name='eventdata'
+                label='Other details'
+                value={newOpportunity.eventdata}
+                onChange={handleChange}
+                sx={{display: 'flex',
+                  position: 'relative',
+                  width: '305px',
+                  height: 'auto',
+                  backgroundColor: 'rgb(255, 255, 255)',
+                }}
+              />
+            </div>
             <div className='opportunity-creation__creation-buttons'>
               <Button onClick={toggle}
                 sx={{
                   display: 'flex',
                   position: 'relative',
                   width: '100px',
-                  top: '50px',
-                  right: '80px',
                   height: '50px',
+                  marginRight: '5px',
                   backgroundColor: 'gray',
+                  fontSize: '8pt',
                 }}>
                 Cancel
               </Button>
@@ -585,11 +679,10 @@ export default function OpportunityCreation({toggle}) {
                 sx={{
                   display: 'flex',
                   position: 'relative',
-                  width: '150px',
-                  bottom: '0px',
-                  left: '40px',
+                  width: '100px',
                   height: '50px',
                   backgroundColor: '#fdc700',
+                  fontSize: '8pt',
                 }}>
                 Create Opportunity
               </Button>

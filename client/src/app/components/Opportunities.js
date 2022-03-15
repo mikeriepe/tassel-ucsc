@@ -1,29 +1,25 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 
 import useAuth from '../util/AuthContext';
 import CreatedOpportunities from './CreatedOpportunities';
 import JoinedOpportunities from './JoinedOpportunities';
 import PastOpportunities from './PastOpportunities';
 import PendingOpportunities from './PendingOpportunities';
-import '../stylesheets/OpportunityListItem.css';
+import '../stylesheets/OpportunityCard.css';
 
 /**
  * creates Opportunities
  * @return {HTML} Opportunities component
  */
 export default function Opportunities() {
-  const {userProfile,
-    joinedOpportunities,
-    setJoinedOpportunities,
-    createdOpportunities,
-    setCreatedOpportunities,
-    pastOpportunities,
-    setPastOpportunities,
-    pendingOpportunities,
-    setPendingOpportunities} = useAuth();
+  const {userProfile} = useAuth();
 
   console.log(userProfile);
+  const [joinedOpportunities, setJoinedOpportunities] = useState([]);
+  const [createdOpportunities, setCreatedOpportunities] = useState([]);
+  const [pastOpportunities, setPastOpportunities] = useState([]);
+  const [pendingOpportunities, setPendingOpportunities] = useState([]);
 
   const getJoinedOpportunities = () => {
     fetch(`/api/getJoinedOpportunities/${userProfile.profileid}`)
@@ -34,7 +30,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setJoinedOpportunities(json);
         })
         .catch((err) => {
@@ -52,7 +48,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setCreatedOpportunities(json);
         })
         .catch((err) => {
@@ -70,7 +66,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setPastOpportunities(json);
         })
         .catch((err) => {
@@ -88,7 +84,7 @@ export default function Opportunities() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setPendingOpportunities(json);
         })
         .catch((err) => {

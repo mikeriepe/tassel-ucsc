@@ -1,38 +1,38 @@
 .request-header {
-    font-family: Roboto;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    padding-block: 2rem;
-    border-bottom: 1px solid var(--border-primary);
-  }
-  
-  .request-details {
-    display: flex;
-    flex-direction: column;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    padding-block: 2rem;
-  }
-  
-  .request-message {
-    margin-bottom: 10px;
-  }
-  
-  .request-status {
-    margin-bottom: 10px;
-  }
-  
-  .request-role {
-    margin-bottom: 10px;
-  }
-  
-  .request-date {
-    margin-bottom: 10px;
-  }
-  
-  .no_results_message {
-    margin-left: auto;
-    margin-right: auto;
-  }
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.request-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-block: 2rem;
+}
+
+.request-message {
+  margin-bottom: 10px;
+}
+
+.request-status {
+  margin-bottom: 10px;
+}
+
+.request-role {
+  margin-bottom: 10px;
+}
+
+.request-date {
+  margin-bottom: 10px;
+}
+
+.no_results_message {
+  margin-left: auto;
+  margin-right: auto;
+}

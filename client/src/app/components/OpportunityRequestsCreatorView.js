@@ -123,7 +123,9 @@ export default function OpportunityRequestsCreatorView({data}) {
         {pendingRequestsReceived &&
         pendingRequestsReceived.map((request, index) => (
           <RequestCard request={request}
-            getPendingRequests={getPendingRequestsRecieved}
+            pendingRequests={pendingRequestsReceived}
+            getPendingRequests={getPendingRequestsReceived}
+            setPendingRequests={setPendingRequestsReceived}
             getApprovedRequests={getApprovedRequests}
             getRejectedRequests={getRejectedRequests}
             data={data} key={index} />
@@ -157,6 +159,8 @@ export default function OpportunityRequestsCreatorView({data}) {
         {pendingRequestsSent &&
         pendingRequestsSent.map((request, index) => (
           <RequestCard request={request}
+            pendingRequests={pendingRequestsSent}
+            setPendingRequests={setPendingRequestsSent}
             getPendingRequests={getPendingRequestsSent}
             data={data} key={index} />
         ))}

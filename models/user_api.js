@@ -40,8 +40,8 @@ exports.userPost = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-exports.userGet = async (req, res) => {
-  const users = await userModel.getUsers();
+exports.getActiveUsers = async (_, res) => {
+  const users = await userModel.getActiveUsers();
   res.status(200).send(users);
 };
 

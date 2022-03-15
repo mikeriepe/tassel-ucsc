@@ -16,10 +16,10 @@ export default function Login() {
   const [signUp, setSignUp] = useState(location.state.signUp);
 
 
+  // eslint-disable-next-line no-unused-vars
   const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
-  console.log('current user: ', user);
-  console.log('current user profile: ', userProfile);
-
+  // console.log('current user: ', user);
+  // console.log('current user profile: ', userProfile);
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -137,7 +137,6 @@ export default function Login() {
           });
           setLoggedIn(true);
           setUser(json);
-          navigate(`/`);
         })
         .catch((err) => {
           console.log(err);
@@ -157,6 +156,7 @@ export default function Login() {
         .then((json) => {
           console.log(json);
           setUserProfile(json);
+          navigate(`/myprofile`);
         })
         .catch((err) => {
           console.log(err);

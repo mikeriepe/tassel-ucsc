@@ -7,13 +7,14 @@ const pool = new Pool();
 /**
  * Query to retrieve all users from the user table in ACMatchMaker postgreSQL DB
  */
-exports.getUsers = async () => {
+exports.getActiveUsers = async () => {
   const query = {
     text: `SELECT * 
-          FROM users`,
+            FROM users
+            WHERE active = true`,
   };
   const {rows} = await pool.query(query);
-  return rows[0];
+  return rows;
 };
 
 /**

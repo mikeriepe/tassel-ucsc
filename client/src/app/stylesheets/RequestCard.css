@@ -1,78 +1,78 @@
 .request-detail {
-    display: flex;
-    margin-bottom: 1rem;
-    width: 95%;
-  }
-  
-  .requester {
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  
-  .requester-avatar {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  
-  .requester-name {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .requester-major {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--primary-blue-main);
-  }
-  
-  .requester-year {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-  }
-  
-  .requestee {
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .requestee-avatar {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  
-  .requestee-name {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .requestee-major {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--primary-blue-main);
-  }
-  
-  .requestee-year {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-  }
+  display: flex;
+  margin-bottom: 1rem;
+  width: 95%;
+}
+
+.requester {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.requester-avatar {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.requester-name {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.requester-major {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary-blue-main);
+}
+
+.requester-year {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.requestee {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.requestee-avatar {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.requestee-name {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.requestee-major {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary-blue-main);
+}
+
+.requestee-year {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}

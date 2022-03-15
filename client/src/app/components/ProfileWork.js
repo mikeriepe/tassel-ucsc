@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
  * @return {HTML} Profile component
  */
 export default function ProfileWork({data}) {
-  console.log(data.job1);
+  // console.log(data.job1);
   return (
     <Paper
       elevation={3}

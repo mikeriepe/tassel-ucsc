@@ -2,7 +2,7 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import '../stylesheets/Opportunities.css';
 import {List} from '@mui/material';
-import OpportunityListItem from './OpportunityListItem';
+import OpportunityCard from './OpportunityCard';
 
 /**
  * creates Profile
@@ -36,7 +36,7 @@ export default function PastOpportunities({data}) {
         }}
       >
         {data && data.map((opportunity, index) => (
-          <OpportunityListItem data={opportunity} key={index} />
+          <OpportunityCard data={opportunity} key={index} />
         ))}
       </List>
 

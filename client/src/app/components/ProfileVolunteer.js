@@ -7,7 +7,7 @@ import '../stylesheets/MyProfile.css';
  * @return {HTML} Profile component
  */
 export default function ProfileVolunteer({data}) {
-  console.log(data.experience1);
+  // console.log(data.experience1);
   const exampleData1 = {
     title: 'Beach Cleanup',
     company: 'Marine Biology Club',

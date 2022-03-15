@@ -3,7 +3,7 @@ import {useState} from 'react';
 import Paper from '@mui/material/Paper';
 import '../stylesheets/Opportunities.css';
 import {List, ListItem} from '@mui/material';
-import OpportunityListItem from './OpportunityListItem';
+import OpportunityCard from './OpportunityCard';
 import OpportunityCreation from './OpportunityCreation';
 
 /**
@@ -11,7 +11,7 @@ import OpportunityCreation from './OpportunityCreation';
  * @return {HTML} Profile component
  */
 export default function CreatedOpportunities({data}) {
-  console.log(data);
+  // console.log(data);
   const [opportunityCreationPopup,
     setOpportunityCreationPopup] = useState(false);
 
@@ -48,7 +48,7 @@ export default function CreatedOpportunities({data}) {
           }}
         >
           {data && data.map((opportunity, index) => (
-            <OpportunityListItem data={opportunity} key={index} />
+            <OpportunityCard data={opportunity} key={index} />
           ))}
         </List>
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {List} from '@mui/material';
 import Paper from '@mui/material/Paper';
-import OpportunityListItem from './OpportunityListItem';
+import OpportunityCard from './OpportunityCard';
 import '../stylesheets/Opportunities.css';
 
 /**
@@ -9,7 +9,7 @@ import '../stylesheets/Opportunities.css';
  * @return {HTML} Profile component
  */
 export default function JoinedOpportunities({data}) {
-  console.log(data);
+  // console.log(data);
 
   return (
     <Paper
@@ -38,7 +38,7 @@ export default function JoinedOpportunities({data}) {
         }}
       >
         {data && data.map((opportunity, index) => (
-          <OpportunityListItem
+          <OpportunityCard
             key={`opportunity-list-item-${index}`}
             data={opportunity}
           />
