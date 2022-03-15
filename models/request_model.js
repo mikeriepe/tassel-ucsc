@@ -4,16 +4,35 @@ const Pool = require('pg').Pool;
 const pool = new Pool();
 
 /**
- * getUserRequests
+ * getUserOutgoingRequests
  * gets request data associated with profile id provided
  * Returns the specified profiles requests sent to or from the user that are still active
  * @param {*} profileid
  */
- exports.getUserRequests= async (profileid) => {
+ exports.getUserOutgoingRequests= async (profileid) => {
   const query = {
     text: `SELECT *
            FROM requests
            WHERE requester = ($1) AND toEvent = true`,
+    values: [profileid],
+  };
+
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+};
+
+/**
+ * getUserIncomingRequests
+ * gets request data associated with profile id provided
+ * Returns the specified profiles requests sent to or from the user that are still active
+ * @param {*} profileid
+ */
+ exports.getUserIncomingRequests= async (profileid) => {
+  const query = {
+    text: `SELECT *
+           FROM requests
+           WHERE requestee = ($1) AND toEvent = false`,
     values: [profileid],
   };
 

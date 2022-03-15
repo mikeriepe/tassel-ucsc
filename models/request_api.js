@@ -8,9 +8,21 @@ const uuid = require('uuid');
  * @param {*} req
  * @param {*} res
  */
- exports.getUserRequests = async (req, res) => {
+ exports.getUserIncomingRequests = async (req, res) => {
   console.log(req.params.profileid);
-  const requests = await requestModel.getUserRequests(req.params.profileid);
+  const requests = await requestModel.getUserIncomingRequests(req.params.profileid);
+  res.status(201).send(requests);
+};
+
+/**
+ * GETs requests
+ * retrieves the requests associated with a specified user profile.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getUserOutgoingRequests = async (req, res) => {
+  console.log(req.params.profileid);
+  const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
   res.status(201).send(requests);
 };
 
