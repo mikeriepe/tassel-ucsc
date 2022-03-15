@@ -108,7 +108,9 @@ app.delete('/api/deleteOpportunity/:eventid', opportunityApi.deleteOpportunity);
 // Request CRUD operations
 //
 //
-app.get('/api/getUserRequests/:profileid', requestApi.getUserRequests);
+app.get('/api/getUserOutgoingRequests/:profileid', requestApi.getUserOutgoingRequests);
+
+app.get('/api/getUserIncomingRequests/:profileid', requestApi.getUserIncomingRequests);
 
 app.get('/api/getPendingRequest/:profileid/:eventid', requestApi.getPendingRequest);
 

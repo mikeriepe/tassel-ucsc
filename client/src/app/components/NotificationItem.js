@@ -5,7 +5,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
-import useAuth from '../util/AuthContext';
+// import useAuth from '../util/AuthContext';
 import {useNavigate} from 'react-router-dom';
 
 /**
@@ -14,10 +14,12 @@ import {useNavigate} from 'react-router-dom';
  * @return {HTML} notification items
  */
 export default function NotificationItem({data}) {
-  const {userProfile} = useAuth();
+  // const {userProfile} = useAuth();
   const [requesterProfile, setProfile] = React.useState(null);
   const [opportunity, setOpportunity] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
+
   const getProfile = () => {
     fetch(`/api/getProfileByProfileId/${data.requester}`)
         .then((res) => {
@@ -72,9 +74,17 @@ export default function NotificationItem({data}) {
     getOpportunity();
   }, []);
 
+  React.useEffect(() => {
+    if (requesterProfile && opportunity) {
+      setLoading(false);
+    }
+  }, [requesterProfile, opportunity]);
+
   return (
     <div>
-      {(data.requester != userProfile.profileid) &&
+      {
+        loading ?
+        <p>Loading</p> :
         <ListItemButton
           alignItems="flex-start"
           onClick={gotoNotificationDetail()}
@@ -133,7 +143,7 @@ export default function NotificationItem({data}) {
           />
         </ListItemButton>
       }
-      {(data.requester == userProfile.profileid) &&
+      {/* {(data.requester == userProfile.profileid) &&
       data.requeststatus != 'pending' &&
       <ListItemButton
         alignItems="flex-start"
@@ -187,7 +197,7 @@ export default function NotificationItem({data}) {
           }
         />
       </ListItemButton>
-      }
+      } */}
       <Divider variant="inset" component="li" />
     </div>
   );

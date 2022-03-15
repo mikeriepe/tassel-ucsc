@@ -35,7 +35,7 @@ export default function OpportunityRequestsCreatorView({data}) {
         });
   };
 
-  const getPendingRequestsRecieved = () => {
+  const getPendingRequestsReceived = () => {
     fetch(`/api/getPendingRequestsReceived/` +
     `${userProfile.profileid}/${data.eventid}`)
         .then((res) => {
@@ -93,7 +93,7 @@ export default function OpportunityRequestsCreatorView({data}) {
 
   useEffect(() => {
     getPendingRequestsSent();
-    getPendingRequestsRecieved();
+    getPendingRequestsReceived();
     getApprovedRequests();
     getRejectedRequests();
   }, []);

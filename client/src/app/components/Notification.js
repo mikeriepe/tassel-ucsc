@@ -39,7 +39,7 @@ export default function Notification({props}) {
   const [notifications, setNotifications] = useState(null);
 
   const getUserRequests = () => {
-    fetch(`/api/getUserRequests/${userProfile.profileid}`)
+    fetch(`/api/getUserIncomingRequests/${userProfile.profileid}`)
         .then((res) => {
           if (!res.ok) {
             throw res;
