@@ -171,17 +171,14 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
+
 const port = process.env.PORT || 3001;
-
 app.listen(port);
-
 console.log('App is listening on port ' + port);
 
-// DEBUG
-/*
-profileModel.createProfile(
-    {
-      'userid': `82f2d80c-a9ff-49c9-a0d7-7b8edfcfb24c`,
-    },
-);
-*/
+/**
+ * TESTING SERVER HOSTING (*This is for JEST/ Supertest purposes)
+ * COMMENT THIS FOR PRODUCTION
+ * UNCOMMENT THIS FOR TESTING
+ */
+module.exports = app
