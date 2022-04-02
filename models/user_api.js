@@ -1,4 +1,5 @@
 const userModel = require('./user_model.js');
+const profileModel = require('./profile_model.js');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 
@@ -117,11 +118,17 @@ exports.userVerifyPost = async (req, res) => {
  */
 exports.userVerifySession = async (req, res) =>{
   console.log('This user has logged in before! Decoding JWT and sending back user info...');
-  const user = jwt.decode(req.cookies.accessToken);
-  delete user.iat;
-  delete user.exp;
-  console.log(user)
+  const userData = jwt.decode(req.cookies.accessToken);
+  delete userData.iat;
+  delete userData.exp;
+  const profileData = await profileModel.getProfile(userData.userid);
 
-  res.status(200).send(user)
+  console.log(userData);
+  console.log(profileData);
+
+  res.status(200).send({
+    user: userData,
+    profile: profileData,
+  })
 }
 

@@ -7,9 +7,6 @@ import useAuth from '../util/AuthContext';
  * @return {HTML} Landing page
  */
 export default function Landing() {
-  // Import the states from authcontext
-  const {setUser, setLoggedIn, setUserProfile} = useAuth();
-
   const authTest = () => {
     fetch(`/api/dummy`, {
       method: 'GET',
@@ -21,6 +18,8 @@ export default function Landing() {
 
 
   // Checks if there's a user that logged in each time the APP loads
+  // Import the states from authcontext
+  const {setUser, setLoggedIn, setUserProfile} = useAuth();
   React.useEffect(()=>{
     fetch(`/api/userVerifySession`, {
       method: 'GET',
@@ -35,24 +34,10 @@ export default function Landing() {
           return res.json();
         })
         .then((json)=>{
-          // Set the user to be logged in and set user data
-          setUser(json);
+          // Set the user to be logged in and set user data and user profile
+          setUser(json.user);
           setLoggedIn(true);
-          fetch(`/api/getProfile/${json.userid}`)
-              .then((res) => {
-                if (!res.ok) {
-                  throw res;
-                }
-                return res.json();
-              })
-              .then((json) => {
-                console.log(json);
-                setUserProfile(json);
-              })
-              .catch((err) => {
-                console.log(err);
-                alert('Error retrieving profile, please try again');
-              });
+          setUserProfile(json.profile);
         })
         .catch( () =>{
           console.log('No JWT Detected');
@@ -67,7 +52,7 @@ export default function Landing() {
         <button
           className="LoginPage__submitButton"
           onClick={authTest}
-          // hidden={true}
+          hidden={true}
         >
           Test Auth
         </button>
