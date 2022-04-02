@@ -13,6 +13,30 @@ export function AuthProvider(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
 
+  React.useEffect(()=>{
+    fetch(`/api/userVerifySession`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }})
+        .then((res)=> {
+          // Check if the response code is OK or not
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json)=>{
+          // Set the user to be logged in and set user data and user profile
+          setUser(json.user);
+          setLoggedIn(true);
+          setUserProfile(json.profile);
+        })
+        .catch( () =>{
+          console.log('No JWT Detected');
+        });
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{user,

@@ -118,6 +118,7 @@ exports.userVerifyPost = async (req, res) => {
  */
 exports.userVerifySession = async (req, res) =>{
   console.log('This user has logged in before! Decoding JWT and sending back user info...');
+  // Sends back the user data and profile data
   const userData = jwt.decode(req.cookies.accessToken);
   delete userData.iat;
   delete userData.exp;
