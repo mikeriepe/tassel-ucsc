@@ -106,5 +106,22 @@ exports.userVerifyPost = async (req, res) => {
       res.status(401).send('Invalid password');
     }
   })
-
 };
+
+/**
+ * userVerifySession:
+ * Called upon refresh / whenever the app loads.
+ * This function is called AFTER JWT from HTTP Cookie has been verified.
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.userVerifySession = async (req, res) =>{
+  console.log('This user has logged in before! Decoding JWT and sending back user info...');
+  const user = jwt.decode(req.cookies.accessToken);
+  delete user.iat;
+  delete user.exp;
+  console.log(user)
+
+  res.status(200).send(user)
+}
+
