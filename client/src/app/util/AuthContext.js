@@ -14,7 +14,7 @@ export function AuthProvider(props) {
   const [userProfile, setUserProfile] = useState(null);
 
   React.useEffect(()=>{
-    fetch(`/api/userVerifySession`, {
+    fetch(`/api/verifyUserSession`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

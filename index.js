@@ -70,7 +70,7 @@ app.post('/api/userDeactivation', userApi.userDeactivate);
 
 app.post('/api/userCreation', userApi.userPost);
 
-app.get('/api/userVerifySession', authApi.check, userApi.userVerifySession);
+app.get('/api/verifyUserSession', authApi.check, userApi.userVerifySession);
 
 
 //  Profile CRUD operations
