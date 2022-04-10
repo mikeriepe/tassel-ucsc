@@ -1,4 +1,4 @@
-import React, {useContext, createContext, useState} from 'react';
+import React, {useContext, createContext, useState, useEffect} from 'react';
 
 // initializes context
 const AuthContext = createContext();
@@ -13,7 +13,7 @@ export function AuthProvider(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     fetch(`/api/verifyUserSession`, {
       method: 'GET',
       headers: {

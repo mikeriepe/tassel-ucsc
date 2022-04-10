@@ -116,7 +116,7 @@ exports.userVerifyPost = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-exports.userVerifySession = async (req, res) =>{
+exports.verifyUserSession = async (req, res) =>{
   console.log('This user has logged in before! Decoding JWT and sending back user info...');
   // Sends back the user data and profile data
   const userData = jwt.decode(req.cookies.accessToken);
