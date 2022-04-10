@@ -1,4 +1,5 @@
 const userModel = require('./user_model.js');
+const profileModel = require('./profile_model.js');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 
@@ -106,5 +107,29 @@ exports.userVerifyPost = async (req, res) => {
       res.status(401).send('Invalid password');
     }
   })
-
 };
+
+/**
+ * userVerifySession:
+ * Called upon refresh / whenever the app loads.
+ * This function is called AFTER JWT from HTTP Cookie has been verified.
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.verifyUserSession = async (req, res) =>{
+  console.log('This user has logged in before! Decoding JWT and sending back user info...');
+  // Sends back the user data and profile data
+  const userData = jwt.decode(req.cookies.accessToken);
+  delete userData.iat;
+  delete userData.exp;
+  const profileData = await profileModel.getProfile(userData.userid);
+
+  console.log(userData);
+  console.log(profileData);
+
+  res.status(200).send({
+    user: userData,
+    profile: profileData,
+  })
+}
+

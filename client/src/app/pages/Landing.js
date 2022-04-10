@@ -1,6 +1,7 @@
 import * as React from 'react';
 import '../stylesheets/Landing.css';
 
+// import useAuth from '../util/AuthContext';
 /**
  * creates landing page
  * @return {HTML} Landing page

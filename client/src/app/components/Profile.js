@@ -90,7 +90,7 @@ export default function Profile() {
         alignItems: 'center',
       }}
     >
-      {profile == null && <>
+      {profile == null && userProfile && <>
         {userProfile && <ProfileHeader
           data={userProfile} />}
         {!userProfile && <ProfileHeader
