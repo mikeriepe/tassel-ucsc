@@ -35,7 +35,7 @@ export default function NavBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const showNotification = Boolean(notificationAnchorEl);
-  // const [notificationCount, setNotificationCount] = React.useState(0);
+  const [notificationCount, setNotificationCount] = React.useState(0);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -82,7 +82,7 @@ export default function NavBar() {
         notificationId: notificationId,
         showNotification: showNotification,
         setNotificationAnchorEl: setNotificationAnchorEl,
-        // setNotificationCount: setNotificationCount,
+        setNotificationCount: setNotificationCount,
       }}
     />
   );
@@ -258,11 +258,11 @@ export default function NavBar() {
                   aria-controls={notificationId}
                   size="large"
                   aria-haspopup="true"
-                  aria-label="show 17 new notifications"
+                  aria-label="show number of new notifications"
                   color="inherit"
                   onClick = {handleNotificationOpen}
                 >
-                  <Badge badgeContent={17} color="error">
+                  <Badge badgeContent={notificationCount} color="error">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>

@@ -5,28 +5,6 @@ import NotificationItem from './NotificationItem';
 import useAuth from '../util/AuthContext';
 import {useEffect, useState} from 'react';
 
-// const notifications =
-// [
-//   {
-//     'requestid': 1,
-//     'requester': 'Rachel Wong',
-//     'requeststatus': 'Pending',
-//     'requestdatetime': '3 days ago',
-//     'requestmessage':
-//       ' Hi I would like to volunteer for Gracehack event as a speaker',
-//     'requestopportunity': 'Gracehack-speaker',
-//   },
-//   {
-//     'requestid': 2,
-//     'requester': 'SWE team',
-//     'requeststatus': 'Pending',
-//     'requestdatetime': '4 days ago',
-//
-// 'requestmessage': 'Hi you are a good fit for our speaker role of Gracehack',
-//     'requestopportunity': 'SWE speaker panel',
-//   },
-// ];
-
 /**
  * Notification
  * Displays the notification popover
@@ -47,9 +25,13 @@ export default function Notification({props}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
+          // console.log(json);
           setNotifications(json);
-          // props.setNotificationCount(notifications.length)
+        })
+        .then(() => {
+          if (notifications) {
+            props.setNotificationCount(notifications.length);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -75,7 +57,14 @@ export default function Notification({props}) {
         onClose={handleNotificationClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        PaperProps={{
+          style: {width: '25%'},
         }}
       >
         <List
