@@ -1,0 +1,154 @@
+.signup-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  position: absolute;
+  top: 76px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.signup-box-container {
+  display: flex;
+  width: 60rem;
+  height: 35rem;
+  border-radius: 10px 0 0 10px;
+  filter: drop-shadow(0px, 15px, 40px, rgba(192 225 255 0.1));
+}
+
+.signup-box-left {
+  width: 50%;
+  border-radius: 10px 0 0 10px;
+  background: linear-gradient(140deg, #7EFFF7 -8%, #3AB8FF 70%);
+}
+
+.signup-box-left-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100% - 4em*2);
+  width: calc(100% - 4em*2);
+  gap: 20px;
+  padding: 4em;
+}
+
+.signup-box-left-logo {
+  font-size: 0.8rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: white;
+}
+
+.signup-box-left-headline {
+  width: 55%;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 25px;
+  letter-spacing: -0.015em;
+  color: white;
+}
+
+.signup-box-right {
+  width: 50%;
+}
+
+.signup-box-right-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100% - 4em*2);
+  width: calc(100% - 4em*2);
+  padding: 4em;
+  gap: 40px;
+}
+
+.signup-step-one,
+.signup-step-two,
+.signup-step-three {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  height: 100%;
+  width: 100%;
+}
+
+.signup-step-four {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: 100%;
+  width: 100%;
+}
+
+.signup-step-four-text {
+  text-align: center;
+  line-height: 25px;
+}
+
+.text-title {
+  font-size: 1.5rem;
+}
+
+.text-small {
+  font-size: 0.8rem;
+}
+
+.text-light {
+  font-weight: 400;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.text-dark {
+  color: #3C4047;
+}
+
+.text-warning {
+  color: #FF0000;
+}
+
+.text-blue {
+  color: #00C2FF;
+}
+
+.gap-vert-large {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gap-vert-small {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gap-hori-large {
+  display: flex;
+  gap: 10px;
+}
+
+.gap-hori-small {
+  display: flex;
+  gap: 5px;
+}
+
+.gap-vert-even {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gap-hori-even {
+  display: flex;
+  justify-content: space-between;
+}

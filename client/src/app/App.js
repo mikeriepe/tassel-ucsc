@@ -13,6 +13,8 @@ import Browse from './pages/Browse';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
 
+import TestSignup from './pages/TestSignup';
+
 import {AuthProvider} from './util/AuthContext';
 
 
@@ -34,6 +36,8 @@ export default function App() {
         <Route path='/opportunity/:opportunityid'
           element={<Opportunity/>}/>
         <Route path='/profile/:profileid' element={<Profile />} />
+
+        <Route path='/testing' element={<TestSignup />} />
       </Routes>
     </AuthProvider>
   );
