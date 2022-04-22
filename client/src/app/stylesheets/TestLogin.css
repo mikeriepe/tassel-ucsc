@@ -1,4 +1,4 @@
-.signup-page-container {
+.login-page-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,13 +11,13 @@
   left: 0;
 }
 
-.signup-box-left {
+.login-box-left {
   width: 50%;
   border-radius: 10px 0 0 10px;
   background: linear-gradient(140deg, #7EFFF7 -8%, #3AB8FF 70%);
 }
 
-.signup-box-left-content {
+.login-box-left-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,7 +27,7 @@
   padding: 4em;
 }
 
-.signup-box-left-logo {
+.login-box-left-logo {
   font-size: 0.8rem;
   font-style: italic;
   font-weight: 700;
@@ -35,7 +35,7 @@
   color: white;
 }
 
-.signup-box-left-headline {
+.login-box-left-headline {
   width: 55%;
   font-size: 1.2rem;
   font-weight: 800;
@@ -44,11 +44,11 @@
   color: white;
 }
 
-.signup-box-right {
+.login-box-right {
   width: 50%;
 }
 
-.signup-box-right-content {
+.login-box-right-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -58,9 +58,9 @@
   gap: 40px;
 }
 
-.signup-step-one,
-.signup-step-two,
-.signup-step-three {
+.login-step-one,
+.login-step-two,
+.login-step-three {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -69,7 +69,7 @@
   width: 100%;
 }
 
-.signup-step-four {
+.login-step-four {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -79,7 +79,7 @@
   width: 100%;
 }
 
-.signup-step-four-text {
+.login-step-four-text {
   text-align: center;
   line-height: 25px;
 }
