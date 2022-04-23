@@ -421,7 +421,7 @@ function ForgotPasswordThree({active}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testlogin');
+    navigate('/login');
   };
 
   return (
