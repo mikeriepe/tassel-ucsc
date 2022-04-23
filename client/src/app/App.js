@@ -30,7 +30,7 @@ export default function App() {
       <NavBar/>
       <Routes>
         <Route path='/' element={<Landing />}/>
-        <Route path='/login' element={<Login />}/>
+        <Route path='/testlogin' element={<Login />}/>
         <Route path='/getstarted' element={<GetStarted />}/>
         <Route path='/myprofile' element={<MyProfile />} />
         <Route path='/browse' element={<Browse />}/>
@@ -38,7 +38,7 @@ export default function App() {
         <Route path='/profile/:profileid' element={<Profile />} />
 
         <Route path='/testsignup' element={<TestSignup />} />
-        <Route path='/testlogin' element={<TestLogin />} />
+        <Route path='/login' element={<TestLogin />} />
       </Routes>
     </AuthProvider>
   );

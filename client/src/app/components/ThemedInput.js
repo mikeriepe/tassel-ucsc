@@ -34,24 +34,10 @@ export default function ThemedInput({placeholder, type, index, step}) {
   };
 
   const handleChange = (e) => {
-    if (index === 'password') {
-      if (e.target.value === '') {
-        setValues((prevValues) => ({
-          ...prevValues,
-          [step]: {...prevValues[step], [index]: e.target.value},
-        }));
-      } else {
-        setValues((prevValues) => ({
-          ...prevValues,
-          [step]: {...prevValues[step], [index]: 'true'},
-        }));
-      }
-    } else {
-      setValues((prevValues) => ({
-        ...prevValues,
-        [step]: {...prevValues[step], [index]: e.target.value},
-      }));
-    }
+    setValues((prevValues) => ({
+      ...prevValues,
+      [step]: {...prevValues[step], [index]: e.target.value},
+    }));
   };
 
   const handleClickShowPassword = () => {

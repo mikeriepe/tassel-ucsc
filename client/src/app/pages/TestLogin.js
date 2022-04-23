@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {InputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -7,6 +8,7 @@ import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
 import Checkbox from '@mui/material/Checkbox';
 import LoginBanner from '../assets/LoginBanner.png';
+import useAuth from '../util/AuthContext';
 import '../stylesheets/TestLogin.css';
 
 /**
@@ -14,11 +16,14 @@ import '../stylesheets/TestLogin.css';
  * @return {HTML} login page
  */
 export default function TestLogin() {
+  const navigate = useNavigate();
+  const {user, setUser, setLoggedIn, setUserProfile} = useAuth();
+
   const [stepPage, setStepPage] = useState('login');
   const [values, setValues] = useState({
     'login': {
-      email: '',
-      password: '',
+      useremail: '',
+      userpassword: '',
     },
     'forgot1': {
       email: '',
@@ -29,23 +34,74 @@ export default function TestLogin() {
     },
   });
 
-  const checkValues = (object) => {
-    return Object.values(object).every((v) => v && typeof v === 'object' ?
-      checkValues(v) : v.length > 0,
-    );
+  useEffect(() => {
+    if (user != null) {
+      getProfile();
+    }
+  }, [user]);
+
+  // useEffect(() => {
+  //   console.log(values);
+  // }, [values]);
+
+  const login = () => {
+    fetch(`/api/login`, {
+      method: 'POST',
+      body: JSON.stringify(values['login']),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            return res.json();
+          } else if (res.status == 401) {
+            throw res;
+          } else {
+            throw res;
+          }
+        })
+        .then((json) => {
+          toast.success('Login Success', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoggedIn(true);
+          setUser(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Invalid Username or Password. Please Try Again.');
+        });
+  };
+
+  const getProfile = () => {
+    fetch(`/api/getProfile/${user.userid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          setUserProfile(json);
+          navigate(`/myprofile`);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving profile, please try again');
+        });
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const data = {values};
-    const checkLogin = checkValues(values['login']);
-
-    if (checkLogin) {
-      console.log(data);
-    } else {
-      alert('Fill in all the required fields.');
-    }
+    login();
   };
 
   const handleNextPage = (step) => {
@@ -58,7 +114,7 @@ export default function TestLogin() {
         className='login-page-container'
         component='form'
         noValidate
-        autoComplete='off'
+        autoComplete='on'
         onSubmit={handleSubmit}
       >
         <Paper
@@ -152,7 +208,7 @@ function LoginForm({active, handleNextPage}) {
           <ThemedInput
             placeholder={'bobsmith@gmail.com'}
             type={'text'}
-            index={'email'}
+            index={'useremail'}
             step={'login'}
           />
         </div>
@@ -168,7 +224,7 @@ function LoginForm({active, handleNextPage}) {
           <ThemedInput
             placeholder={'Your password'}
             type={'password'}
-            index={'password'}
+            index={'userpassword'}
             step={'login'}
           />
         </div>
