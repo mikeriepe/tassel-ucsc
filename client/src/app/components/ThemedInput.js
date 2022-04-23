@@ -1,17 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, createContext} from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+export const InputContext = createContext();
+export const useInputContext = () => useContext(InputContext);
+
 /**
  * Themed input
  * @return {JSX}
  */
-export default function ThemedInput({placeholder, type}) {
-  const [value, setValue] = useState('');
+export default function ThemedInput({placeholder, type, index, step}) {
+  const value = useInputContext();
+  const [values, setValues] = value;
   const [showPassword, setShowPassword] = useState(false);
 
   const inputStyling = {
@@ -31,7 +34,24 @@ export default function ThemedInput({placeholder, type}) {
   };
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    if (index === 'password') {
+      if (e.target.value === '') {
+        setValues((prevValues) => ({
+          ...prevValues,
+          [step]: {...prevValues[step], [index]: e.target.value},
+        }));
+      } else {
+        setValues((prevValues) => ({
+          ...prevValues,
+          [step]: {...prevValues[step], [index]: 'true'},
+        }));
+      }
+    } else {
+      setValues((prevValues) => ({
+        ...prevValues,
+        [step]: {...prevValues[step], [index]: e.target.value},
+      }));
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -43,22 +63,18 @@ export default function ThemedInput({placeholder, type}) {
   };
 
   return (
-    <Box
-      component='form'
-      noValidate
-      autoComplete='off'
-    >
+    <>
       <OutlinedInput
         placeholder={placeholder}
         type={type}
-        value={value}
+        value={values[index]}
         onChange={handleChange}
         sx={{...inputStyling, display: type === 'text' ? null : 'none'}}
       />
       <OutlinedInput
         placeholder={placeholder}
         type={showPassword ? 'text' : 'password'}
-        value={value}
+        value={values[index]}
         onChange={handleChange}
         endAdornment={
           <InputAdornment position='end'>
@@ -77,6 +93,6 @@ export default function ThemedInput({placeholder, type}) {
         }
         sx={{...inputStyling, display: type === 'password' ? null : 'none'}}
       />
-    </Box>
+    </>
   );
 }

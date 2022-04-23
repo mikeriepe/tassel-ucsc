@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {InputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
@@ -16,113 +17,165 @@ import '../stylesheets/TestSignup.css';
  */
 export default function TestSignup() {
   const [stepNumber, setStepNumber] = useState(0);
-  // const [completed, setCompleted] = useState({});
+  const [values, setValues] = useState({
+    0: {
+      firstName: '',
+      lastName: '',
+    },
+    1: {
+      email: '',
+      year: '',
+    },
+    2: {
+      email: '',
+      password: '',
+    },
+  });
 
   const steps = ['Name', 'School', 'Email', 'Verification', 'Done'];
+
+  const checkValues = (object) => {
+    return Object.values(object).every((v) => v && typeof v === 'object' ?
+      checkValues(v) : v.length > 0,
+    );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {values};
+    const checkStep1 = checkValues(values[0]);
+    const checkStep2 = checkValues(values[1]);
+    const checkStep3 = checkValues(values[2]);
+
+    if (checkStep1 && checkStep2 && checkStep3) {
+      console.log(data);
+      handleNextStep(3);
+    } else {
+      alert('Fill in all the required fields.');
+    }
+  };
 
   const handleNextStep = (step) => {
     setStepNumber(step);
   };
 
   return (
-    <div className='signup-page-container'>
-      <Paper
-        className='signup-box-container'
-        elevation={0}
-        sx={{
-          display: 'flex',
-          width: '1000px',
-          height: '600px',
-          borderRadius: '10px 0 0 10px',
-          filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-          color: '#8B95A5',
-        }}
+    <InputContext.Provider value={[values, setValues]}>
+      <Box
+        component='form'
+        noValidate
+        autoComplete='off'
+        onSubmit={handleSubmit}
       >
-        <div className='signup-box-left'>
-          <div className='signup-box-left-content'>
-            <div className='signup-box-left-logo'>
-              Logo.
+        <div className='signup-page-container'>
+          <Paper
+            className='signup-box-container'
+            elevation={0}
+            sx={{
+              display: 'flex',
+              width: '1000px',
+              height: '600px',
+              borderRadius: '10px 0 0 10px',
+              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+              color: '#8B95A5',
+            }}
+          >
+            <div className='signup-box-left'>
+              <div className='signup-box-left-content'>
+                <div className='signup-box-left-logo'>
+                  Logo.
+                </div>
+                <div className='signup-box-left-headline'>
+                  Grow your connection with the UCSC community!
+                </div>
+                <img src={SignupBanner} />
+              </div>
             </div>
-            <div className='signup-box-left-headline'>
-              Grow your connection with the UCSC community!
+            <div className='signup-box-right'>
+              <SignupStepOne
+                active={stepNumber === 0}
+                step={0}
+                handleNextStep={(e) => handleNextStep(e)}
+              />
+              <SignupStepTwo
+                active={stepNumber === 1}
+                step={1}
+                handleNextStep={(e) => handleNextStep(e)}
+              />
+              <SignupStepThree
+                active={stepNumber === 2}
+                step={2}
+                handleNextStep={(e) => handleNextStep(e)}
+              />
+              <SignupStepFour
+                active={stepNumber === 3}
+                step={3}
+                handleNextStep={(e) => handleNextStep(e)}
+              />
+              <SignupStepFive active={stepNumber === 4} />
             </div>
-            <img src={SignupBanner} />
-          </div>
+          </Paper>
+          <Paper
+            className='stepper-box-container'
+            elevation={0}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingInline: '30px',
+              width: '40em',
+              height: '4em',
+              borderRadius: '10px',
+              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+              color: '#8B95A5',
+            }}
+          >
+            <Box
+              sx={{
+                'width': '100%',
+                '.MuiStepLabel-labelContainer span': {
+                  fontFamily: 'Montserrat',
+                  fontSize: '0.8rem',
+                  fontWeight: '600',
+                  color: '#3C4047',
+                },
+                '.MuiStepIcon-text': {
+                  fontFamily: 'Montserrat',
+                  fontWeight: '700',
+                  fill: 'white',
+                },
+                '.MuiStepIcon-root.Mui-active': {
+                  color: '#FBC02D',
+                },
+                '.MuiStepIcon-root.Mui-completed': {
+                  color: '#FBC02D',
+                },
+              }}
+            >
+              <Stepper nonLinear activeStep={stepNumber}>
+                {steps.map((label, index) => (
+                  <Step
+                    key={label}
+                    completed={index < 3 && checkValues(values[index])}
+                  >
+                    <StepButton
+                      color='inherit'
+                      onClick={index < 3 && stepNumber < 3 ?
+                        () => handleNextStep(index) : null
+                      }
+                      disableRipple
+                    >
+                      {label}
+                    </StepButton>
+                  </Step>
+                ))}
+              </Stepper>
+            </Box>
+          </Paper>
         </div>
-        <div className='signup-box-right'>
-          <SignupStepOne
-            active={stepNumber === 0}
-            step={0}
-            handleNextStep={(e) => handleNextStep(e)}
-          />
-          <SignupStepTwo
-            active={stepNumber === 1}
-            step={1}
-            handleNextStep={(e) => handleNextStep(e)}
-          />
-          <SignupStepThree
-            active={stepNumber === 2}
-            step={2}
-            handleNextStep={(e) => handleNextStep(e)}
-          />
-          <SignupStepFour
-            active={stepNumber === 3}
-            step={3}
-            handleNextStep={(e) => handleNextStep(e)}
-          />
-          <SignupStepFive active={stepNumber === 4} />
-        </div>
-      </Paper>
-      <Paper
-        className='stepper-box-container'
-        elevation={0}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingInline: '30px',
-          width: '40em',
-          height: '4em',
-          borderRadius: '10px',
-          filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-          color: '#8B95A5',
-        }}
-      >
-        <Box
-          sx={{
-            'width': '100%',
-            '.MuiStepLabel-labelContainer span': {
-              fontFamily: 'Montserrat',
-              fontSize: '0.8rem',
-              fontWeight: '600',
-              color: '#3C4047',
-            },
-            '.MuiStepIcon-text': {
-              fontFamily: 'Montserrat',
-              fontWeight: '700',
-              fill: 'white',
-            },
-            '.MuiStepIcon-root.Mui-active': {
-              color: '#FBC02D',
-            },
-          }}
-        >
-          <Stepper nonLinear activeStep={stepNumber}>
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepButton
-                  color='inherit'
-                  onClick={() => handleNextStep(index)}
-                  disableRipple
-                >
-                  {label}
-                </StepButton>
-              </Step>
-            ))}
-          </Stepper>
-        </Box>
-      </Paper>
-    </div>
+      </Box>
+    </InputContext.Provider>
   );
 }
 
@@ -165,7 +218,12 @@ function SignupStepOne({active, step, handleNextStep}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'Bob'} type={'text'} />
+          <ThemedInput
+            placeholder={'Bob'}
+            type={'text'}
+            index={'firstName'}
+            step={step}
+          />
         </div>
         <div className='gap-vert-small'>
           <div className='text-small text-bold gap-hori-small'>
@@ -176,7 +234,12 @@ function SignupStepOne({active, step, handleNextStep}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'Smith'} type={'text'} />
+          <ThemedInput
+            placeholder={'Smith'}
+            type={'text'}
+            index={'lastName'}
+            step={step}
+          />
         </div>
       </div>
       <div className='gap-vert-large'>
@@ -243,7 +306,12 @@ function SignupStepTwo({active, step, handleNextStep}) {
           <div className='text-small text-bold text-dark gap-hori-small'>
             School Email
           </div>
-          <ThemedInput placeholder={'bobsmith@ucsc.edu'} type={'text'} />
+          <ThemedInput
+            placeholder={'bobsmith@ucsc.edu'}
+            type={'text'}
+            index={'email'}
+            step={step}
+          />
         </div>
         <div className='gap-vert-small'>
           <div className='text-small text-bold gap-hori-small'>
@@ -254,7 +322,12 @@ function SignupStepTwo({active, step, handleNextStep}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'1997'} type={'text'} />
+          <ThemedInput
+            placeholder={'1997'}
+            type={'text'}
+            index={'year'}
+            step={step}
+          />
         </div>
       </div>
       <div className='gap-vert-large'>
@@ -332,7 +405,12 @@ function SignupStepThree({active, step, handleNextStep}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'bobsmith@gmail.com'} type={'text'} />
+          <ThemedInput
+            placeholder={'bobsmith@gmail.com'}
+            type={'text'}
+            index={'email'}
+            step={step}
+          />
         </div>
         <div className='gap-vert-small'>
           <div className='text-small text-bold gap-hori-small'>
@@ -346,6 +424,8 @@ function SignupStepThree({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
+            index={'password'}
+            step={step}
           />
         </div>
       </div>
@@ -362,8 +442,7 @@ function SignupStepThree({active, step, handleNextStep}) {
           <ThemedButton
             color={'yellow'}
             variant={'themed'}
-            value={step}
-            onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
+            type={'submit'}
           >
             Create account
           </ThemedButton>

@@ -63,6 +63,10 @@ export default function ThemedButton({children, color, variant, ...props}) {
         color === 'gray' ? gray.main :
         blue.main,
     },
+    '&:disabled': {
+      backgroundColor: '#ebedf0',
+      color: gray.main,
+    },
   };
 
   const cancelStyling = {

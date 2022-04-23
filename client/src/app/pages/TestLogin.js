@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {InputContext} from '../components/ThemedInput';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
@@ -13,53 +15,94 @@ import '../stylesheets/TestLogin.css';
  */
 export default function TestLogin() {
   const [stepPage, setStepPage] = useState('login');
+  const [values, setValues] = useState({
+    'login': {
+      email: '',
+      password: '',
+    },
+    'forgot1': {
+      email: '',
+    },
+    'forgot2': {
+      newPass: '',
+      confirmPass: '',
+    },
+  });
+
+  const checkValues = (object) => {
+    return Object.values(object).every((v) => v && typeof v === 'object' ?
+      checkValues(v) : v.length > 0,
+    );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {values};
+    const checkLogin = checkValues(values['login']);
+
+    if (checkLogin) {
+      console.log(data);
+    } else {
+      alert('Fill in all the required fields.');
+    }
+  };
 
   const handleNextPage = (step) => {
     setStepPage(step);
   };
 
   return (
-    <div className='login-page-container'>
-      <Paper
-        className='login-box-container'
-        elevation={0}
-        sx={{
-          display: 'flex',
-          width: '1000px',
-          height: '600px',
-          borderRadius: '10px 0 0 10px',
-          filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-          color: '#8B95A5',
-        }}
+    <InputContext.Provider value={[values, setValues]}>
+      <Box
+        component='form'
+        noValidate
+        autoComplete='off'
+        onSubmit={handleSubmit}
       >
-        <div className='login-box-left'>
-          <div className='login-box-left-content'>
-            <div className='login-box-left-logo'>
-              Logo.
+        <div className='login-page-container'>
+          <Paper
+            className='login-box-container'
+            elevation={0}
+            sx={{
+              display: 'flex',
+              width: '1000px',
+              height: '600px',
+              borderRadius: '10px 0 0 10px',
+              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+              color: '#8B95A5',
+            }}
+          >
+            <div className='login-box-left'>
+              <div className='login-box-left-content'>
+                <div className='login-box-left-logo'>
+                  Logo.
+                </div>
+                <div className='login-box-left-headline'>
+                  Welcome back!
+                </div>
+                <img src={LoginBanner} />
+              </div>
             </div>
-            <div className='login-box-left-headline'>
-              Welcome back!
+            <div className='login-box-right'>
+              <LoginForm
+                active={stepPage === 'login'}
+                handleNextPage={(e) => handleNextPage(e)}
+              />
+              <ForgotPasswordOne
+                active={stepPage === 'forgot1'}
+                handleNextPage={(e) => handleNextPage(e)}
+              />
+              <ForgotPasswordTwo
+                active={stepPage === 'forgot2'}
+                handleNextPage={(e) => handleNextPage(e)}
+              />
+              <ForgotPasswordThree active={stepPage === 'forgot3'} />
             </div>
-            <img src={LoginBanner} />
-          </div>
+          </Paper>
         </div>
-        <div className='login-box-right'>
-          <LoginForm
-            active={stepPage === 'login'}
-            handleNextPage={(e) => handleNextPage(e)}
-          />
-          <ForgotPasswordOne
-            active={stepPage === 'forgot1'}
-            handleNextPage={(e) => handleNextPage(e)}
-          />
-          <ForgotPasswordTwo
-            active={stepPage === 'forgot2'}
-            handleNextPage={(e) => handleNextPage(e)}
-          />
-          <ForgotPasswordThree active={stepPage === 'forgot3'} />
-        </div>
-      </Paper>
-    </div>
+      </Box>
+    </InputContext.Provider>
   );
 }
 
@@ -107,7 +150,12 @@ function LoginForm({active, handleNextPage}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'bobsmith@gmail.com'} type={'text'} />
+          <ThemedInput
+            placeholder={'bobsmith@gmail.com'}
+            type={'text'}
+            index={'email'}
+            step={'login'}
+          />
         </div>
         <div className='gap-vert-small'>
           <div className='text-small text-bold gap-hori-small'>
@@ -118,7 +166,12 @@ function LoginForm({active, handleNextPage}) {
               *
             </div>
           </div>
-          <ThemedInput placeholder={'Your password'} type={'password'} />
+          <ThemedInput
+            placeholder={'Your password'}
+            type={'password'}
+            index={'password'}
+            step={'login'}
+          />
         </div>
         <div
           className='text-small text-blue'
@@ -134,6 +187,7 @@ function LoginForm({active, handleNextPage}) {
             <ThemedButton
               color={'yellow'}
               variant={'themed'}
+              type={'submit'}
             >
               Login
             </ThemedButton>
@@ -190,7 +244,12 @@ function ForgotPasswordOne({active, handleNextPage}) {
         <div className='text-small text-bold text-dark gap-hori-small'>
           Email
         </div>
-        <ThemedInput placeholder={'bobsmith@gmail.com'} type={'text'} />
+        <ThemedInput
+          placeholder={'bobsmith@gmail.com'}
+          type={'text'}
+          index={'email'}
+          step={'forgot1'}
+        />
       </div>
       <div className='gap-vert-large'>
         <div className='gap-hori-large'>
@@ -251,6 +310,8 @@ function ForgotPasswordTwo({active, handleNextPage}) {
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
+            index={'newPass'}
+            step={'forgot2'}
           />
         </div>
         <div className='gap-vert-small'>
@@ -260,6 +321,8 @@ function ForgotPasswordTwo({active, handleNextPage}) {
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
+            index={'confirmPass'}
+            step={'forgot2'}
           />
         </div>
       </div>
