@@ -55,52 +55,51 @@ export default function TestLogin() {
   return (
     <InputContext.Provider value={[values, setValues]}>
       <Box
+        className='login-page-container'
         component='form'
         noValidate
         autoComplete='off'
         onSubmit={handleSubmit}
       >
-        <div className='login-page-container'>
-          <Paper
-            className='login-box-container'
-            elevation={0}
-            sx={{
-              display: 'flex',
-              width: '1000px',
-              height: '600px',
-              borderRadius: '10px 0 0 10px',
-              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-              color: '#8B95A5',
-            }}
-          >
-            <div className='login-box-left'>
-              <div className='login-box-left-content'>
-                <div className='login-box-left-logo'>
-                  Logo.
-                </div>
-                <div className='login-box-left-headline'>
-                  Welcome back!
-                </div>
-                <img src={LoginBanner} />
+        <Paper
+          className='login-box-container'
+          elevation={0}
+          sx={{
+            display: 'flex',
+            width: '1000px',
+            height: '600px',
+            borderRadius: '10px 0 0 10px',
+            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+            color: '#8B95A5',
+          }}
+        >
+          <div className='login-box-left'>
+            <div className='login-box-left-content'>
+              <div className='login-box-left-logo'>
+                Logo.
               </div>
+              <div className='login-box-left-headline'>
+                Welcome back!
+              </div>
+              <img src={LoginBanner} />
             </div>
-            <div className='login-box-right'>
-              <LoginForm
-                active={stepPage === 'login'}
-                handleNextPage={(e) => handleNextPage(e)}
-              />
-              <ForgotPasswordOne
-                active={stepPage === 'forgot1'}
-                handleNextPage={(e) => handleNextPage(e)}
-              />
-              <ForgotPasswordTwo
-                active={stepPage === 'forgot2'}
-                handleNextPage={(e) => handleNextPage(e)}
-              />
-              <ForgotPasswordThree active={stepPage === 'forgot3'} />
-            </div>
-          </Paper>
-        </div>
+          </div>
+          <div className='login-box-right'>
+            <LoginForm
+              active={stepPage === 'login'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordOne
+              active={stepPage === 'forgot1'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordTwo
+              active={stepPage === 'forgot2'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordThree active={stepPage === 'forgot3'} />
+          </div>
+        </Paper>
       </Box>
     </InputContext.Provider>
   );

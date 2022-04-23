@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
+import StepLabel from '@mui/material/StepLabel';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
 import SignupBanner from '../assets/SignupBanner.png';
@@ -63,117 +64,119 @@ export default function TestSignup() {
   return (
     <InputContext.Provider value={[values, setValues]}>
       <Box
+        className='signup-page-container'
         component='form'
         noValidate
         autoComplete='off'
         onSubmit={handleSubmit}
       >
-        <div className='signup-page-container'>
-          <Paper
-            className='signup-box-container'
-            elevation={0}
-            sx={{
-              display: 'flex',
-              width: '1000px',
-              height: '600px',
-              borderRadius: '10px 0 0 10px',
-              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-              color: '#8B95A5',
-            }}
-          >
-            <div className='signup-box-left'>
-              <div className='signup-box-left-content'>
-                <div className='signup-box-left-logo'>
-                  Logo.
-                </div>
-                <div className='signup-box-left-headline'>
-                  Grow your connection with the UCSC community!
-                </div>
-                <img src={SignupBanner} />
+        <Paper
+          className='signup-box-container'
+          elevation={0}
+          sx={{
+            display: 'flex',
+            width: '1000px',
+            height: '600px',
+            borderRadius: '10px 0 0 10px',
+            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+            color: '#8B95A5',
+          }}
+        >
+          <div className='signup-box-left'>
+            <div className='signup-box-left-content'>
+              <div className='signup-box-left-logo'>
+                Logo.
               </div>
+              <div className='signup-box-left-headline'>
+                Grow your connection with the UCSC community!
+              </div>
+              <img src={SignupBanner} />
             </div>
-            <div className='signup-box-right'>
-              <SignupStepOne
-                active={stepNumber === 0}
-                step={0}
-                handleNextStep={(e) => handleNextStep(e)}
-              />
-              <SignupStepTwo
-                active={stepNumber === 1}
-                step={1}
-                handleNextStep={(e) => handleNextStep(e)}
-              />
-              <SignupStepThree
-                active={stepNumber === 2}
-                step={2}
-                handleNextStep={(e) => handleNextStep(e)}
-              />
-              <SignupStepFour
-                active={stepNumber === 3}
-                step={3}
-                handleNextStep={(e) => handleNextStep(e)}
-              />
-              <SignupStepFive active={stepNumber === 4} />
-            </div>
-          </Paper>
-          <Paper
-            className='stepper-box-container'
-            elevation={0}
+          </div>
+          <div className='signup-box-right'>
+            <SignupStepOne
+              active={stepNumber === 0}
+              step={0}
+              handleNextStep={(e) => handleNextStep(e)}
+            />
+            <SignupStepTwo
+              active={stepNumber === 1}
+              step={1}
+              handleNextStep={(e) => handleNextStep(e)}
+            />
+            <SignupStepThree
+              active={stepNumber === 2}
+              step={2}
+              handleNextStep={(e) => handleNextStep(e)}
+            />
+            <SignupStepFour
+              active={stepNumber === 3}
+              step={3}
+              handleNextStep={(e) => handleNextStep(e)}
+            />
+            <SignupStepFive active={stepNumber === 4} />
+          </div>
+        </Paper>
+        <Paper
+          className='stepper-box-container'
+          elevation={0}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingInline: '30px',
+            width: '40em',
+            height: '4em',
+            borderRadius: '10px',
+            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+            color: '#8B95A5',
+          }}
+        >
+          <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingInline: '30px',
-              width: '40em',
-              height: '4em',
-              borderRadius: '10px',
-              filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-              color: '#8B95A5',
+              'width': '100%',
+              '.MuiStepLabel-labelContainer span': {
+                fontFamily: 'Montserrat',
+                fontSize: '0.8rem',
+                fontWeight: '600',
+                color: '#3C4047',
+              },
+              '.MuiStepIcon-text': {
+                fontFamily: 'Montserrat',
+                fontWeight: '700',
+                fill: 'white',
+              },
+              '.MuiStepIcon-root.Mui-active': {
+                color: '#FBC02D',
+              },
+              '.MuiStepIcon-root.Mui-completed': {
+                color: '#FBC02D',
+              },
             }}
           >
-            <Box
-              sx={{
-                'width': '100%',
-                '.MuiStepLabel-labelContainer span': {
-                  fontFamily: 'Montserrat',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
-                  color: '#3C4047',
-                },
-                '.MuiStepIcon-text': {
-                  fontFamily: 'Montserrat',
-                  fontWeight: '700',
-                  fill: 'white',
-                },
-                '.MuiStepIcon-root.Mui-active': {
-                  color: '#FBC02D',
-                },
-                '.MuiStepIcon-root.Mui-completed': {
-                  color: '#FBC02D',
-                },
-              }}
-            >
-              <Stepper nonLinear activeStep={stepNumber}>
-                {steps.map((label, index) => (
-                  <Step
-                    key={label}
-                    completed={index < 3 && checkValues(values[index])}
-                  >
+            <Stepper nonLinear activeStep={stepNumber}>
+              {steps.map((label, index) => (
+                <Step
+                  key={label}
+                  completed={index < 3 && checkValues(values[index])}
+                >
+                  {index < 3 ?
                     <StepButton
                       color='inherit'
-                      onClick={index < 3 && stepNumber < 3 ?
+                      onClick={stepNumber < 3 ?
                         () => handleNextStep(index) : null
                       }
                       disableRipple
                     >
                       {label}
-                    </StepButton>
-                  </Step>
-                ))}
-              </Stepper>
-            </Box>
-          </Paper>
-        </div>
+                    </StepButton> :
+                    <StepLabel>{label}</StepLabel>
+                  }
+                </Step>
+              ))}
+            </Stepper>
+          </Box>
+        </Paper>
       </Box>
     </InputContext.Provider>
   );
