@@ -190,7 +190,7 @@ function SignupStepOne({active, step, handleNextStep}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testlogin');
+    navigate('/login');
   };
 
   return (
@@ -283,7 +283,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testlogin');
+    navigate('/login');
   };
 
   return (
@@ -377,7 +377,7 @@ function SignupStepThree({active, step, handleNextStep}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testlogin');
+    navigate('/login');
   };
 
   return (
@@ -521,7 +521,7 @@ function SignupStepFive({active}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testlogin');
+    navigate('/login');
   };
 
   return (

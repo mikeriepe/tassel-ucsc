@@ -37,7 +37,7 @@ export default function App() {
         <Route path='/opportunity/:opportunityid' element={<Opportunity/>}/>
         <Route path='/profile/:profileid' element={<Profile />} />
 
-        <Route path='/testsignup' element={<TestSignup />} />
+        <Route path='/signup' element={<TestSignup />} />
         <Route path='/login' element={<TestLogin />} />
       </Routes>
     </AuthProvider>

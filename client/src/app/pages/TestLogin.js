@@ -169,7 +169,7 @@ function LoginForm({active, handleNextPage}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/testsignup');
+    navigate('/signup');
   };
 
   return (

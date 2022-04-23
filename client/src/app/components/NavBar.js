@@ -113,7 +113,7 @@ export default function NavBar() {
           >
             <MenuItem>Log In</MenuItem>
           </Link>
-          <Link className='link' to="/login"
+          <Link className='link' to="/signup"
             state={{signUp: true}}
           >
             <MenuItem>Sign up</MenuItem>
