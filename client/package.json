@@ -24,7 +24,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cypress open",
+    "testold": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js --ignore-path ../.gitignore ."
   },
@@ -48,6 +49,7 @@
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
+    "cypress": "^9.5.4",
     "eslint": "^8.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.28.0"
