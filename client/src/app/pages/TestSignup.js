@@ -10,7 +10,49 @@ import StepLabel from '@mui/material/StepLabel';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
 import SignupBanner from '../assets/SignupBanner.png';
-import '../stylesheets/TestSignup.css';
+import '../stylesheets/LoginSignup.css';
+
+const PaperStyling = {
+  display: 'flex',
+  width: '1000px',
+  height: '600px',
+  borderRadius: '10px',
+  filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+  color: 'inherit',
+};
+
+const StepperPaperStyling = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingInline: '30px',
+  width: '40em',
+  height: '4em',
+  borderRadius: '10px',
+  filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+  color: '#8B95A5',
+};
+
+const StepperStyling = {
+  'width': '100%',
+  '.MuiStepLabel-labelContainer span': {
+    fontFamily: 'Montserrat',
+    fontSize: '0.8rem',
+    fontWeight: '600',
+    color: '#3C4047',
+  },
+  '.MuiStepIcon-text': {
+    fontFamily: 'Montserrat',
+    fontWeight: '700',
+    fill: 'white',
+  },
+  '.MuiStepIcon-root.Mui-active': {
+    color: '#FBC02D',
+  },
+  '.MuiStepIcon-root.Mui-completed': {
+    color: '#FBC02D',
+  },
+};
 
 /**
  * Creates signup page
@@ -32,8 +74,6 @@ export default function TestSignup() {
       password: '',
     },
   });
-
-  const steps = ['Name', 'School', 'Email', 'Verification', 'Done'];
 
   const checkValues = (object) => {
     return Object.values(object).every((v) => v && typeof v === 'object' ?
@@ -63,37 +103,22 @@ export default function TestSignup() {
 
   return (
     <InputContext.Provider value={[values, setValues]}>
-      <Box
-        className='signup-page-container'
-        component='form'
-        noValidate
-        autoComplete='off'
-        onSubmit={handleSubmit}
-      >
-        <Paper
-          className='signup-box-container'
-          elevation={0}
-          sx={{
-            display: 'flex',
-            width: '1000px',
-            height: '600px',
-            borderRadius: '10px 0 0 10px',
-            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-            color: '#8B95A5',
-          }}
-        >
-          <div className='signup-box-left'>
-            <div className='signup-box-left-content'>
-              <div className='signup-box-left-logo'>
-                Logo.
-              </div>
-              <div className='signup-box-left-headline'>
-                Grow your connection with the UCSC community!
-              </div>
-              <img src={SignupBanner} />
-            </div>
+      <Box className='page'>
+        <Paper className='card' elevation={0} sx={PaperStyling}>
+          <div className='card-banner flow-small padding-64'>
+            <p className='text-bold text-italic text-white'>Logo.</p>
+            <h3 className='text-xbold text-white'>
+              Grow your connection with the UCSC community!
+            </h3>
+            <img src={SignupBanner} />
           </div>
-          <div className='signup-box-right'>
+          <Box
+            className='card-content padding-64'
+            component='form'
+            noValidate
+            autoComplete='on'
+            onSubmit={handleSubmit}
+          >
             <SignupStepOne
               active={stepNumber === 0}
               step={0}
@@ -114,71 +139,55 @@ export default function TestSignup() {
               step={3}
               handleNextStep={(e) => handleNextStep(e)}
             />
-            <SignupStepFive active={stepNumber === 4} />
-          </div>
-        </Paper>
-        <Paper
-          className='stepper-box-container'
-          elevation={0}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingInline: '30px',
-            width: '40em',
-            height: '4em',
-            borderRadius: '10px',
-            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-            color: '#8B95A5',
-          }}
-        >
-          <Box
-            sx={{
-              'width': '100%',
-              '.MuiStepLabel-labelContainer span': {
-                fontFamily: 'Montserrat',
-                fontSize: '0.8rem',
-                fontWeight: '600',
-                color: '#3C4047',
-              },
-              '.MuiStepIcon-text': {
-                fontFamily: 'Montserrat',
-                fontWeight: '700',
-                fill: 'white',
-              },
-              '.MuiStepIcon-root.Mui-active': {
-                color: '#FBC02D',
-              },
-              '.MuiStepIcon-root.Mui-completed': {
-                color: '#FBC02D',
-              },
-            }}
-          >
-            <Stepper nonLinear activeStep={stepNumber}>
-              {steps.map((label, index) => (
-                <Step
-                  key={label}
-                  completed={index < 3 && checkValues(values[index])}
-                >
-                  {index < 3 ?
-                    <StepButton
-                      color='inherit'
-                      onClick={stepNumber < 3 ?
-                        () => handleNextStep(index) : null
-                      }
-                      disableRipple
-                    >
-                      {label}
-                    </StepButton> :
-                    <StepLabel>{label}</StepLabel>
-                  }
-                </Step>
-              ))}
-            </Stepper>
+            <SignupStepFive
+              active={stepNumber === 4}
+              step={4}
+              handleNextStep={(e) => handleNextStep(e)}
+            />
           </Box>
         </Paper>
+        <SignupStepper
+          stepNumber={stepNumber}
+          handleNextStep={(e) => handleNextStep(e)}
+          values={values}
+          checkValues={checkValues}
+        />
       </Box>
     </InputContext.Provider>
+  );
+}
+
+/**
+ * Stepper for signup
+ * @return {JSX}
+ */
+function SignupStepper({stepNumber, handleNextStep, values, checkValues}) {
+  const steps = ['Name', 'School', 'Email', 'Verification', 'Done'];
+
+  return (
+    <Paper className='stepper' elevation={0} sx={StepperPaperStyling}>
+      <Box sx={StepperStyling}>
+        <Stepper nonLinear activeStep={stepNumber}>
+          {steps.map((label, index) => (
+            <Step
+              key={label}
+              completed={index < 3 && checkValues(values[index])}
+            >
+              {index < 3 ?
+                <StepButton
+                  color='inherit'
+                  onClick={stepNumber < 3 ? () => handleNextStep(index) : null}
+                  disableRipple
+                >
+                  {label}
+                </StepButton> :
+                <StepLabel>{label}</StepLabel>
+              }
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+    </Paper>
   );
 }
 
@@ -194,33 +203,18 @@ function SignupStepOne({active, step, handleNextStep}) {
   };
 
   return (
-    <div
-      className='signup-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div>
-        <div className='text-title text-dark'>
-          Sign Up
-        </div>
-        <div className='text-small text-warning gap-hori-small'>
-          <div className='text-light'>
-            Required
-          </div>
-          <div className='text-bold'>
-            *
-          </div>
-        </div>
+        <h2 className='text-normal'>Signup</h2>
+        <p className='text-light text-warning'>
+          Required <span className='text-bold'>*</span>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              First Name
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+      <div className='grid-flow-large'>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            First Name <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'Bob'}
             type={'text'}
@@ -228,15 +222,10 @@ function SignupStepOne({active, step, handleNextStep}) {
             step={step}
           />
         </div>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Last Name
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Last Name <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'Smith'}
             type={'text'}
@@ -245,31 +234,26 @@ function SignupStepOne({active, step, handleNextStep}) {
           />
         </div>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large'>
-          <div>
-            <ThemedButton
-              color={'yellow'}
-              variant={'themed'}
-              value={step}
-              onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
-            >
-              Next Step
-            </ThemedButton>
-          </div>
-        </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Already have an account?
-          </div>
-          <div
-            className='text-bold text-blue'
-            onClick={handleNavigate}
-            style={{cursor: 'pointer'}}
+      <div className='grid-flow-small'>
+        <div className='flex-flow-small'>
+          <ThemedButton
+            color={'yellow'}
+            variant={'themed'}
+            value={step}
+            onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
           >
-            Login
-          </div>
+            Next Step
+          </ThemedButton>
         </div>
+        <p className='text-light'>
+          Already have an account?
+          <span
+            className='text-bold text-blue clickable'
+            onClick={handleNavigate}
+          >
+            &nbsp;Login here
+          </span>
+        </p>
       </div>
     </div>
   );
@@ -287,28 +271,16 @@ function SignupStepTwo({active, step, handleNextStep}) {
   };
 
   return (
-    <div
-      className='signup-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div>
-        <div className='text-title text-dark'>
-          Sign Up
-        </div>
-        <div className='text-small text-warning gap-hori-small'>
-          <div className='text-light'>
-            Required
-          </div>
-          <div className='text-bold'>
-            *
-          </div>
-        </div>
+        <h2 className='text-normal'>Signup</h2>
+        <p className='text-light text-warning'>
+          Required <span className='text-bold'>*</span>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold text-dark gap-hori-small'>
-            School Email
-          </div>
+      <div className='grid-flow-large'>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>School Email</p>
           <ThemedInput
             placeholder={'bobsmith@ucsc.edu'}
             type={'text'}
@@ -316,15 +288,10 @@ function SignupStepTwo({active, step, handleNextStep}) {
             step={step}
           />
         </div>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Year of Graduation
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Year of Graduation <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'1997'}
             type={'text'}
@@ -333,8 +300,8 @@ function SignupStepTwo({active, step, handleNextStep}) {
           />
         </div>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large'>
+      <div className='grid-flow-small'>
+        <div className='flex-flow-large'>
           <ThemedButton
             color={'yellow'}
             variant={'cancel'}
@@ -352,18 +319,15 @@ function SignupStepTwo({active, step, handleNextStep}) {
             Next Step
           </ThemedButton>
         </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Already have an account?
-          </div>
-          <div
-            className='text-bold text-blue'
+        <p className='text-light'>
+          Already have an account?
+          <span
+            className='text-bold text-blue clickable'
             onClick={handleNavigate}
-            style={{cursor: 'pointer'}}
           >
-            Login
-          </div>
-        </div>
+            &nbsp;Login here
+          </span>
+        </p>
       </div>
     </div>
   );
@@ -381,33 +345,18 @@ function SignupStepThree({active, step, handleNextStep}) {
   };
 
   return (
-    <div
-      className='signup-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div>
-        <div className='text-title text-dark'>
-          Sign Up
-        </div>
-        <div className='text-small text-warning gap-hori-small'>
-          <div className='text-light'>
-            Required
-          </div>
-          <div className='text-bold'>
-            *
-          </div>
-        </div>
+        <h2 className='text-normal'>Signup</h2>
+        <p className='text-light text-warning'>
+          Required <span className='text-bold'>*</span>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Email
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+      <div className='grid-flow-large'>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Email <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'bobsmith@gmail.com'}
             type={'text'}
@@ -415,15 +364,10 @@ function SignupStepThree({active, step, handleNextStep}) {
             step={step}
           />
         </div>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Password
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Password <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
@@ -432,8 +376,8 @@ function SignupStepThree({active, step, handleNextStep}) {
           />
         </div>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large'>
+      <div className='grid-flow-small'>
+        <div className='flex-flow-large'>
           <ThemedButton
             color={'yellow'}
             variant={'cancel'}
@@ -450,18 +394,15 @@ function SignupStepThree({active, step, handleNextStep}) {
             Create account
           </ThemedButton>
         </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Already have an account?
-          </div>
-          <div
-            className='text-bold text-blue'
+        <p className='text-light'>
+          Already have an account?
+          <span
+            className='text-bold text-blue clickable'
             onClick={handleNavigate}
-            style={{cursor: 'pointer'}}
           >
-            Login
-          </div>
-        </div>
+            &nbsp;Login here
+          </span>
+        </p>
       </div>
     </div>
   );
@@ -473,41 +414,34 @@ function SignupStepThree({active, step, handleNextStep}) {
  */
 function SignupStepFour({active, step, handleNextStep}) {
   return (
-    <div
-      className='signup-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='signup-step-four-text gap-vert-large'>
-        <div className='text-title text-dark'>
-          Verify your email
-        </div>
-        <div className='text-small'>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
+      <div className='grid-flow-large text-center'>
+        <h2 className='text-normal'>Verify your email</h2>
+        <p className='text-gray text-lineheight-24'>
           We just sent you an email to verify your email address. Please
           use the link in the email to activate your account. The link
           will expire in 48 hours.
-        </div>
+        </p>
       </div>
-      <div className='signup-step-four-text text-small'>
+      <p className='text-gray text-center text-lineheight-24'>
         If you did not receive the email, please click the button below
         to resend another email.
-      </div>
-      <div className='gap-vert-large'>
-        <ThemedButton
-          color={'yellow'}
-          variant={'cancel'}
-          value={step}
-          onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
-        >
-          Resend Email
-        </ThemedButton>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Need help? Contact us at
-          </div>
-          <div className='text-bold text-blue'>
-            tasselsupport@gmail.com
-          </div>
+      </p>
+      <div className='grid-flow-small grid-center text-center'>
+        <div className='flex-flow-small'>
+          <ThemedButton
+            color={'yellow'}
+            variant={'cancel'}
+            value={step}
+            onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
+          >
+            Resend Email
+          </ThemedButton>
         </div>
+        <p className='text-light'>
+          Need help? Contact us at
+          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+        </p>
       </div>
     </div>
   );
@@ -525,37 +459,30 @@ function SignupStepFive({active}) {
   };
 
   return (
-    <div
-      className='login-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='login-step-four-text gap-vert-large'>
-        <div className='text-title text-dark'>
-          Success!
-        </div>
-        <div className='text-small' style={{lineHeight: '25px'}}>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
+      <div className='grid-flow-large text-center'>
+        <h2 className='text-normal'>Success!</h2>
+        <p className='text-gray text-lineheight-24'>
          We have successfully created your new account. However, an admin
          must approve your account. You will have access to our site, but
          certain features will be restricted until your account has been
          approved. Look out for an email detailing your account&apos;s approval.
-        </div>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <ThemedButton
-          color={'yellow'}
-          variant={'themed'}
-          onClick={handleNavigate}
-        >
-          Login
-        </ThemedButton>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Need help? Contact us at
-          </div>
-          <div className='text-bold text-blue'>
-            tasselsupport@gmail.com
-          </div>
+      <div className='grid-flow-small grid-center text-center'>
+        <div className='flex-flow-small'>
+          <ThemedButton
+            color={'yellow'}
+            variant={'themed'}
+            onClick={handleNavigate}
+          >
+            Login
+          </ThemedButton>
         </div>
+        <p className='text-light'>
+          Need help? Contact us at
+          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+        </p>
       </div>
     </div>
   );

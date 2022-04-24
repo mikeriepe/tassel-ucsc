@@ -127,35 +127,35 @@ export default function TestLogin() {
   return (
     <InputContext.Provider value={[values, setValues]}>
       <Box className='page'>
-        <Paper
-          className='card'
-          elevation={0}
-          sx={PaperStyling}
-        >
+        <Paper className='card' elevation={0} sx={PaperStyling}>
           <div className='card-banner flow-small padding-64'>
             <p className='text-bold text-italic text-white'>Logo.</p>
             <h3 className='text-xbold text-white'>Welcome back!</h3>
             <img src={LoginBanner} />
           </div>
           <Box
-            className='card-content flow-large padding-64'
+            className='card-content padding-64'
             component='form'
             noValidate
             autoComplete='on'
             onSubmit={handleSubmit}
           >
-            {stepPage === 'login' &&
-              <LoginForm handleNextPage={(e) => handleNextPage(e)} />
-            }
-            {stepPage === 'forgot1' &&
-              <ForgotPasswordOne handleNextPage={(e) => handleNextPage(e)} />
-            }
-            {stepPage === 'forgot2' &&
-              <ForgotPasswordTwo handleNextPage={(e) => handleNextPage(e)} />
-            }
-            {stepPage === 'forgot3' &&
-              <ForgotPasswordThree handleNextPage={(e) => handleNextPage(e)} />
-            }
+            <LoginForm
+              active={stepPage === 'login'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordOne
+              active={stepPage === 'forgot1'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordTwo
+              active={stepPage === 'forgot2'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
+            <ForgotPasswordThree
+              active={stepPage === 'forgot3'}
+              handleNextPage={(e) => handleNextPage(e)}
+            />
           </Box>
         </Paper>
       </Box>
@@ -167,7 +167,7 @@ export default function TestLogin() {
  * Login form
  * @return {JSX}
  */
-function LoginForm({handleNextPage}) {
+function LoginForm({active, handleNextPage}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -175,7 +175,7 @@ function LoginForm({handleNextPage}) {
   };
 
   return (
-    <>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div className='grid-flow-large'>
         <div>
           <h2 className='text-normal'>Login</h2>
@@ -243,7 +243,7 @@ function LoginForm({handleNextPage}) {
           </span>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -251,9 +251,9 @@ function LoginForm({handleNextPage}) {
  * Part one of changing password
  * @return {JSX}
  */
-function ForgotPasswordOne({handleNextPage}) {
+function ForgotPasswordOne({active, handleNextPage}) {
   return (
-    <>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div className='grid-flow-large'>
         <h2 className='text-normal'>Forgot your password?</h2>
         <p className='text-gray text-lineheight-24'>
@@ -296,7 +296,7 @@ function ForgotPasswordOne({handleNextPage}) {
           <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -304,9 +304,9 @@ function ForgotPasswordOne({handleNextPage}) {
  * Part two of changing password
  * @return {JSX}
  */
-function ForgotPasswordTwo({handleNextPage}) {
+function ForgotPasswordTwo({active, handleNextPage}) {
   return (
-    <>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div className='grid-flow-large'>
         <h2 className='text-normal'>Change your password</h2>
         <p className='text-gray text-lineheight-24'>
@@ -358,7 +358,7 @@ function ForgotPasswordTwo({handleNextPage}) {
           <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -366,7 +366,7 @@ function ForgotPasswordTwo({handleNextPage}) {
  * Part three of changing password
  * @return {JSX}
  */
-function ForgotPasswordThree() {
+function ForgotPasswordThree({active}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -374,7 +374,7 @@ function ForgotPasswordThree() {
   };
 
   return (
-    <>
+    <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div className='grid-flow-large text-center'>
         <h2 className='text-normal'>Success!</h2>
         <p className='text-gray text-lineheight-24'>
@@ -397,6 +397,6 @@ function ForgotPasswordThree() {
           <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
         </p>
       </div>
-    </>
+    </div>
   );
 }
