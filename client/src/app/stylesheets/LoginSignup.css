@@ -1,0 +1,112 @@
+/* Block */
+
+.page {
+  display: grid;
+  min-height: calc(100vh - 76px);
+  place-items: center;
+}
+
+.card-banner {
+  width: 50%;
+  border-radius: 10px 0 0 10px;
+  background: linear-gradient(140deg, #7EFFF7 -8%, #3AB8FF 70%);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+}
+
+/* Composition */
+
+.flow-large > :where(:not(:first-child)) {
+  margin-top: var(--flow-large-spacer, 2.5em);
+}
+
+.flow-small > :where(:not(:first-child)) {
+  margin-top: var(--flow-small-spacer, 1em);
+}
+
+.grid-flow-small {
+  display: grid;
+  gap: 5px;
+}
+
+.grid-flow-large {
+  display: grid;
+  gap: 10px;
+}
+
+.grid-center {
+  place-items: center;
+}
+
+.flex-flow-small {
+  display: flex;
+  gap: 5px;
+}
+
+.flex-flow-large {
+  display: flex;
+  gap: 10px;
+}
+
+/* Utility */
+
+.text-center {
+  text-align: center;
+}
+
+.text-light {
+  font-weight: 400;
+}
+
+.text-normal {
+  font-weight: 500;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.text-xbold {
+  font-weight: 800;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+.text-dark {
+  color: var(--text-dark);
+}
+
+.text-gray {
+  color: var(--text-gray-primary);
+}
+
+.text-white {
+  color: var(--text-white);
+}
+
+.text-blue {
+  color: var(--primary-blue-main);
+}
+
+.text-warning {
+  color: var(--error-red-main);
+}
+
+.text-lineheight-24 {
+  line-height: 1.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.padding-64 {
+  padding: 4rem;
+}

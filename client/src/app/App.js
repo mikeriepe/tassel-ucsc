@@ -18,7 +18,6 @@ import TestLogin from './pages/TestLogin';
 
 import {AuthProvider} from './util/AuthContext';
 
-
 /**
  * returns basic routes and navbar of app
  * @return {HTML} App component

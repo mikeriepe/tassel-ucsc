@@ -3,13 +3,33 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {InputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Paper from '@mui/material/Paper';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
-import Checkbox from '@mui/material/Checkbox';
 import LoginBanner from '../assets/LoginBanner.png';
 import useAuth from '../util/AuthContext';
-import '../stylesheets/TestLogin.css';
+import '../stylesheets/LoginSignup.css';
+
+const PaperStyling = {
+  display: 'flex',
+  width: '1000px',
+  height: '600px',
+  borderRadius: '10px',
+  filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
+  color: 'inherit',
+};
+
+const InputLabelStyling = {
+  '.MuiTypography-root': {
+    fontFamily: 'inherit',
+    fontSize: '0.8rem',
+    fontWeight: 'inherit',
+    color: '#8B95A5',
+  },
+  'marginLeft': '1em',
+};
 
 /**
  * Creates login page
@@ -26,11 +46,11 @@ export default function TestLogin() {
       userpassword: '',
     },
     'forgot1': {
-      email: '',
+      useremail: '',
     },
     'forgot2': {
-      newPass: '',
-      confirmPass: '',
+      newpassword: '',
+      confirmpassword: '',
     },
   });
 
@@ -39,10 +59,6 @@ export default function TestLogin() {
       getProfile();
     }
   }, [user]);
-
-  // useEffect(() => {
-  //   console.log(values);
-  // }, [values]);
 
   const login = () => {
     fetch(`/api/login`, {
@@ -110,51 +126,37 @@ export default function TestLogin() {
 
   return (
     <InputContext.Provider value={[values, setValues]}>
-      <Box
-        className='login-page-container'
-        component='form'
-        noValidate
-        autoComplete='on'
-        onSubmit={handleSubmit}
-      >
+      <Box className='page'>
         <Paper
-          className='login-box-container'
+          className='card'
           elevation={0}
-          sx={{
-            display: 'flex',
-            width: '1000px',
-            height: '600px',
-            borderRadius: '10px 0 0 10px',
-            filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-            color: '#8B95A5',
-          }}
+          sx={PaperStyling}
         >
-          <div className='login-box-left'>
-            <div className='login-box-left-content'>
-              <div className='login-box-left-logo'>
-                Logo.
-              </div>
-              <div className='login-box-left-headline'>
-                Welcome back!
-              </div>
-              <img src={LoginBanner} />
-            </div>
+          <div className='card-banner flow-small padding-64'>
+            <p className='text-bold text-italic text-white'>Logo.</p>
+            <h3 className='text-xbold text-white'>Welcome back!</h3>
+            <img src={LoginBanner} />
           </div>
-          <div className='login-box-right'>
-            <LoginForm
-              active={stepPage === 'login'}
-              handleNextPage={(e) => handleNextPage(e)}
-            />
-            <ForgotPasswordOne
-              active={stepPage === 'forgot1'}
-              handleNextPage={(e) => handleNextPage(e)}
-            />
-            <ForgotPasswordTwo
-              active={stepPage === 'forgot2'}
-              handleNextPage={(e) => handleNextPage(e)}
-            />
-            <ForgotPasswordThree active={stepPage === 'forgot3'} />
-          </div>
+          <Box
+            className='card-content flow-large padding-64'
+            component='form'
+            noValidate
+            autoComplete='on'
+            onSubmit={handleSubmit}
+          >
+            {stepPage === 'login' &&
+              <LoginForm handleNextPage={(e) => handleNextPage(e)} />
+            }
+            {stepPage === 'forgot1' &&
+              <ForgotPasswordOne handleNextPage={(e) => handleNextPage(e)} />
+            }
+            {stepPage === 'forgot2' &&
+              <ForgotPasswordTwo handleNextPage={(e) => handleNextPage(e)} />
+            }
+            {stepPage === 'forgot3' &&
+              <ForgotPasswordThree handleNextPage={(e) => handleNextPage(e)} />
+            }
+          </Box>
         </Paper>
       </Box>
     </InputContext.Provider>
@@ -162,10 +164,10 @@ export default function TestLogin() {
 }
 
 /**
- * Step one of login
+ * Login form
  * @return {JSX}
  */
-function LoginForm({active, handleNextPage}) {
+function LoginForm({handleNextPage}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -173,38 +175,24 @@ function LoginForm({active, handleNextPage}) {
   };
 
   return (
-    <div
-      className='login-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='gap-vert-large'>
+    <>
+      <div className='grid-flow-large'>
         <div>
-          <div className='text-title text-dark'>
-            Login
-          </div>
-          <div className='text-small text-warning gap-hori-small'>
-            <div className='text-light'>
-              Required
-            </div>
-            <div className='text-bold'>
-              *
-            </div>
-          </div>
+          <h2 className='text-normal'>Login</h2>
+          <p className='text-light text-warning'>
+            Required <span className='text-bold'>*</span>
+          </p>
         </div>
-        <div className='text-small' style={{width: '70%', lineHeight: '25px'}}>
-          Enter your email address and password below to login to your account.
-        </div>
+        <p className='text-gray text-lineheight-24'>
+          Enter your email address and password
+          below to login to your account.
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Email
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+      <div className='grid-flow-large'>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Email <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'bobsmith@gmail.com'}
             type={'text'}
@@ -212,65 +200,50 @@ function LoginForm({active, handleNextPage}) {
             step={'login'}
           />
         </div>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold gap-hori-small'>
-            <div className='text-dark'>
-              Password
-            </div>
-            <div className='text-warning'>
-              *
-            </div>
-          </div>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>
+            Password <span className='text-bold text-warning'>*</span>
+          </p>
           <ThemedInput
             placeholder={'Your password'}
             type={'password'}
             index={'userpassword'}
             step={'login'}
           />
-        </div>
-        <div
-          className='text-small text-blue'
-          onClick={(e) => handleNextPage('forgot1')}
-          style={{cursor: 'pointer'}}
-        >
-          Forgot your password?
+          <p
+            className='text-blue clickable'
+            onClick={(e) => handleNextPage('forgot1')}
+          >
+            Forgot your password?
+          </p>
         </div>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large' style={{gap: '20px'}}>
-          <div>
-            <ThemedButton
-              color={'yellow'}
-              variant={'themed'}
-              type={'submit'}
-            >
-              Login
-            </ThemedButton>
-          </div>
-          <div
-            className='text-small'
-            style={{display: 'flex', alignItems: 'center'}}
+      <div className='grid-flow-small'>
+        <div>
+          <ThemedButton
+            color={'yellow'}
+            variant={'themed'}
+            type={'submit'}
           >
-            <Checkbox disableRipple />
-            <div>
-              Keep me logged in
-            </div>
-          </div>
+            Login
+          </ThemedButton>
+          <FormControlLabel
+            label='Keep me logged in'
+            control={<Checkbox disableRipple />}
+            sx={InputLabelStyling}
+          />
         </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Don&apos;t have an account?
-          </div>
-          <div
-            className='text-bold text-blue'
+        <p className='text-light'>
+          Don&apos;t have an account?
+          <span
+            className='text-bold text-blue clickable'
             onClick={handleNavigate}
-            style={{cursor: 'pointer'}}
           >
-            Register here
-          </div>
-        </div>
+            &nbsp;Register here
+          </span>
+        </p>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -278,36 +251,29 @@ function LoginForm({active, handleNextPage}) {
  * Part one of changing password
  * @return {JSX}
  */
-function ForgotPasswordOne({active, handleNextPage}) {
+function ForgotPasswordOne({handleNextPage}) {
   return (
-    <div
-      className='login-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='gap-vert-large'>
-        <div className='text-title text-dark'>
-          Forgot your password?
-        </div>
-        <div className='text-small' style={{lineHeight: '25px'}}>
-          Don&apos;t worry, we can help you out! If you remember your
-          email address, you can quickly reset your password. Input your
-          email address and we&apos;ll send you a link to your email that will
-          allow you to reset your password.
-        </div>
+    <>
+      <div className='grid-flow-large'>
+        <h2 className='text-normal'>Forgot your password?</h2>
+        <p className='text-gray text-lineheight-24'>
+          Don&apos;t worry, we can help you out! If you remember
+          your email address, you can quickly reset your password.
+          Input your email address and we&apos;ll send you a link to your
+          email that will allow you to reset your password.
+        </p>
       </div>
-      <div className='gap-vert-small'>
-        <div className='text-small text-bold text-dark gap-hori-small'>
-          Email
-        </div>
+      <div className='grid-flow-small'>
+        <p className='text-bold'>Email</p>
         <ThemedInput
           placeholder={'bobsmith@gmail.com'}
           type={'text'}
-          index={'email'}
+          index={'useremail'}
           step={'forgot1'}
         />
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large'>
+      <div className='grid-flow-small'>
+        <div className='flex-flow-large'>
           <ThemedButton
             color={'yellow'}
             variant={'cancel'}
@@ -325,16 +291,12 @@ function ForgotPasswordOne({active, handleNextPage}) {
             Request password change
           </ThemedButton>
         </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Need help? Contact us at
-          </div>
-          <div className='text-bold text-blue'>
-            tasselsupport@gmail.com
-          </div>
-        </div>
+        <p className='text-light'>
+          Need help? Contact us at
+          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+        </p>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -342,47 +304,38 @@ function ForgotPasswordOne({active, handleNextPage}) {
  * Part two of changing password
  * @return {JSX}
  */
-function ForgotPasswordTwo({active, handleNextPage}) {
+function ForgotPasswordTwo({handleNextPage}) {
   return (
-    <div
-      className='login-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='gap-vert-large'>
-        <div className='text-title text-dark'>
-          Change your password
-        </div>
-        <div className='text-small' style={{width: '80%', lineHeight: '25px'}}>
+    <>
+      <div className='grid-flow-large'>
+        <h2 className='text-normal'>Change your password</h2>
+        <p className='text-gray text-lineheight-24'>
           Enter your new password below.
           We strongly advise you to store it safely.
-        </div>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold text-dark gap-hori-small'>
-            New Password
-          </div>
+      <div className='grid-flow-large'>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>New Password</p>
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
-            index={'newPass'}
+            index={'newpassword'}
             step={'forgot2'}
           />
         </div>
-        <div className='gap-vert-small'>
-          <div className='text-small text-bold text-dark gap-hori-small'>
-            Confirm New Password
-          </div>
+        <div className='grid-flow-small'>
+          <p className='text-bold'>Confirm Password</p>
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
-            index={'confirmPass'}
+            index={'newpassword'}
             step={'forgot2'}
           />
         </div>
       </div>
-      <div className='gap-vert-large'>
-        <div className='gap-hori-large'>
+      <div className='grid-flow-small'>
+        <div className='flex-flow-large'>
           <ThemedButton
             color={'yellow'}
             variant={'cancel'}
@@ -400,16 +353,12 @@ function ForgotPasswordTwo({active, handleNextPage}) {
             Change password
           </ThemedButton>
         </div>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Need help? Contact us at
-          </div>
-          <div className='text-bold text-blue'>
-            tasselsupport@gmail.com
-          </div>
-        </div>
+        <p className='text-light'>
+          Need help? Contact us at
+          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+        </p>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -417,7 +366,7 @@ function ForgotPasswordTwo({active, handleNextPage}) {
  * Part three of changing password
  * @return {JSX}
  */
-function ForgotPasswordThree({active}) {
+function ForgotPasswordThree() {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -425,36 +374,29 @@ function ForgotPasswordThree({active}) {
   };
 
   return (
-    <div
-      className='login-box-right-content'
-      style={{display: active ? null : 'none'}}
-    >
-      <div className='login-step-four-text gap-vert-large'>
-        <div className='text-title text-dark'>
-          Success!
-        </div>
-        <div className='text-small' style={{lineHeight: '25px'}}>
+    <>
+      <div className='grid-flow-large text-center'>
+        <h2 className='text-normal'>Success!</h2>
+        <p className='text-gray text-lineheight-24'>
           We have successfully changed your password.
           Click the button below to login to your account.
-        </div>
+        </p>
       </div>
-      <div className='gap-vert-large'>
-        <ThemedButton
-          color={'yellow'}
-          variant={'themed'}
-          onClick={handleNavigate}
-        >
-          Login
-        </ThemedButton>
-        <div className='text-small gap-hori-small'>
-          <div className='text-light text-dark'>
-            Need help? Contact us at
-          </div>
-          <div className='text-bold text-blue'>
-            tasselsupport@gmail.com
-          </div>
+      <div className='grid-flow-small grid-center'>
+        <div className='flex-flow-small'>
+          <ThemedButton
+            color={'yellow'}
+            variant={'themed'}
+            onClick={handleNavigate}
+          >
+            Login
+          </ThemedButton>
         </div>
+        <p className='text-light'>
+          Need help? Contact us at
+          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+        </p>
       </div>
-    </div>
+    </>
   );
 }
