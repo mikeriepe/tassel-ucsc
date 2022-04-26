@@ -165,6 +165,8 @@ app.get('/api/getOpportunityTypes', opportunityTypeApi.getOpportunityTypes);
 app.get('/api/dummy', authApi.check, authApi.dummy);
 
 
+// verifies the jwt token used in the route
+app.get('/api/verify/:token', authApi.verify);
 
 // redirects any other paths to the client
 app.use(express.static(path.join(__dirname, 'client', 'build')));

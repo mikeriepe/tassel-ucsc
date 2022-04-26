@@ -12,6 +12,7 @@ import MyProfile from './pages/MyProfile';
 import Browse from './pages/Browse';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
+import Verify from './components/Verify';
 
 import {AuthProvider} from './util/AuthContext';
 
@@ -34,6 +35,7 @@ export default function App() {
         <Route path='/opportunity/:opportunityid'
           element={<Opportunity/>}/>
         <Route path='/profile/:profileid' element={<Profile />} />
+        <Route path='/verify/:token' element={<Verify />} />
       </Routes>
     </AuthProvider>
   );
