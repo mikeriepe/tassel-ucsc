@@ -141,6 +141,5 @@ exports.verifyUserSession = async (req, res) =>{
 exports.expireUserSession = async (req, res) =>{
   console.log("Expiring a user's session...");
   res.cookie('accessToken',req.cookies.accessToken ,{maxAge: 0});
-  // res.cookie('accessToken',"" ,{expires: Date.now()});
   res.status(200).send();
 }
