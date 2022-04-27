@@ -12,6 +12,7 @@ import MyProfile from './pages/MyProfile';
 import Browse from './pages/Browse';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
+import Verify from './components/Verify';
 
 import TestSignup from './pages/TestSignup';
 import TestLogin from './pages/TestLogin';
@@ -38,6 +39,7 @@ export default function App() {
 
         <Route path='/signup' element={<TestSignup />} />
         <Route path='/login' element={<TestLogin />} />
+        <Route path='/verify/:token' element={<Verify />} />
       </Routes>
     </AuthProvider>
   );

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secrets = require('./secrets.json');
+const userModel = require('./user_model.js');
 
 /**
  *  check is used to verfiy if the JWT is valid.
@@ -34,4 +35,22 @@ exports.check = (req, res, next) => {
 exports.dummy = async (req, res) =>{
     console.log(req.cookies);
     res.sendStatus(200);
+}
+
+exports.verify = (req, res) => {
+    const token = req.params.token;
+    // Verifing the JWT token 
+    jwt.verify(token, secrets.verificationToken, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            console.log("Email verification failed, possibly the link is invalid or expired");
+            res.sendStatus(403);
+        }
+        else {
+            console.log("Email verifified successfully");
+            const response = userModel.activateUser(decoded.useremail);
+            console.log(response);
+            res.sendStatus(200);
+        }
+    });
 }
