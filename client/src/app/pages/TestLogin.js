@@ -131,6 +131,7 @@ export default function TestLogin() {
           </div>
           <Box
             className='card-content padding-64'
+            component='form'
             autoComplete='on'
             noValidate
           >
@@ -193,7 +194,6 @@ function LoginForm({active, handleNextPage, login}) {
             type={'text'}
             index={'useremail'}
             step={'login'}
-            func={login}
           />
         </div>
         <div className='grid-flow-small'>
@@ -205,7 +205,6 @@ function LoginForm({active, handleNextPage, login}) {
             type={'password'}
             index={'userpassword'}
             step={'login'}
-            func={login}
           />
           <p
             className='text-blue clickable'
@@ -220,7 +219,11 @@ function LoginForm({active, handleNextPage, login}) {
           <ThemedButton
             color={'yellow'}
             variant={'themed'}
-            onClick={login}
+            type={'submit'}
+            onClick={(e) => {
+              e.preventDefault();
+              login();
+            }}
           >
             Login
           </ThemedButton>
