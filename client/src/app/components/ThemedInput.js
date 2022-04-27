@@ -12,7 +12,7 @@ export const useInputContext = () => useContext(InputContext);
  * Themed input
  * @return {JSX}
  */
-export default function ThemedInput({placeholder, type, index, step}) {
+export default function ThemedInput({placeholder, type, index, step, func}) {
   const value = useInputContext();
   const [values, setValues] = value;
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +48,12 @@ export default function ThemedInput({placeholder, type, index, step}) {
     e.preventDefault();
   };
 
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      func();
+    }
+  };
+
   return (
     <>
       <OutlinedInput
@@ -55,6 +61,7 @@ export default function ThemedInput({placeholder, type, index, step}) {
         type={type}
         value={values[index]}
         onChange={handleChange}
+        onKeyDown={func !== undefined ? handleEnter : null}
         sx={{...inputStyling, display: type === 'text' ? null : 'none'}}
       />
       <OutlinedInput
@@ -62,6 +69,7 @@ export default function ThemedInput({placeholder, type, index, step}) {
         type={showPassword ? 'text' : 'password'}
         value={values[index]}
         onChange={handleChange}
+        onKeyDown={func !== undefined ? handleEnter : null}
         endAdornment={
           <InputAdornment position='end'>
             <IconButton

@@ -116,10 +116,6 @@ export default function TestLogin() {
         });
   };
 
-  const handleSubmit = (e) => {
-    login();
-  };
-
   const handleNextPage = (step) => {
     setStepPage(step);
   };
@@ -135,14 +131,13 @@ export default function TestLogin() {
           </div>
           <Box
             className='card-content padding-64'
-            component='form'
-            noValidate
             autoComplete='on'
-            onSubmit={handleSubmit}
+            noValidate
           >
             <LoginForm
               active={stepPage === 'login'}
               handleNextPage={(e) => handleNextPage(e)}
+              login={login}
             />
             <ForgotPasswordOne
               active={stepPage === 'forgot1'}
@@ -167,7 +162,7 @@ export default function TestLogin() {
  * Login form
  * @return {JSX}
  */
-function LoginForm({active, handleNextPage}) {
+function LoginForm({active, handleNextPage, login}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -198,6 +193,7 @@ function LoginForm({active, handleNextPage}) {
             type={'text'}
             index={'useremail'}
             step={'login'}
+            func={login}
           />
         </div>
         <div className='grid-flow-small'>
@@ -209,6 +205,7 @@ function LoginForm({active, handleNextPage}) {
             type={'password'}
             index={'userpassword'}
             step={'login'}
+            func={login}
           />
           <p
             className='text-blue clickable'
@@ -223,7 +220,7 @@ function LoginForm({active, handleNextPage}) {
           <ThemedButton
             color={'yellow'}
             variant={'themed'}
-            type={'submit'}
+            onClick={login}
           >
             Login
           </ThemedButton>
