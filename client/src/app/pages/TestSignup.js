@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {InputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -10,6 +11,7 @@ import StepLabel from '@mui/material/StepLabel';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
 import SignupBanner from '../assets/SignupBanner.png';
+import verifyEmail from '../util/EmailVerification';
 import '../stylesheets/LoginSignup.css';
 
 const PaperStyling = {
@@ -60,20 +62,67 @@ const StepperStyling = {
  */
 export default function TestSignup() {
   const [stepNumber, setStepNumber] = useState(0);
+  const [createdProfileData, setCreatedProfileData] = useState(null);
   const [values, setValues] = useState({
     0: {
-      firstName: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
     },
     1: {
-      email: '',
-      year: '',
+      schoolemail: '',
+      graduationyear: '',
     },
     2: {
-      email: '',
-      password: '',
+      useremail: '',
+      userpassword: '',
+      active: 'false',
     },
   });
+
+  const createUser = () => {
+    fetch(`/api/userCreation`, {
+      method: 'POST',
+      body: JSON.stringify(values[2]),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          fetch(`/api/profileCreation`, {
+            method: 'POST',
+            body: JSON.stringify({userid: json.userid}),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          toast.success('Account created', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setCreatedProfileData(json);
+          verifyEmail(json);
+          setValues((prevValues) => ({
+            ...prevValues,
+            [2]: {
+              ...prevValues[2],
+              useremail: '',
+              userpassword: '',
+              active: 'false',
+            },
+          }));
+        });
+  };
 
   const checkValues = (object) => {
     return Object.values(object).every((v) => v && typeof v === 'object' ?
@@ -82,19 +131,21 @@ export default function TestSignup() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const data = {values};
     const checkStep1 = checkValues(values[0]);
     const checkStep2 = checkValues(values[1]);
     const checkStep3 = checkValues(values[2]);
 
     if (checkStep1 && checkStep2 && checkStep3) {
-      console.log(data);
+      createUser();
       handleNextStep(3);
     } else {
       alert('Fill in all the required fields.');
     }
+  };
+
+  const handleResend = () => {
+    console.log(createdProfileData);
+    verifyEmail(createdProfileData);
   };
 
   const handleNextStep = (step) => {
@@ -117,7 +168,6 @@ export default function TestSignup() {
             component='form'
             noValidate
             autoComplete='on'
-            onSubmit={handleSubmit}
           >
             <SignupStepOne
               active={stepNumber === 0}
@@ -133,17 +183,19 @@ export default function TestSignup() {
               active={stepNumber === 2}
               step={2}
               handleNextStep={(e) => handleNextStep(e)}
+              handleSubmit={handleSubmit}
             />
             <SignupStepFour
               active={stepNumber === 3}
               step={3}
               handleNextStep={(e) => handleNextStep(e)}
+              handleResend={handleResend}
             />
-            <SignupStepFive
+            {/* <SignupStepFive
               active={stepNumber === 4}
               step={4}
               handleNextStep={(e) => handleNextStep(e)}
-            />
+            /> */}
           </Box>
         </Paper>
         <SignupStepper
@@ -162,7 +214,7 @@ export default function TestSignup() {
  * @return {JSX}
  */
 function SignupStepper({stepNumber, handleNextStep, values, checkValues}) {
-  const steps = ['Name', 'School', 'Email', 'Verification', 'Done'];
+  const steps = ['Name', 'School', 'Email', 'Verification'];
 
   return (
     <Paper className='stepper' elevation={0} sx={StepperPaperStyling}>
@@ -171,7 +223,9 @@ function SignupStepper({stepNumber, handleNextStep, values, checkValues}) {
           {steps.map((label, index) => (
             <Step
               key={label}
-              completed={index < 3 && checkValues(values[index])}
+              completed={
+                (index < 3 && checkValues(values[index])) || stepNumber === 3
+              }
             >
               {index < 3 ?
                 <StepButton
@@ -218,7 +272,7 @@ function SignupStepOne({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'Bob'}
             type={'text'}
-            index={'firstName'}
+            index={'firstname'}
             step={step}
           />
         </div>
@@ -229,7 +283,7 @@ function SignupStepOne({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'Smith'}
             type={'text'}
-            index={'lastName'}
+            index={'lastname'}
             step={step}
           />
         </div>
@@ -284,7 +338,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'bobsmith@ucsc.edu'}
             type={'text'}
-            index={'email'}
+            index={'schoolemail'}
             step={step}
           />
         </div>
@@ -295,7 +349,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'1997'}
             type={'text'}
-            index={'year'}
+            index={'graduationyear'}
             step={step}
           />
         </div>
@@ -337,7 +391,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
  * Step three of signup
  * @return {JSX}
  */
-function SignupStepThree({active, step, handleNextStep}) {
+function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -360,7 +414,7 @@ function SignupStepThree({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'bobsmith@gmail.com'}
             type={'text'}
-            index={'email'}
+            index={'useremail'}
             step={step}
           />
         </div>
@@ -371,7 +425,7 @@ function SignupStepThree({active, step, handleNextStep}) {
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
-            index={'password'}
+            index={'userpassword'}
             step={step}
           />
         </div>
@@ -390,6 +444,10 @@ function SignupStepThree({active, step, handleNextStep}) {
             color={'yellow'}
             variant={'themed'}
             type={'submit'}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
           >
             Create account
           </ThemedButton>
@@ -412,7 +470,7 @@ function SignupStepThree({active, step, handleNextStep}) {
  * Step four of signup
  * @return {JSX}
  */
-function SignupStepFour({active, step, handleNextStep}) {
+function SignupStepFour({active, step, handleResend}) {
   return (
     <div className='flow-large' style={{display: active ? null : 'none'}}>
       <div className='grid-flow-large text-center'>
@@ -433,7 +491,7 @@ function SignupStepFour({active, step, handleNextStep}) {
             color={'yellow'}
             variant={'cancel'}
             value={step}
-            onClick={(e) => handleNextStep(Number(e.target.value) + 1)}
+            onClick={handleResend}
           >
             Resend Email
           </ThemedButton>
@@ -447,43 +505,43 @@ function SignupStepFour({active, step, handleNextStep}) {
   );
 }
 
-/**
- * Step five of signup
- * @return {JSX}
- */
-function SignupStepFive({active}) {
-  const navigate = useNavigate();
+// /**
+//  * Step five of signup
+//  * @return {JSX}
+//  */
+// export function SignupStepFive({active}) {
+//   const navigate = useNavigate();
 
-  const handleNavigate = () => {
-    navigate('/login');
-  };
+//   const handleNavigate = () => {
+//     navigate('/login');
+//   };
 
-  return (
-    <div className='flow-large' style={{display: active ? null : 'none'}}>
-      <div className='grid-flow-large text-center'>
-        <h2 className='text-normal'>Success!</h2>
-        <p className='text-gray text-lineheight-24'>
-         We have successfully created your new account. However, an admin
-         must approve your account. You will have access to our site, but
-         certain features will be restricted until your account has been
-         approved. Look out for an email detailing your account&apos;s approval.
-        </p>
-      </div>
-      <div className='grid-flow-small grid-center text-center'>
-        <div className='flex-flow-small'>
-          <ThemedButton
-            color={'yellow'}
-            variant={'themed'}
-            onClick={handleNavigate}
-          >
-            Login
-          </ThemedButton>
-        </div>
-        <p className='text-light'>
-          Need help? Contact us at
-          <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
-        </p>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className='flow-large' style={{display: active ? null : 'none'}}>
+//       <div className='grid-flow-large text-center'>
+//         <h2 className='text-normal'>Success!</h2>
+//         <p className='text-gray text-lineheight-24'>
+//          We have successfully created your new account. However, an admin
+//          must approve your account. You will have access to our site, but
+//          certain features will be restricted until your account has been
+//       approved. Look out for an email detailing your account&apos;s approval.
+//         </p>
+//       </div>
+//       <div className='grid-flow-small grid-center text-center'>
+//         <div className='flex-flow-small'>
+//           <ThemedButton
+//             color={'yellow'}
+//             variant={'themed'}
+//             onClick={handleNavigate}
+//           >
+//             Login
+//           </ThemedButton>
+//         </div>
+//         <p className='text-light'>
+//           Need help? Contact us at
+//        <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
