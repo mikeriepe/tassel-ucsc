@@ -1,0 +1,15 @@
+.verificationResponse {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.response {
+  display: flex;
+  justify-content: center;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+}

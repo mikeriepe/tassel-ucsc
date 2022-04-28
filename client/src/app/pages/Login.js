@@ -4,6 +4,7 @@ import {Stack} from '@mui/material';
 import {toast} from 'react-toastify';
 import '../stylesheets/Login.css';
 
+import verifyEmail from '../util/EmailVerification';
 import useAuth from '../util/AuthContext';
 
 /**
@@ -14,12 +15,10 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [signUp, setSignUp] = useState(location.state.signUp);
+  const [verifyEmailNotification, setVerifyEmailNotification] = useState(false);
+  const [createdProfileData, setCreatedProfileData] = useState(null);
 
-
-  // eslint-disable-next-line no-unused-vars
-  const {user, setUser, setLoggedIn, userProfile, setUserProfile} = useAuth();
-  // console.log('current user: ', user);
-  // console.log('current user profile: ', userProfile);
+  const {user, setUser, setLoggedIn, setUserProfile} = useAuth();
 
   const [accountLoginCredentials, setAccountLoginCredentials] = useState({
     useremail: '',
@@ -31,7 +30,6 @@ export default function Login() {
     userpassword: '',
     active: 'false',
   });
-
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -69,6 +67,13 @@ export default function Login() {
     }
   }, [user]);
 
+
+  const handleResendClick = () => {
+    console.log('here');
+    console.log(createdProfileData);
+    verifyEmail(createdProfileData);
+  };
+
   const createUser = () => {
     fetch(`/api/userCreation`, {
       method: 'POST',
@@ -84,7 +89,6 @@ export default function Login() {
           return res.json();
         })
         .then((json) => {
-          console.log(json.userid);
           fetch(`/api/profileCreation`, {
             method: 'POST',
             body: JSON.stringify({userid: json.userid}),
@@ -101,9 +105,14 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
-          setUser(json);
-          setLoggedIn(true);
-          navigate(`/`);
+          setCreatedProfileData(json);
+          verifyEmail(json);
+          setVerifyEmailNotification(true);
+          setnewAccountCredentials(
+              {useremail: '',
+                userpassword: '',
+                active: 'false'});
+          setSignUp(false);
         });
   };
 
@@ -166,8 +175,9 @@ export default function Login() {
 
   return (
     <div className="LoginPage">
-      {!signUp && <div className="LoginPage__body">
-        <Stack className="LoginPage__inputBody">
+      {!signUp && !verifyEmailNotification &&
+      <div className="LoginPage__body">
+        <Stack>
           <div className="LoginPage__topText">Log In</div>
           <label className="LoginPage__label">
               Email
@@ -203,8 +213,9 @@ export default function Login() {
           </button>
         </Stack>
       </div>}
-      {signUp && <div className="LoginPage__body">
-        <Stack className="LoginPage__inputBody">
+      {signUp && !verifyEmailNotification &&
+      <div className="LoginPage__body">
+        <Stack>
           <div className="LoginPage__topText">Sign Up</div>
           <label className="LoginPage__label">
           Email
@@ -240,6 +251,26 @@ export default function Login() {
           >
             Log in
           </button>
+        </Stack>
+      </div>}
+      {verifyEmailNotification && <div className='LoginPage__body'>
+        <Stack>
+          <div className='VerifyEmailNotification__topText'>
+            Verify Your Email
+          </div>
+          <p className='VerifyEmailNotification__message'>
+            {`We sent an email to ${createdProfileData.useremail}
+             to verify your email address and activate your account.
+             Please use the link in the email to verify your email address.
+             The link will expire in 48 hours.`}</p>
+          <p className='VerifyEmailNotification__message'>
+           If you did not recieve the email,
+            please click the link below to resend.
+          </p>
+          <div className='verifyEmailNotification__resendLink'
+            onClick={handleResendClick} style={{cursor: 'pointer'}}>
+              click here
+          </div>
         </Stack>
       </div>}
     </div>
