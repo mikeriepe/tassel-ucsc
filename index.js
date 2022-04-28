@@ -72,6 +72,8 @@ app.post('/api/userCreation', userApi.userPost);
 
 app.get('/api/verifyUserSession', authApi.check, userApi.verifyUserSession);
 
+app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
+
 
 //  Profile CRUD operations
 //

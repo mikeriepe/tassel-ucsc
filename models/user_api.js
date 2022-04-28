@@ -146,3 +146,13 @@ exports.verifyUserSession = async (req, res) =>{
   })
 }
 
+/**
+ * userExpireSession:
+ * Used upon logout.
+ */
+
+exports.expireUserSession = async (req, res) =>{
+  console.log("Expiring a user's session...");
+  res.cookie('accessToken',req.cookies.accessToken ,{maxAge: 0});
+  res.status(200).send();
+}
