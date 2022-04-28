@@ -70,7 +70,7 @@ export default function TestVerify() {
         >
           <div
             className='flow-large'
-            style={{display: status === 'success' ? null : 'none'}}
+            style={{display: status === 'Success' ? null : 'none'}}
           >
             <div className='grid-flow-large text-center'>
               <h2 className='text-normal'>Success!</h2>
@@ -102,28 +102,17 @@ export default function TestVerify() {
           </div>
           <div
             className='flow-large'
-            style={{display: status === 'success' ? null : 'none'}}
+            style={{display: status !== 'Success' ? null : 'none'}}
           >
             <div className='grid-flow-large text-center'>
-              <h2 className='text-normal'>Success!</h2>
+              <h2 className='text-normal'>Profile Could Not Be Activated</h2>
               <p className='text-gray text-lineheight-24'>
-                We have successfully created your new account. However, an admin
-                must approve your account. You will have access to our site, but
-                certain features will be restricted until your account has been
-                approved. Look out for an email detailing your account&apos;s
-                approval.
+                Your link was either invalid or had expired. If you need more
+                information or help, please send a message to the email
+                address given below.
               </p>
             </div>
             <div className='grid-flow-small grid-center text-center'>
-              <div className='flex-flow-small'>
-                <ThemedButton
-                  color={'yellow'}
-                  variant={'themed'}
-                  onClick={handleNavigate}
-                >
-                  Login
-                </ThemedButton>
-              </div>
               <p className='text-light'>
                 Need help? Contact us at
                 <span className='text-bold text-blue'>

@@ -191,11 +191,6 @@ export default function TestSignup() {
               handleNextStep={(e) => handleNextStep(e)}
               handleResend={handleResend}
             />
-            {/* <SignupStepFive
-              active={stepNumber === 4}
-              step={4}
-              handleNextStep={(e) => handleNextStep(e)}
-            /> */}
           </Box>
         </Paper>
         <SignupStepper
@@ -504,44 +499,3 @@ function SignupStepFour({active, step, handleResend}) {
     </div>
   );
 }
-
-// /**
-//  * Step five of signup
-//  * @return {JSX}
-//  */
-// export function SignupStepFive({active}) {
-//   const navigate = useNavigate();
-
-//   const handleNavigate = () => {
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div className='flow-large' style={{display: active ? null : 'none'}}>
-//       <div className='grid-flow-large text-center'>
-//         <h2 className='text-normal'>Success!</h2>
-//         <p className='text-gray text-lineheight-24'>
-//          We have successfully created your new account. However, an admin
-//          must approve your account. You will have access to our site, but
-//          certain features will be restricted until your account has been
-//       approved. Look out for an email detailing your account&apos;s approval.
-//         </p>
-//       </div>
-//       <div className='grid-flow-small grid-center text-center'>
-//         <div className='flex-flow-small'>
-//           <ThemedButton
-//             color={'yellow'}
-//             variant={'themed'}
-//             onClick={handleNavigate}
-//           >
-//             Login
-//           </ThemedButton>
-//         </div>
-//         <p className='text-light'>
-//           Need help? Contact us at
-//        <span className='text-bold text-blue'> tasselsupport@gmail.com</span>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
