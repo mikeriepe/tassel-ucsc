@@ -7,11 +7,14 @@ import {BrowserRouter} from 'react-router-dom';
 
 import theme from './app/util/Theme';
 import {ThemeProvider} from '@mui/material/styles';
+import {AuthProvider} from './app/util/AuthContext';
 
 render((
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <App/>
+      <AuthProvider>
+        <App/>
+      </AuthProvider>
     </ThemeProvider>
   </BrowserRouter>
 ), document.getElementById('root'));

@@ -14,7 +14,7 @@ import useAuth from '../util/AuthContext';
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [signUp, setSignUp] = useState(location.state.signUp);
+  const [signUp, setSignUp] = useState(false);
   const [verifyEmailNotification, setVerifyEmailNotification] = useState(false);
   const [createdProfileData, setCreatedProfileData] = useState(null);
 
@@ -58,7 +58,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    setSignUp(location.state.signUp);
+    setSignUp(false);
   }, [location.key, location.state]);
 
   useEffect(() => {

@@ -8,20 +8,29 @@ import lightBlue from '@mui/material/colors/lightBlue';
 import grey from '@mui/material/colors/grey';
 
 const theme = createTheme({
+  typography: {
+    'fontFamily': `"Montserrat", "Roboto", sans-serif`,
+    'fontWeightLight': 400,
+    'fontWeightRegular': 500,
+    'fontWeightMedium': 500,
+  },
   palette: {
     mode: 'light',
     primary: {
+      lightHover: blue[100],
       light: blue[300],
       main: blue[400],
       dark: blue[500],
     },
     secondary: {
+      lightHover: yellow[100],
       light: yellow[600],
       main: yellow[700],
       dark: yellow[800],
       contrastText: grey[50],
     },
     tertiary: {
+      lightHover: grey[100],
       light: grey[400],
       main: grey[500],
       dark: grey[600],
