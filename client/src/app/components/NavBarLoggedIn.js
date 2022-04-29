@@ -80,10 +80,17 @@ export default function NavBarLoggedIn() {
   };
 
   const handleLogout = () => {
-    setUser(null);
-    setLoggedIn(false);
-    setUserProfile(null);
-    navigate('/');
+    fetch(`/api/expireUserSession`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(()=>{
+      setUser(null);
+      setLoggedIn(false);
+      setUserProfile(null);
+      navigate('/');
+    });
   };
 
   // Drawer Functions
