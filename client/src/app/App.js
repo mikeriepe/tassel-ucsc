@@ -10,6 +10,7 @@ import Opportunities from './pages/Opportunities';
 import Dashboard from './pages/Dashboard';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
+import 'react-toastify/dist/ReactToastify.css';
 import './stylesheets/App.css';
 
 import TestSignup from './pages/TestSignup';
