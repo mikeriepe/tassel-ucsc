@@ -1,47 +1,56 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import {ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './stylesheets/App.css';
-
-import NavBar from './components/NavBar';
+import useAuth from './util/AuthContext';
+import NavBarLoggedIn from './components/NavBarLoggedIn';
+import NavBarLoggedOut from './components/NavBarLoggedOut';
 import Landing from './pages/Landing';
-import GetStarted from './pages/GetStarted';
-import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
-import Browse from './pages/Browse';
+import Opportunities from './pages/Opportunities';
+import Dashboard from './pages/Dashboard';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
-// import Verify from './components/Verify';
+import './stylesheets/App.css';
 
 import TestSignup from './pages/TestSignup';
 import TestLogin from './pages/TestLogin';
 import TestVerify from './components/TestVerify';
 
-import {AuthProvider} from './util/AuthContext';
+// TODO: delete browse page
+import Browse from './pages/Browse';
+// TODO: settings page?
+import Settings from './pages/Settings';
+import Box from '@mui/material/Box';
+import {DrawerHeader} from './components/NavBarComponents';
 
 /**
  * returns basic routes and navbar of app
  * @return {HTML} App component
  */
 export default function App() {
+  const {userProfile} = useAuth();
+  console.log(userProfile);
   return (
-    <AuthProvider>
-      <ToastContainer />
-      <NavBar/>
-      <Routes>
-        <Route path='/' element={<Landing />}/>
-        <Route path='/testlogin' element={<Login />}/>
-        <Route path='/getstarted' element={<GetStarted />}/>
-        <Route path='/myprofile' element={<MyProfile />} />
-        <Route path='/browse' element={<Browse />}/>
-        <Route path='/opportunity/:opportunityid' element={<Opportunity/>}/>
-        <Route path='/profile/:profileid' element={<Profile />} />
+    <Box sx={{display: 'flex'}}>
+      {userProfile !== null ? <NavBarLoggedIn/> : <NavBarLoggedOut/>}
+      <Box component='main' sx={{flexGrow: 1, p: 3, padding: 0}}>
+        <DrawerHeader />
+        <Routes>
+          <Route path='/' element={<Landing />}/>
+          <Route path='/myprofile' element={<MyProfile />} />
+          <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/opportunities' element={<Opportunities/>}/>
+          <Route path='/opportunity/:opportunityid' element={<Opportunity/>}/>
+          <Route path='/profile/:profileid' element={<Profile />} />
+          {/* TODO: delete browse page */}
+          <Route path='/browse' element={<Browse />}/>
+          {/* TODO: settings page? */}
+          <Route path='/settings' element={<Settings />}/>
 
-        <Route path='/signup' element={<TestSignup />} />
-        <Route path='/login' element={<TestLogin />} />
-        <Route path='/verify/:token' element={<TestVerify />} />
-      </Routes>
-    </AuthProvider>
+          <Route path='/signup' element={<TestSignup />} />
+          <Route path='/login' element={<TestLogin />} />
+          <Route path='/verify/:token' element={<TestVerify />} />
+        </Routes>
+      </Box>
+    </Box>
   );
 }

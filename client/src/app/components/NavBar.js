@@ -56,10 +56,17 @@ export default function NavBar() {
 
   const handleLogOut = () => {
     // TODO
-    handleMenuClose();
-    setUser(null);
-    setLoggedIn(false);
-    setUserProfile(null);
+    fetch(`/api/expireUserSession`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(()=>{
+      handleMenuClose();
+      setUser(null);
+      setLoggedIn(false);
+      setUserProfile(null);
+    });
   };
 
   const handleError = (e) => {
