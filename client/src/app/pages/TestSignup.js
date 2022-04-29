@@ -269,6 +269,7 @@ function SignupStepOne({active, step, handleNextStep}) {
             type={'text'}
             index={'firstname'}
             step={step}
+            fill={'given-name'}
           />
         </div>
         <div className='grid-flow-small'>
@@ -280,6 +281,7 @@ function SignupStepOne({active, step, handleNextStep}) {
             type={'text'}
             index={'lastname'}
             step={step}
+            fill={'family-name'}
           />
         </div>
       </div>
@@ -335,6 +337,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
             type={'text'}
             index={'schoolemail'}
             step={step}
+            fill={'email'}
           />
         </div>
         <div className='grid-flow-small'>
@@ -411,6 +414,7 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             type={'text'}
             index={'useremail'}
             step={step}
+            fill={'email'}
           />
         </div>
         <div className='grid-flow-small'>

@@ -8,30 +8,38 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 export const InputContext = createContext();
 export const useInputContext = () => useContext(InputContext);
 
+const inputStyling = {
+  'paddingInline': '10px',
+  'height': '40px',
+  'width': '100%',
+  'borderRadius': '15px',
+  'fontFamily': 'Montserrat',
+  'fontSize': '0.8rem',
+  'fontWeight': '600',
+  'color': '#3C4047',
+  '.MuiOutlinedInput-input:-webkit-autofill': {
+    'padding': 0,
+    'paddingInline': '14px',
+    'height': '40px',
+    '-webkit-box-shadow': '0 0 0 30px white inset !important',
+    '-webkit-text-fill-color': '#3C4047',
+  },
+};
+
+const visibilityStyling = {
+  marginRight: '10px',
+  fontSize: '20px',
+  color: '#8B95A5',
+};
+
 /**
  * Themed input
  * @return {JSX}
  */
-export default function ThemedInput({placeholder, type, index, step}) {
+export default function ThemedInput({placeholder, type, index, step, fill}) {
   const value = useInputContext();
   const [values, setValues] = value;
   const [showPassword, setShowPassword] = useState(false);
-
-  const inputStyling = {
-    paddingInline: '10px',
-    height: '40px',
-    width: '100%',
-    borderRadius: '15px',
-    fontFamily: 'Montserrat',
-    fontSize: '0.8rem',
-    fontWeight: '600',
-  };
-
-  const visibilityStyling = {
-    marginRight: '10px',
-    fontSize: '20px',
-    color: '#8B95A5',
-  };
 
   const handleChange = (e) => {
     setValues((prevValues) => ({
@@ -55,6 +63,7 @@ export default function ThemedInput({placeholder, type, index, step}) {
         type={type}
         value={values[index]}
         onChange={handleChange}
+        autoComplete={fill}
         sx={{...inputStyling, display: type === 'text' ? null : 'none'}}
       />
       <OutlinedInput

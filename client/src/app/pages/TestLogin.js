@@ -194,6 +194,7 @@ function LoginForm({active, handleNextPage, login}) {
             type={'text'}
             index={'useremail'}
             step={'login'}
+            fill={'email'}
           />
         </div>
         <div className='grid-flow-small'>
@@ -270,6 +271,7 @@ function ForgotPasswordOne({active, handleNextPage}) {
           type={'text'}
           index={'useremail'}
           step={'forgot1'}
+          fill={'email'}
         />
       </div>
       <div className='grid-flow-small'>
