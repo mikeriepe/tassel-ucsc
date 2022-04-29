@@ -1,5 +1,6 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
 import useAuth from './util/AuthContext';
 import NavBarLoggedIn from './components/NavBarLoggedIn';
 import NavBarLoggedOut from './components/NavBarLoggedOut';
@@ -31,6 +32,7 @@ export default function App() {
   console.log(userProfile);
   return (
     <Box sx={{display: 'flex'}}>
+      <ToastContainer />
       {userProfile !== null ? <NavBarLoggedIn/> : <NavBarLoggedOut/>}
       <Box component='main' sx={{flexGrow: 1, p: 3, padding: 0}}>
         <DrawerHeader />

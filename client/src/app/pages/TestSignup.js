@@ -20,7 +20,7 @@ const PaperStyling = {
   height: '600px',
   borderRadius: '10px',
   filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-  color: 'inherit',
+  color: '#3C4047',
 };
 
 const StepperPaperStyling = {
