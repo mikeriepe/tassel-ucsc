@@ -235,28 +235,57 @@ export default function NavBarLoggedIn() {
             const [label, route, icon] = arr;
             return (
               <Link key={label} to={route}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+                {
+                  open ?
+                  // without tooltip
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
                     }}
                   >
-                    {icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={label}
-                    sx={{opacity: open ? 1 : 0}}
-                    style={{fontWeight: 600}}
-                  />
-                </ListItemButton>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={label}
+                      sx={{opacity: open ? 1 : 0}}
+                      style={{fontWeight: 600}}
+                    />
+                  </ListItemButton> :
+                  // with tooltip
+                  <Tooltip title={label} placement='right'>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={label}
+                        sx={{opacity: open ? 1 : 0}}
+                        style={{fontWeight: 600}}
+                      />
+                    </ListItemButton>
+                  </Tooltip>
+                }
               </Link>
             );
           })}
