@@ -21,6 +21,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import EventIcon from '@mui/icons-material/Event';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Avatar from '@mui/material/Avatar';
@@ -39,16 +40,26 @@ import Notification from './Notification';
  * @return {*} NavBar Component
  */
 export default function NavBarLoggedIn() {
-  const {userProfile, setUser, setLoggedIn, setUserProfile} = useAuth();
+  const {userProfile, user, setUser, setLoggedIn, setUserProfile} = useAuth();
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+
+  // Pages ---------------------------------------------------------------------
 
   const pages = [
     ['Dashboard', '/dashboard', <DashboardIcon key='Dashboard'/>],
     ['Opportunities', '/opportunities', <EventIcon key='Opportunities'/>],
     ['Settings', '/settings', <SettingsIcon key='Settings'/>],
   ];
+  // add approvals page if user is admin
+  if (user.isadmin) {
+    pages.splice(1, 0, [
+      'Approvals',
+      '/approvals',
+      <AssignmentTurnedInIcon key='Approvals'/>,
+    ]);
+  }
 
   // Notifications -------------------------------------------------------------
 
@@ -179,8 +190,7 @@ export default function NavBarLoggedIn() {
                 type={'submit'}
                 style={{borderRadius: 30, padding: 10}}
               >
-                {/* TODO: replace with userProfile's first name */}
-                FirstName
+                {userProfile.firstname}
               </ThemedButton>
             </Link>
           </Box>
@@ -221,7 +231,7 @@ export default function NavBarLoggedIn() {
         <Divider />
         {/* main pages */}
         <List>
-          {pages.map((arr, index) => {
+          {pages.map((arr) => {
             const [label, route, icon] = arr;
             return (
               <Link key={label} to={route}>

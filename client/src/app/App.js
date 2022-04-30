@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import MyProfile from './pages/MyProfile';
 import Opportunities from './pages/Opportunities';
 import Dashboard from './pages/Dashboard';
+import Approvals from './pages/Approvals';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
 // TODO: delete browse page
@@ -42,6 +43,7 @@ export default function App() {
           <Route path='/verify/:token' element={<Verify />} />
           <Route path='/myprofile' element={<MyProfile />} />
           <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/approvals' element={<Approvals/>}/>
           <Route path='/opportunities' element={<Opportunities/>}/>
           <Route path='/opportunity/:opportunityid'
             element={<Opportunity/>}/>
