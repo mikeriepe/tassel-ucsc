@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Box from '@mui/material/Box';
+import PageHeader from '../components/PageHeader';
 
 /**
  * creates approvals page
@@ -6,8 +8,11 @@ import * as React from 'react';
  */
 export default function Approvals() {
   return (
-    <div className='Approvals'>
-      <h1>Approvals</h1>
-    </div>
+    <Box className='Approvals'>
+      <PageHeader
+        title='Approvals'
+        subtitle='Approve or reject accounts and opportunities'
+      />
+    </Box>
   );
 }
