@@ -1,7 +1,7 @@
 import * as React from 'react';
 import useAuth from '../util/AuthContext';
 import {useTheme} from '@mui/material/styles';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -17,6 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -32,6 +33,7 @@ import {
   AppBar,
 } from './NavBarComponents';
 import Notification from './Notification';
+import '../stylesheets/NavBar.css';
 
 /**
  * logged in navbar
@@ -114,6 +116,8 @@ export default function NavBarLoggedIn() {
   };
 
   // NavBar --------------------------------------------------------------------
+  const {pathname} = useLocation();
+
   return (
     <div>
       <CssBaseline />
@@ -233,19 +237,24 @@ export default function NavBarLoggedIn() {
         <List>
           {pages.map((arr) => {
             const [label, route, icon] = arr;
+            const selected = route === pathname;
             return (
               <Link key={label} to={route}>
                 {
                   open ?
                   // without tooltip
-                  <ListItemButton
+                  <ListItem
+                    id={selected ? 'navbar-item-selected' : 'navbar-item'}
+                    button
+                    selected={selected}
                     sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
+                      'minHeight': 48,
+                      'justifyContent': open ? 'initial' : 'center',
+                      'px': 2.5,
                     }}
                   >
                     <ListItemIcon
+                      id={selected ? 'navbar-icon-selected' : 'navbar-icon'}
                       sx={{
                         minWidth: 0,
                         mr: open ? 3 : 'auto',
@@ -259,17 +268,21 @@ export default function NavBarLoggedIn() {
                       sx={{opacity: open ? 1 : 0}}
                       style={{fontWeight: 600}}
                     />
-                  </ListItemButton> :
+                  </ListItem> :
                   // with tooltip
                   <Tooltip title={label} placement='right'>
-                    <ListItemButton
+                    <ListItem
+                      id={selected ? 'navbar-item-selected' : 'navbar-item'}
+                      button
+                      selected={selected}
                       sx={{
-                        minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
-                        px: 2.5,
+                        'minHeight': 48,
+                        'justifyContent': open ? 'initial' : 'center',
+                        'px': 2.5,
                       }}
                     >
                       <ListItemIcon
+                        id={selected ? 'navbar-icon-selected' : 'navbar-icon'}
                         sx={{
                           minWidth: 0,
                           mr: open ? 3 : 'auto',
@@ -283,7 +296,7 @@ export default function NavBarLoggedIn() {
                         sx={{opacity: open ? 1 : 0}}
                         style={{fontWeight: 600}}
                       />
-                    </ListItemButton>
+                    </ListItem>
                   </Tooltip>
                 }
               </Link>
