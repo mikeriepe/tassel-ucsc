@@ -36,7 +36,14 @@ const visibilityStyling = {
  * Themed input
  * @return {JSX}
  */
-export default function ThemedInput({placeholder, type, index, step, fill}) {
+export default function ThemedInput({
+  placeholder,
+  type,
+  index,
+  step,
+  fill,
+  error,
+}) {
   const value = useInputContext();
   const [values, setValues] = value;
   const [showPassword, setShowPassword] = useState(false);
@@ -64,6 +71,7 @@ export default function ThemedInput({placeholder, type, index, step, fill}) {
         value={values[index]}
         onChange={handleChange}
         autoComplete={fill}
+        error={error}
         sx={{...inputStyling, display: type === 'text' ? null : 'none'}}
       />
       <OutlinedInput
@@ -71,6 +79,7 @@ export default function ThemedInput({placeholder, type, index, step, fill}) {
         type={showPassword ? 'text' : 'password'}
         value={values[index]}
         onChange={handleChange}
+        error={error}
         endAdornment={
           <InputAdornment position='end'>
             <IconButton

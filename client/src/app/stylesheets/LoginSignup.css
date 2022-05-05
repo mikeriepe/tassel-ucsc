@@ -63,6 +63,11 @@
   gap: 10px;
 }
 
+.flex-flow-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Utility */
 
 .text-center {

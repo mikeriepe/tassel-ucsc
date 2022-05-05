@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {InputContext} from '../components/ThemedInput';
+import {InputContext, useInputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
@@ -316,9 +316,21 @@ function SignupStepOne({active, step, handleNextStep}) {
  */
 function SignupStepTwo({active, step, handleNextStep}) {
   const navigate = useNavigate();
+  const value = useInputContext();
+  const [values] = value;
 
   const handleNavigate = () => {
     navigate('/login');
+  };
+
+  const validateSchoolEmail = (email) => {
+    const regex = /^\S+@ucsc.edu$/;
+    return regex.test(email);
+  };
+
+  const validateYear = (year) => {
+    const today = new Date();
+    return Number(year) >= 1950 && Number(year) <= today.getFullYear() + 50;
   };
 
   return (
@@ -331,24 +343,56 @@ function SignupStepTwo({active, step, handleNextStep}) {
       </div>
       <div className='grid-flow-large'>
         <div className='grid-flow-small'>
-          <p className='text-bold'>School Email</p>
+          <div className='flex-flow-space-between text-bold'>
+            <p>School Email</p>
+            <p
+              className='text-warning'
+              style={{
+                opacity: values[1].schoolemail.length > 0 &&
+                  !validateSchoolEmail(values[1].schoolemail) ?
+                  1 : 0,
+              }}
+            >
+              Invalid UCSC email
+            </p>
+          </div>
           <ThemedInput
             placeholder={'bobsmith@ucsc.edu'}
             type={'text'}
             index={'schoolemail'}
             step={step}
             fill={'email'}
+            error={
+              values[1].schoolemail.length > 0 &&
+              !validateSchoolEmail(values[1].schoolemail)
+            }
           />
         </div>
         <div className='grid-flow-small'>
-          <p className='text-bold'>
-            Year of Graduation <span className='text-bold text-warning'>*</span>
-          </p>
+          <div className='flex-flow-space-between text-bold'>
+            <p>
+              Year of Graduation <span className='text-warning'>*</span>
+            </p>
+            <p
+              className='text-warning'
+              style={{
+                opacity: values[1].graduationyear.length > 0 &&
+                  !validateYear(values[1].graduationyear) ?
+                  1 : 0,
+              }}
+            >
+              Invalid graduation year
+            </p>
+          </div>
           <ThemedInput
             placeholder={'1997'}
             type={'text'}
             index={'graduationyear'}
             step={step}
+            error={
+              values[1].graduationyear.length > 0 &&
+              !validateYear(values[1].graduationyear)
+            }
           />
         </div>
       </div>
@@ -391,9 +435,21 @@ function SignupStepTwo({active, step, handleNextStep}) {
  */
 function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
   const navigate = useNavigate();
+  const value = useInputContext();
+  const [values] = value;
 
   const handleNavigate = () => {
     navigate('/login');
+  };
+
+  const validateUserEmail = (email) => {
+    const regex = /^\S+@\S+\.\S+$/;
+    return regex.test(email);
+  };
+
+  const validateUserPassword = (password) => {
+    const regex = /[A-Z]/;
+    return regex.test(password) && password.length >= 8;
   };
 
   return (
@@ -406,26 +462,58 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
       </div>
       <div className='grid-flow-large'>
         <div className='grid-flow-small'>
-          <p className='text-bold'>
-            Email <span className='text-bold text-warning'>*</span>
-          </p>
+          <div className='flex-flow-space-between text-bold'>
+            <p>
+              Email <span className='text-warning'>*</span>
+            </p>
+            <p
+              className='text-warning'
+              style={{
+                opacity: values[2].useremail.length > 0 &&
+                  !validateUserEmail(values[2].useremail) ?
+                  1 : 0,
+              }}
+            >
+              Invalid email
+            </p>
+          </div>
           <ThemedInput
             placeholder={'bobsmith@gmail.com'}
             type={'text'}
             index={'useremail'}
             step={step}
             fill={'email'}
+            error={
+              values[2].useremail.length > 0 &&
+              !validateUserEmail(values[2].useremail)
+            }
           />
         </div>
         <div className='grid-flow-small'>
-          <p className='text-bold'>
-            Password <span className='text-bold text-warning'>*</span>
-          </p>
+          <div className='flex-flow-space-between text-bold'>
+            <p>
+              Password <span className='text-warning'>*</span>
+            </p>
+            <p
+              className='text-warning'
+              style={{
+                opacity: values[2].userpassword.length > 0 &&
+                  !validateUserPassword(values[2].userpassword) ?
+                  1 : 0,
+              }}
+            >
+              8+ Characters, 1 Capital Letter
+            </p>
+          </div>
           <ThemedInput
             placeholder={'8+ Characters, 1 Capital Letter'}
             type={'password'}
             index={'userpassword'}
             step={step}
+            error={
+              values[2].userpassword.length > 0 &&
+              !validateUserPassword(values[2].userpassword)
+            }
           />
         </div>
       </div>
