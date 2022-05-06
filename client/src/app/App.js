@@ -13,9 +13,9 @@ import Profile from './components/Profile';
 import 'react-toastify/dist/ReactToastify.css';
 import './stylesheets/App.css';
 
-import TestSignup from './pages/TestSignup';
-import TestLogin from './pages/TestLogin';
-import TestVerify from './components/TestVerify';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
+import Verify from './components/Verify';
 
 // TODO: delete browse page
 import Browse from './pages/Browse';
@@ -49,9 +49,9 @@ export default function App() {
           {/* TODO: settings page? */}
           <Route path='/settings' element={<Settings />}/>
 
-          <Route path='/signup' element={<TestSignup />} />
-          <Route path='/login' element={<TestLogin />} />
-          <Route path='/verify/:token' element={<TestVerify />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/verify/:token' element={<Verify />} />
         </Routes>
       </Box>
     </Box>
