@@ -130,16 +130,51 @@ export default function TestSignup() {
     );
   };
 
-  const handleSubmit = (e) => {
-    const checkStep1 = checkValues(values[0]);
-    const checkStep2 = checkValues(values[1]);
-    const checkStep3 = checkValues(values[2]);
+  const isInputValid = (input, type) => {
+    let regex;
+    switch (type) {
+      case 'schoolemail':
+        regex = /^\S+@ucsc.edu$/;
+        return regex.test(input);
 
-    if (checkStep1 && checkStep2 && checkStep3) {
+      case 'graduationyear':
+        const today = new Date();
+        const beforeToday = today.getFullYear() - 50;
+        const afterToday = today.getFullYear() + 10;
+        return Number(input) >= beforeToday && Number(input) <= afterToday;
+
+      case 'useremail':
+        regex = /^\S+@\S+\.\S+$/;
+        return regex.test(input);
+
+      case 'userpassword':
+        regex = /[A-Z]/;
+        return regex.test(input) && input.length >= 8;
+    }
+  };
+
+  const isFormValid = () => {
+    const checkStep1 = checkValues(values[0]);
+    const checkStep2 =
+      checkValues(values[1]) &&
+      isInputValid(values[1].schoolemail, 'schoolemail') &&
+      isInputValid(values[1].graduationyear, 'graduationyear');
+    const checkStep3 =
+      checkValues(values[2]) &&
+      isInputValid(values[2].useremail, 'useremail') &&
+      isInputValid(values[2].userpassword, 'userpassword');
+
+    return checkStep1 && checkStep2 && checkStep3;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isFormValid()) {
       createUser();
       handleNextStep(3);
     } else {
-      alert('Fill in all the required fields.');
+      alert('Required fields need to be filled or invalid inputs');
     }
   };
 
@@ -178,18 +213,21 @@ export default function TestSignup() {
               active={stepNumber === 1}
               step={1}
               handleNextStep={(e) => handleNextStep(e)}
+              isInputValid={(input, type) => isInputValid(input, type)}
             />
             <SignupStepThree
               active={stepNumber === 2}
               step={2}
               handleNextStep={(e) => handleNextStep(e)}
               handleSubmit={handleSubmit}
+              isInputValid={(input, type) => isInputValid(input, type)}
             />
             <SignupStepFour
               active={stepNumber === 3}
               step={3}
               handleNextStep={(e) => handleNextStep(e)}
               handleResend={handleResend}
+              isInputValid={(input, type) => isInputValid(input, type)}
             />
           </Box>
         </Paper>
@@ -314,23 +352,13 @@ function SignupStepOne({active, step, handleNextStep}) {
  * Step two of signup
  * @return {JSX}
  */
-function SignupStepTwo({active, step, handleNextStep}) {
+function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
   const navigate = useNavigate();
   const value = useInputContext();
   const [values] = value;
 
   const handleNavigate = () => {
     navigate('/login');
-  };
-
-  const validateSchoolEmail = (email) => {
-    const regex = /^\S+@ucsc.edu$/;
-    return regex.test(email);
-  };
-
-  const validateYear = (year) => {
-    const today = new Date();
-    return Number(year) >= 1950 && Number(year) <= today.getFullYear() + 50;
   };
 
   return (
@@ -348,8 +376,9 @@ function SignupStepTwo({active, step, handleNextStep}) {
             <p
               className='text-warning'
               style={{
-                opacity: values[1].schoolemail.length > 0 &&
-                  !validateSchoolEmail(values[1].schoolemail) ?
+                opacity:
+                  values[1].schoolemail.length > 0 &&
+                  !isInputValid(values[1].schoolemail, 'schoolemail') ?
                   1 : 0,
               }}
             >
@@ -364,7 +393,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
             fill={'email'}
             error={
               values[1].schoolemail.length > 0 &&
-              !validateSchoolEmail(values[1].schoolemail)
+              !isInputValid(values[1].schoolemail, 'schoolemail')
             }
           />
         </div>
@@ -376,8 +405,9 @@ function SignupStepTwo({active, step, handleNextStep}) {
             <p
               className='text-warning'
               style={{
-                opacity: values[1].graduationyear.length > 0 &&
-                  !validateYear(values[1].graduationyear) ?
+                opacity:
+                  values[1].graduationyear.length > 0 &&
+                  !isInputValid(values[1].graduationyear, 'graduationyear') ?
                   1 : 0,
               }}
             >
@@ -391,7 +421,7 @@ function SignupStepTwo({active, step, handleNextStep}) {
             step={step}
             error={
               values[1].graduationyear.length > 0 &&
-              !validateYear(values[1].graduationyear)
+              !isInputValid(values[1].graduationyear, 'graduationyear')
             }
           />
         </div>
@@ -433,23 +463,19 @@ function SignupStepTwo({active, step, handleNextStep}) {
  * Step three of signup
  * @return {JSX}
  */
-function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
+function SignupStepThree({
+  active,
+  step,
+  handleNextStep,
+  handleSubmit,
+  isInputValid,
+}) {
   const navigate = useNavigate();
   const value = useInputContext();
   const [values] = value;
 
   const handleNavigate = () => {
     navigate('/login');
-  };
-
-  const validateUserEmail = (email) => {
-    const regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email);
-  };
-
-  const validateUserPassword = (password) => {
-    const regex = /[A-Z]/;
-    return regex.test(password) && password.length >= 8;
   };
 
   return (
@@ -469,8 +495,9 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             <p
               className='text-warning'
               style={{
-                opacity: values[2].useremail.length > 0 &&
-                  !validateUserEmail(values[2].useremail) ?
+                opacity:
+                  values[2].useremail.length > 0 &&
+                  !isInputValid(values[2].useremail, 'useremail') ?
                   1 : 0,
               }}
             >
@@ -485,7 +512,7 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             fill={'email'}
             error={
               values[2].useremail.length > 0 &&
-              !validateUserEmail(values[2].useremail)
+              !isInputValid(values[2].useremail, 'useremail')
             }
           />
         </div>
@@ -497,8 +524,9 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             <p
               className='text-warning'
               style={{
-                opacity: values[2].userpassword.length > 0 &&
-                  !validateUserPassword(values[2].userpassword) ?
+                opacity:
+                  values[2].userpassword.length > 0 &&
+                  !isInputValid(values[2].userpassword, 'userpassword') ?
                   1 : 0,
               }}
             >
@@ -512,7 +540,7 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             step={step}
             error={
               values[2].userpassword.length > 0 &&
-              !validateUserPassword(values[2].userpassword)
+              !isInputValid(values[2].userpassword, 'userpassword')
             }
           />
         </div>
@@ -531,10 +559,7 @@ function SignupStepThree({active, step, handleNextStep, handleSubmit}) {
             color={'yellow'}
             variant={'themed'}
             type={'submit'}
-            onClick={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
+            onClick={(e) => handleSubmit(e)}
           >
             Create account
           </ThemedButton>
