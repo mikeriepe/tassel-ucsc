@@ -127,7 +127,16 @@ export default function TestLogin() {
           <div className='card-banner flow-small padding-64'>
             <p className='text-bold text-italic text-white'>Logo.</p>
             <h3 className='text-xbold text-white'>Welcome back!</h3>
-            <img src={LoginBanner} />
+            <div className='flow-tiny'>
+              <img src={LoginBanner} />
+              <p
+                className='text-bold text-white text-tiny'
+                style={{position: 'absolute', bottom: '8.5em'}}
+              >
+                Image from&nbsp;
+                <a href="https://icons8.com/?utm_source=figma-plugin-icons8&utm_medium=cross-promo&utm_campaign=web-version">icons8.com</a>
+              </p>
+            </div>
           </div>
           <Box
             className='card-content padding-64'

@@ -39,6 +39,10 @@
   margin-top: var(--flow-small-spacer, 1em);
 }
 
+.flow-tiny > :where(:not(:first-child)) {
+  margin-top: var(--flow-small-spacer, 0.5em);
+}
+
 .grid-flow-small {
   display: grid;
   gap: 5px;
@@ -72,6 +76,10 @@
 
 .text-center {
   text-align: center;
+}
+
+.text-tiny {
+  font-size: 0.6rem;
 }
 
 .text-light {

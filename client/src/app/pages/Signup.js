@@ -196,7 +196,13 @@ export default function TestSignup() {
             <h3 className='text-xbold text-white'>
               Grow your connection with the UCSC community!
             </h3>
-            <img src={SignupBanner} />
+            <div className='flow-tiny'>
+              <img src={SignupBanner} />
+              <p className='text-bold text-white text-tiny'>
+                Image from&nbsp;
+                <a href="https://icons8.com/?utm_source=figma-plugin-icons8&utm_medium=cross-promo&utm_campaign=web-version">icons8.com</a>
+              </p>
+            </div>
           </div>
           <Box
             className='card-content padding-64'
