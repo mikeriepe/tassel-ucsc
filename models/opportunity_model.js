@@ -10,7 +10,7 @@ const pool = new Pool();
  */
  exports.getOpportunities = async () => {
   const query = {
-    text: `SELECT * FROM opportunities 
+    text: `SELECT * FROM opportunity 
            WHERE active = true`,
     values: [],
   };
@@ -27,7 +27,7 @@ const pool = new Pool();
  */
  exports.getJoinedOpportunities = async (profileid) => {
   const query = {
-    text: `SELECT * FROM opportunities 
+    text: `SELECT * FROM opportunity 
            WHERE ($1 = ANY(userparticipants))
            AND active = true`,
     values: [profileid],
@@ -45,7 +45,7 @@ const pool = new Pool();
  */
  exports.getCreatedOpportunities = async (profileid) => {
   const query = {
-    text: `SELECT * FROM opportunities 
+    text: `SELECT * FROM opportunity 
            WHERE usersponsors->>'creator' = $1
            AND active = true`,
     values: [profileid],
@@ -66,7 +66,7 @@ const pool = new Pool();
  exports.getPastOpportunities = async (profileid) => {
   console.log('here ' + profileid);
   const query = {
-    text: `SELECT * FROM opportunities 
+    text: `SELECT * FROM opportunity 
            WHERE (($1 = ANY(userparticipants)) OR usersponsors->>'creator' = $1)
            AND active = false`,
     values: [profileid],
@@ -85,7 +85,7 @@ const pool = new Pool();
  */
  exports.postOpportunity = async (opportunityInfo, newUUID) => {
   const query = {
-    text: `INSERT INTO opportunities 
+    text: `INSERT INTO opportunity 
              (eventid, usersponsors, locationtype, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime, subject, assignedroles) 
              VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16), ($17), ($18), ($19), ($20), ($21), ($22))
              RETURNING eventid`,
@@ -104,7 +104,7 @@ const pool = new Pool();
  */
  exports.getOpportunity = async (opportunityid) => {
   const query = {
-    text: `SELECT * FROM opportunities 
+    text: `SELECT * FROM opportunity 
            WHERE eventid = ($1)
            AND active = true`,
     values: [opportunityid],
@@ -122,7 +122,7 @@ const pool = new Pool();
  */
 exports.deleteOpportunity = async (eventid) => {
   const query = {
-    text: `DELETE FROM opportunities 
+    text: `DELETE FROM opportunity 
           WHERE eventid = $1`,
     values: [eventid],
   };
@@ -138,7 +138,7 @@ exports.deleteOpportunity = async (eventid) => {
  */
  exports.setParticipants = async (userparticipants, role, roleassignment, eventid) => {
   const query = {
-    text: `UPDATE opportunities
+    text: `UPDATE opportunity
     SET userparticipants = $1, assignedroles = jsonb_set(assignedroles::jsonb, ($2::text[]), to_jsonb($3::text[]))
     WHERE eventid = $4`,
     values: [ userparticipants, '{ ' + `${role}` + '}' , roleassignment, eventid],
