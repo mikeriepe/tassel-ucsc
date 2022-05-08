@@ -10,7 +10,7 @@ const pool = new Pool();
  */
  exports.getOrganizationTypes = async () => {
   const query = {
-    text: `SELECT * FROM organizationtypes
+    text: `SELECT * FROM organizationtype
            ORDER BY name ASC`,
   };
 

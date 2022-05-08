@@ -11,7 +11,7 @@ const pool = new Pool();
  */
  exports.getOrganizations = async (type) => {
   const query = {
-    text: `SELECT * FROM organizations
+    text: `SELECT * FROM organization
            WHERE organizationtype = ($1)
            ORDER BY name ASC
            LIMIT 10`,
