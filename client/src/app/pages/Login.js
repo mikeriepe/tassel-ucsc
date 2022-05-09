@@ -122,7 +122,7 @@ export default function TestLogin() {
 
   return (
     <InputContext.Provider value={[values, setValues]}>
-      <Box className='page'>
+      <Box className='page' aria-label='Login form'>
         <Paper className='card' elevation={0} sx={PaperStyling}>
           <div className='card-banner flow-small padding-64'>
             <p className='text-bold text-italic text-white'>Logo.</p>
@@ -157,10 +157,7 @@ export default function TestLogin() {
               active={stepPage === 'forgot2'}
               handleNextPage={(e) => handleNextPage(e)}
             />
-            <ForgotPasswordThree
-              active={stepPage === 'forgot3'}
-              handleNextPage={(e) => handleNextPage(e)}
-            />
+            <ForgotPasswordThree active={stepPage === 'forgot3'} />
           </Box>
         </Paper>
       </Box>
@@ -227,6 +224,7 @@ function LoginForm({active, handleNextPage, login}) {
       <div className='grid-flow-small'>
         <div>
           <ThemedButton
+            aria-label='Login button'
             color={'yellow'}
             variant={'themed'}
             type={'submit'}

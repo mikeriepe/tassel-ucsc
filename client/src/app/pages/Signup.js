@@ -189,7 +189,7 @@ export default function TestSignup() {
 
   return (
     <InputContext.Provider value={[values, setValues]}>
-      <Box className='page'>
+      <Box className='page' aria-label='Signup form'>
         <Paper className='card' elevation={0} sx={PaperStyling}>
           <div className='card-banner flow-small padding-64'>
             <p className='text-bold text-italic text-white'>Logo.</p>
@@ -332,6 +332,7 @@ function SignupStepOne({active, step, handleNextStep}) {
       <div className='grid-flow-small'>
         <div className='flex-flow-small'>
           <ThemedButton
+            aria-label='Next step button'
             color={'yellow'}
             variant={'themed'}
             value={step}
@@ -435,6 +436,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
       <div className='grid-flow-small'>
         <div className='flex-flow-large'>
           <ThemedButton
+            aria-label='Back step button'
             color={'yellow'}
             variant={'cancel'}
             value={step}
@@ -443,6 +445,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
             Back
           </ThemedButton>
           <ThemedButton
+            aria-label='Next step button'
             color={'yellow'}
             variant={'themed'}
             value={step}
@@ -554,6 +557,7 @@ function SignupStepThree({
       <div className='grid-flow-small'>
         <div className='flex-flow-large'>
           <ThemedButton
+            aria-label='Back step button'
             color={'yellow'}
             variant={'cancel'}
             value={step}
@@ -562,6 +566,7 @@ function SignupStepThree({
             Back
           </ThemedButton>
           <ThemedButton
+            aria-label='Signup button'
             color={'yellow'}
             variant={'themed'}
             type={'submit'}
