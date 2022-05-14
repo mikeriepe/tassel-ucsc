@@ -62,13 +62,13 @@ app.use(function (req, res, next) {
 //   User CRUD operations
 //
 //
-app.get('/api/users', userApi.getActiveUsers);
+app.get('/api/users', authApi.check, userApi.getActiveUsers);
 
 app.post('/api/login', userApi.userVerifyPost);
 
-app.post('/api/userDeactivation', userApi.userDeactivate);
+app.post('/api/userDeactivation', authApi.check, userApi.userDeactivate);
 
-app.post('/api/userCreation', userApi.userPost);
+app.post('/api/userCreation', authApi.check, userApi.userPost);
 
 app.get('/api/verifyUserSession', authApi.check, userApi.verifyUserSession);
 
@@ -78,76 +78,76 @@ app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
 //  Profile CRUD operations
 //
 //
-app.get('/api/getActiveProfiles', profileApi.getActiveProfiles);
+app.get('/api/getActiveProfiles', authApi.check, profileApi.getActiveProfiles);
 
-app.post('/api/profileCreation', profileApi.profilePost);
+app.post('/api/profileCreation', authApi.check, profileApi.profilePost);
 
-app.get('/api/getProfile/:userid', profileApi.getProfile);
+app.get('/api/getProfile/:userid', authApi.check, profileApi.getProfile);
 
-app.get('/api/getProfileByProfileId/:profileid', profileApi.getProfileByProfileId);
+app.get('/api/getProfileByProfileId/:profileid', authApi.check, profileApi.getProfileByProfileId);
 
-app.put('/api/updateProfile', profileApi.profileUpdate);
+app.put('/api/updateProfile', authApi.check, profileApi.profileUpdate);
 
-app.get('/api/getProfileName/:profileid', profileApi.profileGetName)
+app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName)
 
 //  Opportunity CRUD operations
 //
 //
-app.get('/api/getOpportunities', opportunityApi.getOpportunities);
+app.get('/api/getOpportunities', authApi.check, opportunityApi.getOpportunities);
 
-app.get('/api/getJoinedOpportunities/:profileid', opportunityApi.getJoinedOpportunities);
+app.get('/api/getJoinedOpportunities/:profileid', authApi.check, opportunityApi.getJoinedOpportunities);
 
-app.get('/api/getCreatedOpportunities/:profileid', opportunityApi.getCreatedOpportunities);
+app.get('/api/getCreatedOpportunities/:profileid', authApi.check, opportunityApi.getCreatedOpportunities);
 
-app.get('/api/getPendingOpportunities/:profileid', opportunityApi.getPendingOpportunities);
+app.get('/api/getPendingOpportunities/:profileid', authApi.check, opportunityApi.getPendingOpportunities);
 
-app.get('/api/getPastOpportunities/:profileid', opportunityApi.getPastOpportunities);
+app.get('/api/getPastOpportunities/:profileid', authApi.check, opportunityApi.getPastOpportunities);
 
-app.post('/api/postOpportunity', opportunityApi.postOpportunity);
+app.post('/api/postOpportunity', authApi.check, opportunityApi.postOpportunity);
 
-app.get('/api/getOpportunity/:opportunityid', opportunityApi.getOpportunity);
+app.get('/api/getOpportunity/:opportunityid', authApi.check, opportunityApi.getOpportunity);
 
-app.delete('/api/deleteOpportunity/:eventid', opportunityApi.deleteOpportunity);
+app.delete('/api/deleteOpportunity/:eventid', authApi.check, opportunityApi.deleteOpportunity);
 
 // Request CRUD operations
 //
 //
-app.get('/api/getUserOutgoingRequests/:profileid', requestApi.getUserOutgoingRequests);
+app.get('/api/getUserOutgoingRequests/:profileid', authApi.check, requestApi.getUserOutgoingRequests);
 
-app.get('/api/getUserIncomingRequests/:profileid', requestApi.getUserIncomingRequests);
+app.get('/api/getUserIncomingRequests/:profileid', authApi.check, requestApi.getUserIncomingRequests);
 
-app.get('/api/getPendingRequest/:profileid/:eventid', requestApi.getPendingRequest);
+app.get('/api/getPendingRequest/:profileid/:eventid', authApi.check, requestApi.getPendingRequest);
 
-app.get('/api/getPendingRequestsReceived/:profileid/:eventid', requestApi.getPendingRequestsReceived);
+app.get('/api/getPendingRequestsReceived/:profileid/:eventid', authApi.check, requestApi.getPendingRequestsReceived);
 
-app.get('/api/getPendingRequestsSent/:profileid/:eventid', requestApi.getPendingRequestsSent);
+app.get('/api/getPendingRequestsSent/:profileid/:eventid', authApi.check, requestApi.getPendingRequestsSent);
 
-app.get('/api/getApprovedRequests/:profileid/:eventid', requestApi.getApprovedRequests);
+app.get('/api/getApprovedRequests/:profileid/:eventid', authApi.check, requestApi.getApprovedRequests);
 
-app.get('/api/getRejectedRequests/:profileid/:eventid', requestApi.getRejectedRequests);
+app.get('/api/getRejectedRequests/:profileid/:eventid', authApi.check, requestApi.getRejectedRequests);
 
-app.post('/api/postRequest', requestApi.postRequest);
+app.post('/api/postRequest', authApi.check, requestApi.postRequest);
 
-app.post('/api/cancelRequest', requestApi.cancelRequest);
+app.post('/api/cancelRequest', authApi.check, requestApi.cancelRequest);
 
-app.post('/api/approveRequest', requestApi.approveRequest);
+app.post('/api/approveRequest', authApi.check, requestApi.approveRequest);
 
-app.post('/api/rejectRequest', requestApi.rejectRequest);
+app.post('/api/rejectRequest', authApi.check, requestApi.rejectRequest);
 
 // OrganizationType CRUD operations
 //
 //
-app.get('/api/getOrganizationTypes', organizationTypeApi.getOrganizationTypes);
+app.get('/api/getOrganizationTypes', authApi.check, organizationTypeApi.getOrganizationTypes);
 
 // Organizations CRUD operations
 //
 //
-app.get('/api/getOrganizations/:type', organizationApi.getOrganizations);
+app.get('/api/getOrganizations/:type', authApi.check, organizationApi.getOrganizations);
 
 // OpportunityType CRUD operations
 //
 //
-app.get('/api/getOpportunityTypes', opportunityTypeApi.getOpportunityTypes);
+app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportunityTypes);
 
 //  Preferences CRUD operations
 //
