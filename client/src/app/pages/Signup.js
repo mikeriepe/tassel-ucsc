@@ -204,12 +204,7 @@ export default function TestSignup() {
               </p>
             </div>
           </div>
-          <Box
-            className='card-content padding-64'
-            component='form'
-            noValidate
-            autoComplete='on'
-          >
+          <Box className='card-content padding-64'>
             <SignupStepOne
               active={stepNumber === 0}
               step={0}
@@ -488,7 +483,12 @@ function SignupStepThree({
   };
 
   return (
-    <div className='flow-large' style={{display: active ? null : 'none'}}>
+    <Box
+      className='flow-large'
+      component='form'
+      noValidate
+      style={{display: active ? null : 'none'}}
+    >
       <div>
         <h2 className='text-normal'>Signup</h2>
         <p className='text-light text-warning'>
@@ -585,7 +585,7 @@ function SignupStepThree({
           </span>
         </p>
       </div>
-    </div>
+    </Box>
   );
 }
 
