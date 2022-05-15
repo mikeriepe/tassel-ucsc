@@ -35,7 +35,7 @@ const InputLabelStyling = {
  * Creates login page
  * @return {HTML} login page
  */
-export default function TestLogin() {
+export default function Login() {
   const navigate = useNavigate();
   const {user, setUser, setLoggedIn, setUserProfile} = useAuth();
 

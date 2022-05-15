@@ -60,7 +60,7 @@ const StepperStyling = {
  * Creates signup page
  * @return {HTML} signup page
  */
-export default function TestSignup() {
+export default function Signup() {
   const [stepNumber, setStepNumber] = useState(0);
   const [createdProfileData, setCreatedProfileData] = useState(null);
   const [values, setValues] = useState({
