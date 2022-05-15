@@ -65,38 +65,43 @@ export default function ThemedInput({
 
   return (
     <>
-      <OutlinedInput
-        placeholder={placeholder}
-        type={type}
-        value={values[index]}
-        onChange={handleChange}
-        autoComplete={fill}
-        error={error}
-        sx={{...inputStyling, display: type === 'text' ? null : 'none'}}
-      />
-      <OutlinedInput
-        placeholder={placeholder}
-        type={showPassword ? 'text' : 'password'}
-        value={values[index]}
-        onChange={handleChange}
-        error={error}
-        endAdornment={
-          <InputAdornment position='end'>
-            <IconButton
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge='end'
-              disableRipple
-            >
-              {showPassword ?
-                <VisibilityOff sx={visibilityStyling} /> :
-                <Visibility sx={visibilityStyling} />
-              }
-            </IconButton>
-          </InputAdornment>
-        }
-        sx={{...inputStyling, display: type === 'password' ? null : 'none'}}
-      />
+      {type === 'text' ? (
+        <OutlinedInput
+          inputProps={{'aria-label': 'Input text'}}
+          placeholder={placeholder}
+          type={type}
+          value={values[index]}
+          onChange={handleChange}
+          autoComplete={fill}
+          error={error}
+          sx={inputStyling}
+        />
+      ) : (
+        <OutlinedInput
+          inputProps={{'aria-label': 'Input password'}}
+          placeholder={placeholder}
+          type={showPassword ? 'text' : 'password'}
+          value={values[index]}
+          onChange={handleChange}
+          error={error}
+          endAdornment={
+            <InputAdornment position='end'>
+              <IconButton
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge='end'
+                disableRipple
+              >
+                {showPassword ?
+                  <VisibilityOff sx={visibilityStyling} /> :
+                  <Visibility sx={visibilityStyling} />
+                }
+              </IconButton>
+            </InputAdornment>
+          }
+          sx={inputStyling}
+        />
+      )}
     </>
   );
 }

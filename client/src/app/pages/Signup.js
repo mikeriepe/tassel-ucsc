@@ -60,7 +60,7 @@ const StepperStyling = {
  * Creates signup page
  * @return {HTML} signup page
  */
-export default function TestSignup() {
+export default function Signup() {
   const [stepNumber, setStepNumber] = useState(0);
   const [createdProfileData, setCreatedProfileData] = useState(null);
   const [values, setValues] = useState({
@@ -189,7 +189,7 @@ export default function TestSignup() {
 
   return (
     <InputContext.Provider value={[values, setValues]}>
-      <Box className='page'>
+      <Box className='page' aria-label='Signup form'>
         <Paper className='card' elevation={0} sx={PaperStyling}>
           <div className='card-banner flow-small padding-64'>
             <p className='text-bold text-italic text-white'>Logo.</p>
@@ -204,12 +204,7 @@ export default function TestSignup() {
               </p>
             </div>
           </div>
-          <Box
-            className='card-content padding-64'
-            component='form'
-            noValidate
-            autoComplete='on'
-          >
+          <Box className='card-content padding-64'>
             <SignupStepOne
               active={stepNumber === 0}
               step={0}
@@ -332,6 +327,7 @@ function SignupStepOne({active, step, handleNextStep}) {
       <div className='grid-flow-small'>
         <div className='flex-flow-small'>
           <ThemedButton
+            aria-label='Next step button'
             color={'yellow'}
             variant={'themed'}
             value={step}
@@ -435,6 +431,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
       <div className='grid-flow-small'>
         <div className='flex-flow-large'>
           <ThemedButton
+            aria-label='Back step button'
             color={'yellow'}
             variant={'cancel'}
             value={step}
@@ -443,6 +440,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
             Back
           </ThemedButton>
           <ThemedButton
+            aria-label='Next step button'
             color={'yellow'}
             variant={'themed'}
             value={step}
@@ -485,7 +483,12 @@ function SignupStepThree({
   };
 
   return (
-    <div className='flow-large' style={{display: active ? null : 'none'}}>
+    <Box
+      className='flow-large'
+      component='form'
+      noValidate
+      style={{display: active ? null : 'none'}}
+    >
       <div>
         <h2 className='text-normal'>Signup</h2>
         <p className='text-light text-warning'>
@@ -554,6 +557,7 @@ function SignupStepThree({
       <div className='grid-flow-small'>
         <div className='flex-flow-large'>
           <ThemedButton
+            aria-label='Back step button'
             color={'yellow'}
             variant={'cancel'}
             value={step}
@@ -562,6 +566,7 @@ function SignupStepThree({
             Back
           </ThemedButton>
           <ThemedButton
+            aria-label='Signup button'
             color={'yellow'}
             variant={'themed'}
             type={'submit'}
@@ -580,7 +585,7 @@ function SignupStepThree({
           </span>
         </p>
       </div>
-    </div>
+    </Box>
   );
 }
 
