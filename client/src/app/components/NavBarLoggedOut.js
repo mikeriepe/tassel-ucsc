@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import ThemedButton from '../components/ThemedButton';
 import PersonIcon from '@mui/icons-material/Person';
@@ -17,7 +16,6 @@ const drawerWidth = 240;
 export default function NavBarLoggedOut() {
   return (
     <div>
-      <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
