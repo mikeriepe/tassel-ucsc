@@ -88,7 +88,11 @@ app.get('/api/getProfileByProfileId/:profileid', profileApi.getProfileByProfileI
 
 app.put('/api/updateProfile', profileApi.profileUpdate);
 
-app.get('/api/getProfileName/:profileid', profileApi.profileGetName)
+app.get('/api/getProfileName/:profileid', profileApi.profileGetName);
+
+app.get('/api/getProfilesForApproval', profileApi.getProfilesForApproval);
+
+app.post('/api/changeProfileStatus', profileApi.changeProfileStatus);
 
 //  Opportunity CRUD operations
 //

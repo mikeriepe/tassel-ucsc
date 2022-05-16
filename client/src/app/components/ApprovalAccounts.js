@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,8 +10,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
+// import TableFooter from '@mui/material/TableFooter';
+// import TablePagination from '@mui/material/TablePagination';
 import Collapse from '@mui/material/Collapse';
 import Checkbox from '@mui/material/Checkbox';
 import ThemedButton from './ThemedButton';
@@ -18,21 +19,24 @@ import ThemedButton from './ThemedButton';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {profileStatusToText} from '../util/ProfileStatus';
+import CircularProgress from '@mui/material/CircularProgress';
 import '../stylesheets/ApprovalTable.css';
 
 /**
  * row for account table
+ * @param {*} props
  * @return {*} row object
  */
-function Row() {
-  // const { row } = props;
-  const [open, setOpen] = React.useState(false);
+function Row(props) {
+  const {row, handleSelect} = props;
+  const [open, setOpen] = useState(false);
 
   return (
     <React.Fragment>
       <TableRow>
         <TableCell className='data-cell' padding='checkbox'>
-          <Checkbox/>
+          <Checkbox value={row.useremail} onChange={handleSelect}/>
         </TableCell>
         <TableCell className='data-cell' padding='checkbox'>
           <IconButton
@@ -43,19 +47,20 @@ function Row() {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell className='data-cell'>Pending</TableCell>
-        <TableCell className='data-cell' component='th' scope='row'>
-          Colina Guan
+        <TableCell className='data-cell'>
+          {profileStatusToText(row.status)}
         </TableCell>
-        <TableCell className='data-cell'>cobguan@ucsc.edu</TableCell>
-        <TableCell className='data-cell'>2022</TableCell>
-        <TableCell className='data-cell'>2022-03-14 5:22PM</TableCell>
+        <TableCell className='data-cell' component='th' scope='row'>
+          {`${row.firstname} ${row.lastname}`}
+        </TableCell>
+        <TableCell className='data-cell'>{row.useremail}</TableCell>
+        <TableCell className='data-cell'>{row.graduationyear}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={12}>
           <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{margin: 1}}>
-              <Typography variant='h1' gutterBottom={true} component='Paper'>
+              <Typography variant='h1' component='div'>
                 More Information
               </Typography>
             </Box>
@@ -66,29 +71,97 @@ function Row() {
   );
 }
 
-// Row.propTypes = {
-//   row: PropTypes.shape({
-//     calories: PropTypes.number.isRequired,
-//     carbs: PropTypes.number.isRequired,
-//     fat: PropTypes.number.isRequired,
-//     history: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         amount: PropTypes.number.isRequired,
-//         customerId: PropTypes.string.isRequired,
-//         date: PropTypes.string.isRequired,
-//       }),
-//     ).isRequired,
-//     name: PropTypes.string.isRequired,
-//     price: PropTypes.number.isRequired,
-//     protein: PropTypes.number.isRequired,
-//   }).isRequired,
-// };
-
 /**
  * creates account approval content
  * @return {HTML} account approval content
  */
 export default function ApprovalAccounts() {
+  const [accounts, setAccounts] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getAccounts = () => {
+    fetch(`/api/getProfilesForApproval`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setAccounts(json);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving profile, please try again');
+        });
+  };
+
+  const handleSelect = (event) => {
+    const email = event.target.value;
+    const currentIndex = selected.indexOf(email);
+    const newSelected = [...selected];
+
+    if (currentIndex === -1) {
+      newSelected.push(email);
+    } else {
+      newSelected.splice(currentIndex, 1);
+    }
+    setSelected(newSelected);
+  };
+
+  const handleStatusAction = (event) => {
+    console.log(event);
+    let status = 1;
+    switch (event.target.textContent) {
+      case 'Approve':
+        status = 4;
+        break;
+      case 'Request More Info':
+        status = 2;
+        break;
+      case 'Deny':
+        status = 99;
+        break;
+    }
+    const profiles = selected.map((profile) => {
+      const info = accounts.find((account) => account.useremail == profile);
+      info.status = status;
+      return info;
+    });
+    setLoading(true);
+    // eslint-disable-next-line guard-for-in
+    for (let index = 0; index < profiles.length; index++) {
+      const profile = profiles[index];
+      console.log(profile);
+      fetch(`/api/changeProfileStatus`, {
+        method: 'POST',
+        body: JSON.stringify(profile),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res.json();
+          })
+          .then((json) => {
+            console.log(json);
+          })
+          .catch((err) => {
+            console.log(err);
+            alert('Error approving profiles, please try again');
+          });
+    }
+  };
+
+  useEffect(() => {
+    getAccounts();
+  }, [loading]);
+
   // TODO: make more fancy
   // https://mui.com/material-ui/react-table/#sorting-amp-selecting
   const headCells = [
@@ -111,11 +184,6 @@ export default function ApprovalAccounts() {
       id: 'year',
       disablePadding: false,
       label: 'Grad Yr',
-    },
-    {
-      id: 'date',
-      disablePadding: false,
-      label: 'Date Joined',
     },
   ];
 
@@ -141,28 +209,6 @@ export default function ApprovalAccounts() {
               marginRight: '1rem',
             }}
           >
-            {/* <ThemedButton
-              color={'yellow'}
-              variant={'gradient'}
-              type={'submit'}
-              style={{marginRight: '1rem'}}
-            >
-              Approve
-            </ThemedButton>
-            <ThemedButton
-              color={'gray'}
-              variant={'cancel'}
-              type={'submit'}
-            >
-                Deny
-            </ThemedButton>
-            <ThemedButton
-              color={'gray'}
-              variant={'cancel'}
-              type={'submit'}
-            >
-                Request More Info
-            </ThemedButton> */}
             <ThemedButton
               color={'yellow'}
               variant={'gradient'}
@@ -171,6 +217,7 @@ export default function ApprovalAccounts() {
                 fontSize: '0.875rem',
                 marginRight: '.5rem',
               }}
+              onClick={handleStatusAction}
             >
                 Approve
             </ThemedButton>
@@ -182,6 +229,7 @@ export default function ApprovalAccounts() {
                 fontSize: '0.875rem',
                 marginRight: '.5rem',
               }}
+              onClick={handleStatusAction}
             >
                 Request More Info
             </ThemedButton>
@@ -193,60 +241,76 @@ export default function ApprovalAccounts() {
                 fontSize: '0.875rem',
                 marginRight: '.5rem',
               }}
+              onClick={handleStatusAction}
             >
                 Deny
             </ThemedButton>
           </Box>
           <Typography variant='h4'>Search Bar</Typography>
         </Toolbar>
-        <Table
-          style={{
-            backgroundColor: 'white',
-          }}
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell padding='checkbox'>
-                <Checkbox
-                  color='primary'
+        {
+          loading ?
+          <Box sx={{display: 'flex'}} style={{padding: '2rem'}}>
+            <CircularProgress />
+          </Box> :
+          <Table
+            style={{
+              backgroundColor: 'white',
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell padding='checkbox'>
+                  <Checkbox
+                    color='primary'
                   // indeterminate={numSelected > 0 && numSelected < rowCount}
                   // checked={rowCount > 0 && numSelected === rowCount}
                   // onChange={onSelectAllClick}
                   // inputProps={{
                   //   'aria-label': 'select all desserts',
                   // }}
-                />
-              </TableCell>
-              <TableCell padding='checkbox'/>
-              {headCells.map((headCell) => (
-                <TableCell
-                  key={headCell.id}
-                  padding={headCell.disablePadding ? 'none' : 'normal'}
-                  // sortDirection={orderBy === headCell.id ? order : false}
-                  id='table-head-cell'
-                >
-                  <TableSortLabel
+                  />
+                </TableCell>
+                <TableCell padding='checkbox'/>
+                {headCells.map((headCell) => (
+                  <TableCell
+                    key={headCell.id}
+                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    // sortDirection={orderBy === headCell.id ? order : false}
+                    id='table-head-cell'
+                  >
+                    <TableSortLabel
                     // active={orderBy === headCell.id}
                     // direction={orderBy === headCell.id ? order : 'asc'}
                     // onClick={createSortHandler(headCell.id)}
-                  >
-                    {headCell.label}
-                    {/* {orderBy === headCell.id ? (
+                    >
+                      {headCell.label}
+                      {/* {orderBy === headCell.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {order === 'desc' ?
                         'sorted descending' : 'sorted ascending'}
                       </Box>
                     ) : null} */}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <Row/>
-            <Row/>
-          </TableBody>
-          <TableFooter>
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                accounts.map((account) => {
+                  return (
+                    <Row
+                      key={account.useremail}
+                      row={account}
+                      handleSelect={handleSelect}
+                    />
+                  );
+                })
+              }
+            </TableBody>
+            {/* TODO: footer with pagination and number selected */}
+            {/* <TableFooter>
             <div
               style={{
                 position: 'absolute',
@@ -275,8 +339,9 @@ export default function ApprovalAccounts() {
                 // ActionsComponent={TablePaginationActions}
               />
             </TableRow>
-          </TableFooter>
-        </Table>
+          </TableFooter> */}
+          </Table>
+        }
       </Paper>
     </Box>
   );
