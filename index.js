@@ -179,7 +179,7 @@ app.get('*', function (req, res) {
 
 
 const port = process.env.PORT || 3001;
-app.listen(port);
+const server = app.listen(port);
 console.log('App is listening on port ' + port);
 
 /**
@@ -187,4 +187,4 @@ console.log('App is listening on port ' + port);
  * COMMENT THIS FOR PRODUCTION
  * UNCOMMENT THIS FOR TESTING
  */
-module.exports = app
+module.exports = server;
