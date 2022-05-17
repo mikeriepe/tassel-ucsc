@@ -36,6 +36,9 @@ const organizationApi = require('./models/organization_api');
 // OpportunityType API
 const opportunityTypeApi = require('./models/opportunityType_api');
 
+// Post api
+const postApi = require('./models/post_api');
+
 require('dotenv').config();
 
 const app = express();
@@ -73,6 +76,8 @@ app.post('/api/userCreation', authApi.check, userApi.userPost);
 app.get('/api/verifyUserSession', authApi.check, userApi.verifyUserSession);
 
 app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
+
+app.get('/api/getTestingToken', userApi.getTestingToken);
 
 
 //  Profile CRUD operations
@@ -161,14 +166,22 @@ app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportu
 //
 //
 
+// Post CRUD operations
+// 
+// 
+app.post('/api/postPost', authApi.check, postApi.postPost);
+
+app.get('/api/getPost', authApi.check, postApi.getPost);
+
+
 // AUTH test 
 //
 // just returns the JWT token upon authentication success
 app.get('/api/dummy', authApi.check, authApi.dummy);
 
+app.get('/api/verify/:token', authApi.verify); // verifies the jwt token used in the route
 
-// verifies the jwt token used in the route
-app.get('/api/verify/:token', authApi.verify);
+
 
 // redirects any other paths to the client
 app.use(express.static(path.join(__dirname, 'client', 'build')));
