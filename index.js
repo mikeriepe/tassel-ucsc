@@ -39,6 +39,9 @@ const opportunityTypeApi = require('./models/opportunityType_api');
 // Post api
 const postApi = require('./models/post_api');
 
+// Post api
+const commentApi = require('./models/comment_api');
+
 require('dotenv').config();
 
 const app = express();
@@ -173,6 +176,12 @@ app.post('/api/postPost', authApi.check, postApi.postPost);
 
 app.get('/api/getPost', authApi.check, postApi.getPost);
 
+// Comment CRUD operation
+//
+//
+app.post('/api/postComment', authApi.check, commentApi.postComment);
+
+app.get('/api/getComment', authApi.check, commentApi.getComment);
 
 // AUTH test 
 //

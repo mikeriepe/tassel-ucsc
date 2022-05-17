@@ -16,13 +16,12 @@ exports.insertPost = async (data) => {
     };
     const {rows} = await pool.query(query);
     // console.log(rows);
-    return rows[0].postid;
+    return rows[0];
 }
 
 /**
- * Gets all posts for a specific opportunity
+ * Gets all posts for a specific opportunity id
  */
-
 exports.getPost = async (data) => {
     const query = {
         text: `SELECT * FROM post WHERE opportunityid = ($1)`,
