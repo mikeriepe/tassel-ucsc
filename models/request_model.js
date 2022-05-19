@@ -12,7 +12,7 @@ const pool = new Pool();
  exports.getUserOutgoingRequests= async (profileid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE requester = ($1) AND toEvent = true`,
     values: [profileid],
   };
@@ -31,7 +31,7 @@ const pool = new Pool();
  exports.getUserIncomingRequests= async (profileid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE requestee = ($1) AND toEvent = false`,
     values: [profileid],
   };
@@ -51,7 +51,7 @@ const pool = new Pool();
  exports.getPendingRequest = async (profileid, eventid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE requester = ($1) AND opportunityid = ($2) AND requeststatus = ($3)`,
     values: [profileid, eventid, "pending"],
   };
@@ -70,7 +70,7 @@ const pool = new Pool();
  exports.getPendingRequestsReceived = async (profileid, eventid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE requestee = ($1) AND opportunityid = ($2) AND requeststatus = ($3)`,
     values: [profileid, eventid, "pending"],
   };
@@ -90,7 +90,7 @@ const pool = new Pool();
  exports.getPendingRequestsSent = async (profileid, eventid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE requester = ($1) AND opportunityid = ($2) AND requeststatus = ($3)`,
     values: [profileid, eventid, "pending"],
   };
@@ -110,7 +110,7 @@ const pool = new Pool();
  exports.getApprovedRequests = async (profileid, eventid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE (requestee = ($1) OR requester = ($1)) AND opportunityid = ($2) AND requeststatus = ($3)`,
     values: [profileid, eventid, "approved"],
   };
@@ -129,7 +129,7 @@ const pool = new Pool();
  exports.getRejectedRequests = async (profileid, eventid) => {
   const query = {
     text: `SELECT *
-           FROM requests
+           FROM request
            WHERE (requestee = ($1) OR requester = ($1)) AND opportunityid = ($2) AND requeststatus = ($3)`,
     values: [profileid, eventid, "rejected"],
   };
@@ -147,7 +147,7 @@ const pool = new Pool();
  exports.postRequest = async (requestInfo, newUUID) => {
   var currentdate = new Date().toISOString();
   const query = {
-    text: `INSERT INTO requests 
+    text: `INSERT INTO request
              (requestid, requestee, requester, requeststatus, requestdatetime, requestmessage, opportunityid, role) 
              VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8))
              RETURNING requestid`,
@@ -165,7 +165,7 @@ const pool = new Pool();
  */
  exports.cancelRequest = async (requestInfo) => {
   const query = {
-    text: `UPDATE requests
+    text: `UPDATE request
     SET requeststatus = $1
     WHERE requestid = $2`,
     values: ["canceled", requestInfo.requestid],
@@ -182,7 +182,7 @@ const pool = new Pool();
  exports.approveRequest = async (requestInfo) => {
   var currentdate = new Date().toISOString();
   const query = {
-    text: `UPDATE requests
+    text: `UPDATE request
     SET requeststatus = $1, responsedatetime = $2
     WHERE requestid = $3`,
     values: ["approved", currentdate, requestInfo.requestid],
@@ -200,7 +200,7 @@ const pool = new Pool();
  exports.rejectRequest = async (requestInfo) => {
   var currentdate = new Date().toISOString();
   const query = {
-    text: `UPDATE requests
+    text: `UPDATE request
     SET requeststatus = $1, responsedatetime = $2
     WHERE requestid = $3`,
     values: ["rejected", currentdate, requestInfo.requestid],

@@ -12,7 +12,7 @@ const pool = new Pool();
  */
  exports.activateUser = async (useremail) => {
   const query = {
-    text: `UPDATE users
+    text: `UPDATE account
                SET active = $1
                WHERE useremail = $2`,
     values: [true, useremail],
@@ -28,7 +28,7 @@ const pool = new Pool();
 exports.getActiveUsers = async () => {
   const query = {
     text: `SELECT * 
-            FROM users
+            FROM account
             WHERE active = true`,
   };
   const {rows} = await pool.query(query);
@@ -44,7 +44,7 @@ exports.getActiveUsers = async () => {
 exports.getUser = async (email) => {
   const query = {
     text: `SELECT * 
-               FROM users
+               FROM account
                WHERE useremail = $1 AND active = $2`,
     values: [email, true],
   };
@@ -59,7 +59,7 @@ exports.getUser = async (email) => {
  */
 exports.userDeactivate = async (userid) => {
   const query = {
-    text: `UPDATE users
+    text: `UPDATE account
                SET active = $1
                WHERE userid = $2`,
     values: [userid.active, userid.userid],
@@ -76,7 +76,7 @@ exports.userDeactivate = async (userid) => {
  */
 exports.createUser = async (userInfo, newUUID) => {
   const query = {
-    text: `INSERT INTO users 
+    text: `INSERT INTO account 
              (userid, useremail, userpassword, active) 
              VALUES (($1), ($2), ($3), ($4))`,
     values: [newUUID, userInfo.useremail, userInfo.userpassword,
