@@ -21,6 +21,7 @@ import Settings from './pages/Settings';
 import Box from '@mui/material/Box';
 import {DrawerHeader} from './components/NavBarComponents';
 import Verify from './components/Verify';
+import OpportunityCreation from './components/OpportunityCreation';
 
 /**
  * returns basic routes and navbar of app
