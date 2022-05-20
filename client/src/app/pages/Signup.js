@@ -4,12 +4,9 @@ import {toast} from 'react-toastify';
 import {InputContext, useInputContext} from '../components/ThemedInput';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import StepLabel from '@mui/material/StepLabel';
 import ThemedButton from '../components/ThemedButton';
 import ThemedInput from '../components/ThemedInput';
+import ThemedStepper from '../components/ThemedStepper';
 import SignupBanner from '../assets/SignupBanner.png';
 import verifyEmail from '../util/EmailVerification';
 import '../stylesheets/LoginSignup.css';
@@ -21,39 +18,6 @@ const PaperStyling = {
   borderRadius: '10px',
   filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
   color: '#3C4047',
-};
-
-const StepperPaperStyling = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  paddingInline: '30px',
-  width: '40em',
-  height: '4em',
-  borderRadius: '10px',
-  filter: 'drop-shadow(0px 15px 40px rgba(192, 225, 255, 0.1))',
-  color: '#8B95A5',
-};
-
-const StepperStyling = {
-  'width': '100%',
-  '.MuiStepLabel-labelContainer span': {
-    fontFamily: 'Montserrat',
-    fontSize: '0.8rem',
-    fontWeight: '600',
-    color: '#3C4047',
-  },
-  '.MuiStepIcon-text': {
-    fontFamily: 'Montserrat',
-    fontWeight: '700',
-    fill: 'white',
-  },
-  '.MuiStepIcon-root.Mui-active': {
-    color: '#FBC02D',
-  },
-  '.MuiStepIcon-root.Mui-completed': {
-    color: '#FBC02D',
-  },
 };
 
 /**
@@ -232,50 +196,19 @@ export default function Signup() {
             />
           </Box>
         </Paper>
-        <SignupStepper
+        <ThemedStepper
+          steps={['Name', 'School', 'Email', 'Verification']}
           stepNumber={stepNumber}
           handleNextStep={(e) => handleNextStep(e)}
-          values={values}
-          checkValues={checkValues}
+          nonLinear={true}
+          width={'40em'}
+          signupData={{
+            values: values,
+            checkValues: checkValues,
+          }}
         />
       </Box>
     </InputContext.Provider>
-  );
-}
-
-/**
- * Stepper for signup
- * @return {JSX}
- */
-function SignupStepper({stepNumber, handleNextStep, values, checkValues}) {
-  const steps = ['Name', 'School', 'Email', 'Verification'];
-
-  return (
-    <Paper className='stepper' elevation={0} sx={StepperPaperStyling}>
-      <Box sx={StepperStyling}>
-        <Stepper nonLinear activeStep={stepNumber}>
-          {steps.map((label, index) => (
-            <Step
-              key={label}
-              completed={
-                (index < 3 && checkValues(values[index])) || stepNumber === 3
-              }
-            >
-              {index < 3 ?
-                <StepButton
-                  color='inherit'
-                  onClick={stepNumber < 3 ? () => handleNextStep(index) : null}
-                  disableRipple
-                >
-                  {label}
-                </StepButton> :
-                <StepLabel>{label}</StepLabel>
-              }
-            </Step>
-          ))}
-        </Stepper>
-      </Box>
-    </Paper>
   );
 }
 
