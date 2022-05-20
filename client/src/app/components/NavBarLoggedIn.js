@@ -54,7 +54,7 @@ export default function NavBarLoggedIn() {
     ['Settings', '/settings', <SettingsIcon key='Settings'/>],
   ];
   // add approvals page if user is admin
-  if (user.isadmin) {
+  if (user && user.isadmin) {
     pages.splice(1, 0, [
       'Approvals',
       '/approvals',
