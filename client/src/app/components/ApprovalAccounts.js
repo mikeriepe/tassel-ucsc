@@ -262,81 +262,79 @@ export default function ApprovalAccounts() {
   ];
 
   return (
-    <Card>
-      <Toolbar
-        style={{
-          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-          padding: '1rem',
-        }}
-      >
-        <Box
-          style={{
-            marginRight: '1rem',
-          }}
-        >
-          <ThemedButton
-            color={'yellow'}
-            variant={'gradient'}
-            type={'submit'}
+    <>
+      <Card style={{padding: '.5rem'}}>
+        <Toolbar>
+          <Box
             style={{
-              fontSize: '0.875rem',
-              marginRight: '.5rem',
+              marginRight: '1rem',
             }}
-            onClick={handleStatusAction}
           >
+            <ThemedButton
+              color={'yellow'}
+              variant={'gradient'}
+              type={'submit'}
+              style={{
+                fontSize: '0.875rem',
+                marginRight: '.5rem',
+              }}
+              onClick={handleStatusAction}
+            >
                 Approve
-          </ThemedButton>
-          <ThemedButton
-            color={'blue'}
-            variant={'themed'}
-            type={'submit'}
-            style={{
-              fontSize: '0.875rem',
-              marginRight: '.5rem',
-            }}
-            onClick={handleDialogOpen}
-          >
+            </ThemedButton>
+            <ThemedButton
+              color={'blue'}
+              variant={'themed'}
+              type={'submit'}
+              style={{
+                fontSize: '0.875rem',
+                marginRight: '.5rem',
+              }}
+              onClick={handleDialogOpen}
+            >
               Request More Info
-          </ThemedButton>
-          <Dialog open={dialogOpen} onClose={handleDialogClose}>
-            <DialogTitle>Request More Info</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
+            </ThemedButton>
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+              <DialogTitle>Request More Info</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
                   Describe what other information you would like to
                   get from the selected users.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Information"
-                type="text"
-                fullWidth
-                variant="standard"
-                onChange={handleRequestInfo}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose}>Cancel</Button>
-              <Button onClick={handleDialogSubmit}>Send Requests</Button>
-            </DialogActions>
-          </Dialog>
-          <ThemedButton
-            color={'gray'}
-            variant={'themed'}
-            type={'submit'}
-            style={{
-              fontSize: '0.875rem',
-              marginRight: '.5rem',
-            }}
-            onClick={handleStatusAction}
-          >
-                Deny
-          </ThemedButton>
-        </Box>
-        <Typography variant='h4'>Search Bar</Typography>
-      </Toolbar>
-      {
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Information"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onChange={handleRequestInfo}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleDialogClose}>Cancel</Button>
+                <Button onClick={handleDialogSubmit}>Send Requests</Button>
+              </DialogActions>
+            </Dialog>
+            <ThemedButton
+              color={'gray'}
+              variant={'themed'}
+              type={'submit'}
+              style={{
+                fontSize: '0.875rem',
+                marginRight: '.5rem',
+              }}
+              onClick={handleStatusAction}
+            >
+            Deny
+            </ThemedButton>
+          </Box>
+          <Typography variant='h4'>Search Bar</Typography>
+        </Toolbar>
+      </Card>
+      <Card>
+        {
           loading ?
           <Box sx={{display: 'flex'}} style={{padding: '2rem'}}>
             <CircularProgress />
@@ -429,7 +427,8 @@ export default function ApprovalAccounts() {
             </TableRow>
           </TableFooter> */}
           </Table>
-      }
-    </Card>
+        }
+      </Card>
+    </>
   );
 }
