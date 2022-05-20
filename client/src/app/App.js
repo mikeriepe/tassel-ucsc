@@ -6,7 +6,7 @@ import NavBarLoggedIn from './components/NavBarLoggedIn';
 import NavBarLoggedOut from './components/NavBarLoggedOut';
 import Landing from './pages/Landing';
 import MyProfile from './pages/MyProfile';
-import Opportunities from './pages/Opportunities';
+// import Opportunities from './pages/Opportunities';
 import Dashboard from './pages/Dashboard';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
@@ -23,6 +23,8 @@ import Browse from './pages/Browse';
 import Settings from './pages/Settings';
 import Box from '@mui/material/Box';
 import {DrawerHeader} from './components/NavBarComponents';
+
+import ViewOpportunity from './pages/ViewOpportunity';
 
 /**
  * returns basic routes and navbar of app
@@ -41,7 +43,7 @@ export default function App() {
           <Route path='/' element={<Landing />}/>
           <Route path='/myprofile' element={<MyProfile />} />
           <Route path='/dashboard' element={<Dashboard/>}/>
-          <Route path='/opportunities' element={<Opportunities/>}/>
+          {/* <Route path='/opportunities' element={<Opportunities/>}/> */}
           <Route path='/opportunity/:opportunityid' element={<Opportunity/>}/>
           <Route path='/profile/:profileid' element={<Profile />} />
           {/* TODO: delete browse page */}
@@ -49,6 +51,7 @@ export default function App() {
           {/* TODO: settings page? */}
           <Route path='/settings' element={<Settings />}/>
 
+          <Route path='/opportunities' element={<ViewOpportunity />}/>
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
           <Route path='/verify/:token' element={<Verify />} />
