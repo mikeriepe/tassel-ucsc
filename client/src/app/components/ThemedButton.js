@@ -132,8 +132,9 @@ export default function ThemedButton({
         `linear-gradient(to right, ${gray.light}, ${gray.dark})` :
         `linear-gradient(to right, ${blue.light}, ${blue.dark})`,
     '&:hover': {
-      backgroundColor:
-        color === 'yellow' ? yellow.dark :
+      background:
+        color === 'yellow' ?
+          `linear-gradient(to right, ${yellow.dark}, ${yellow.dark})` :
         color === 'gray' ? gray.dark :
         blue.dark,
     },

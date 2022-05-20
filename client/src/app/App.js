@@ -8,6 +8,7 @@ import Landing from './pages/Landing';
 import MyProfile from './pages/MyProfile';
 // import Opportunities from './pages/Opportunities';
 import Dashboard from './pages/Dashboard';
+import Approvals from './pages/Approvals';
 import Opportunity from './pages/Opportunity';
 import Profile from './components/Profile';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,6 +44,7 @@ export default function App() {
           <Route path='/' element={<Landing />}/>
           <Route path='/myprofile' element={<MyProfile />} />
           <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/approvals' element={<Approvals/>}/>
           {/* <Route path='/opportunities' element={<Opportunities/>}/> */}
           <Route path='/opportunity/:opportunityid' element={<Opportunity/>}/>
           <Route path='/profile/:profileid' element={<Profile />} />

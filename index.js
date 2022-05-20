@@ -88,7 +88,13 @@ app.get('/api/getProfileByProfileId/:profileid', authApi.check, profileApi.getPr
 
 app.put('/api/updateProfile', authApi.check, profileApi.profileUpdate);
 
-app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName)
+app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName);
+
+app.get('/api/getProfilesForApproval', authApi.check, profileApi.getProfilesForApproval);
+
+app.post('/api/changeProfileStatus', authApi.check, profileApi.changeProfileStatus);
+
+app.post('/api/changeProfileStatusForRequest', authApi.check, profileApi.changeProfileStatusForRequest);
 
 //  Opportunity CRUD operations
 //

@@ -80,7 +80,6 @@ exports.createProfile= async (userid) => {
   return rows[0];
 };
 
-
 /**
  * updateProfile
  *      updates a profile in the database
@@ -127,3 +126,52 @@ exports.updateProfile= async (userProfile) => {
   console.log('profile name = ' + rows[0].firstname + ' ' + rows[0].lastname[0] + '.');
   return rows[0];
 };
+
+/**
+ * getProfilesForApproval
+ * gets profile data for account approval
+ * @returns {*} profiles
+ */
+ exports.getProfilesForApproval = async () => {
+  const query = {
+    text: `SELECT a.useremail, p.firstname, p.lastname,
+            p.profilepicture, p.graduationyear, p.status,
+            p.requestinfo, p.requestresponse
+            FROM profile AS p
+            LEFT JOIN account AS a
+            ON p.userid = a.userid
+            WHERE p.userid IN
+              (SELECT userid FROM account)`,
+  };
+  console.log('query');
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+}
+
+exports.changeProfileStatus = async (status, useremail) => {
+  const query = {
+    text: `UPDATE profile
+           SET status = ($1)
+           WHERE userid = 
+             (SELECT userid FROM account WHERE useremail = ($2))`,
+    values: [status, useremail],
+  };
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+}
+
+exports.changeProfileStatusForRequest = async (status, request, useremail) => {
+  console.log(status);
+  const query = {
+    text: `UPDATE profile
+           SET status = ($1), requestinfo = ($2)
+           WHERE userid = 
+             (SELECT userid FROM account WHERE useremail = ($3))`,
+    values: [status, request, useremail],
+  };
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+}
