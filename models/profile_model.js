@@ -135,7 +135,8 @@ exports.updateProfile= async (userProfile) => {
  exports.getProfilesForApproval = async () => {
   const query = {
     text: `SELECT a.useremail, p.firstname, p.lastname,
-            p.profilepicture, p.graduationyear, p.status
+            p.profilepicture, p.graduationyear, p.status,
+            p.requestinfo, p.requestresponse
             FROM profile AS p
             LEFT JOIN account AS a
             ON p.userid = a.userid
@@ -155,6 +156,20 @@ exports.changeProfileStatus = async (status, useremail) => {
            WHERE userid = 
              (SELECT userid FROM account WHERE useremail = ($2))`,
     values: [status, useremail],
+  };
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+}
+
+exports.changeProfileStatusForRequest = async (status, request, useremail) => {
+  console.log(status);
+  const query = {
+    text: `UPDATE profile
+           SET status = ($1), requestinfo = ($2)
+           WHERE userid = 
+             (SELECT userid FROM account WHERE useremail = ($3))`,
+    values: [status, request, useremail],
   };
   const {rows} = await pool.query(query);
   console.log(rows);

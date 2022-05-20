@@ -102,3 +102,10 @@ exports.changeProfileStatus = async (req, res) => {
   const profile = await profileModel.changeProfileStatus(status, useremail);
   res.status(200).send(profile);
 }
+
+exports.changeProfileStatusForRequest = async (req, res) => {
+  const {useremail, status, requestinfo} = req.body;
+  const profile = await
+    profileModel.changeProfileStatusForRequest(status, requestinfo, useremail);
+  res.status(200).send(profile);
+}

@@ -94,6 +94,8 @@ app.get('/api/getProfilesForApproval', profileApi.getProfilesForApproval);
 
 app.post('/api/changeProfileStatus', profileApi.changeProfileStatus);
 
+app.post('/api/changeProfileStatusForRequest', profileApi.changeProfileStatusForRequest);
+
 //  Opportunity CRUD operations
 //
 //

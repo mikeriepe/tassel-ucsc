@@ -1,5 +1,12 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +22,6 @@ import TableBody from '@mui/material/TableBody';
 import Collapse from '@mui/material/Collapse';
 import Checkbox from '@mui/material/Checkbox';
 import ThemedButton from './ThemedButton';
-// import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -79,6 +85,59 @@ export default function ApprovalAccounts() {
   const [accounts, setAccounts] = useState([]);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [requestInfo, setRequestInfo] = useState('');
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleRequestInfo = (e) => {
+    setRequestInfo(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const handleDialogSubmit = () => {
+    console.log(requestInfo);
+    const status = 2;
+    const profiles = selected.map((profile) => {
+      const info = accounts.find((account) => account.useremail == profile);
+      info.status = status;
+      info.requestinfo = requestInfo;
+      console.log(info);
+      return info;
+    });
+    setLoading(true);
+    // eslint-disable-next-line guard-for-in
+    for (let index = 0; index < profiles.length; index++) {
+      const profile = profiles[index];
+      console.log(profile);
+      fetch(`/api/changeProfileStatusForRequest`, {
+        method: 'POST',
+        body: JSON.stringify(profile),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            console.log(res.json());
+            setDialogOpen(false);
+            setRequestInfo('');
+            getAccounts();
+          })
+          .catch((err) => {
+            console.log(err);
+            alert('Error approving profiles, please try again');
+          });
+    }
+  };
 
   const getAccounts = () => {
     fetch(`/api/getProfilesForApproval`)
@@ -146,10 +205,8 @@ export default function ApprovalAccounts() {
             if (!res.ok) {
               throw res;
             }
-            return res.json();
-          })
-          .then((json) => {
-            console.log(json);
+            console.log(res.json());
+            getAccounts();
           })
           .catch((err) => {
             console.log(err);
@@ -160,7 +217,7 @@ export default function ApprovalAccounts() {
 
   useEffect(() => {
     getAccounts();
-  }, [loading]);
+  }, []);
 
   // TODO: make more fancy
   // https://mui.com/material-ui/react-table/#sorting-amp-selecting
@@ -229,10 +286,33 @@ export default function ApprovalAccounts() {
                 fontSize: '0.875rem',
                 marginRight: '.5rem',
               }}
-              onClick={handleStatusAction}
+              onClick={handleDialogOpen}
             >
-                Request More Info
+              Request More Info
             </ThemedButton>
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+              <DialogTitle>Request More Info</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Describe what other information you would like to
+                  get from the selected users.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Information"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onChange={handleRequestInfo}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleDialogClose}>Cancel</Button>
+                <Button onClick={handleDialogSubmit}>Send Requests</Button>
+              </DialogActions>
+            </Dialog>
             <ThemedButton
               color={'gray'}
               variant={'themed'}
