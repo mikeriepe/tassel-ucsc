@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import MuiPaper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -27,7 +27,24 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {profileStatusToText} from '../util/ProfileStatus';
 import CircularProgress from '@mui/material/CircularProgress';
+import {styled} from '@mui/material/styles';
 import '../stylesheets/ApprovalTable.css';
+
+
+const Card = styled((props) => (
+  <MuiPaper elevation={0} {...props} />
+))(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: '1em',
+  padding: '1.5em 2em 1.5em 2em',
+  height: 'auto',
+  width: 'auto',
+  background: 'white',
+  boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+  border: '0.5px solid rgba(0, 0, 0, 0.15)',
+  borderRadius: '10px',
+}));
 
 /**
  * row for account table
@@ -245,90 +262,81 @@ export default function ApprovalAccounts() {
   ];
 
   return (
-    <Box
-      style={{
-        backgroundColor: '#F8F8Fa',
-        height: '100%',
-        padding: '2rem',
-      }}
-    >
-      <Paper
-        elevation={0}
+    <Card>
+      <Toolbar
+        style={{
+          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+          padding: '1rem',
+        }}
       >
-        <Toolbar
+        <Box
           style={{
-            borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-            padding: '1rem',
+            marginRight: '1rem',
           }}
         >
-          <Box
+          <ThemedButton
+            color={'yellow'}
+            variant={'gradient'}
+            type={'submit'}
             style={{
-              marginRight: '1rem',
+              fontSize: '0.875rem',
+              marginRight: '.5rem',
             }}
+            onClick={handleStatusAction}
           >
-            <ThemedButton
-              color={'yellow'}
-              variant={'gradient'}
-              type={'submit'}
-              style={{
-                fontSize: '0.875rem',
-                marginRight: '.5rem',
-              }}
-              onClick={handleStatusAction}
-            >
                 Approve
-            </ThemedButton>
-            <ThemedButton
-              color={'blue'}
-              variant={'themed'}
-              type={'submit'}
-              style={{
-                fontSize: '0.875rem',
-                marginRight: '.5rem',
-              }}
-              onClick={handleDialogOpen}
-            >
+          </ThemedButton>
+          <ThemedButton
+            color={'blue'}
+            variant={'themed'}
+            type={'submit'}
+            style={{
+              fontSize: '0.875rem',
+              marginRight: '.5rem',
+            }}
+            onClick={handleDialogOpen}
+          >
               Request More Info
-            </ThemedButton>
-            <Dialog open={dialogOpen} onClose={handleDialogClose}>
-              <DialogTitle>Request More Info</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
+          </ThemedButton>
+          <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            <DialogTitle>Request More Info</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
                   Describe what other information you would like to
                   get from the selected users.
-                </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Information"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  onChange={handleRequestInfo}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleDialogClose}>Cancel</Button>
-                <Button onClick={handleDialogSubmit}>Send Requests</Button>
-              </DialogActions>
-            </Dialog>
-            <ThemedButton
-              color={'gray'}
-              variant={'themed'}
-              type={'submit'}
-              style={{
-                fontSize: '0.875rem',
-                marginRight: '.5rem',
-              }}
-              onClick={handleStatusAction}
-            >
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Information"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={handleRequestInfo}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose}>Cancel</Button>
+              <Button onClick={handleDialogSubmit}>Send Requests</Button>
+            </DialogActions>
+          </Dialog>
+          <ThemedButton
+            color={'gray'}
+            variant={'themed'}
+            type={'submit'}
+            style={{
+              fontSize: '0.875rem',
+              marginRight: '.5rem',
+            }}
+            onClick={handleStatusAction}
+          >
                 Deny
-            </ThemedButton>
-          </Box>
-          <Typography variant='h4'>Search Bar</Typography>
-        </Toolbar>
-        {
+          </ThemedButton>
+        </Box>
+        <Typography variant='h4'>Search Bar</Typography>
+      </Toolbar>
+      {
           loading ?
           <Box sx={{display: 'flex'}} style={{padding: '2rem'}}>
             <CircularProgress />
@@ -421,8 +429,7 @@ export default function ApprovalAccounts() {
             </TableRow>
           </TableFooter> */}
           </Table>
-        }
-      </Paper>
-    </Box>
+      }
+    </Card>
   );
 }

@@ -1,8 +1,18 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import MuiBox from '@mui/material/Box';
+import {styled} from '@mui/material/styles';
 import PageHeader from '../components/PageHeader';
 import CompressedTabBar from '../components/CompressedTabBar';
 import ApprovalAccounts from '../components/ApprovalAccounts';
+
+const Page = styled((props) => (
+  <MuiBox {...props} />
+))(() => ({
+  margin: '2em 8em 2em 8em',
+  height: 'auto',
+  width: 'auto',
+  background: 'var(--background-primary)',
+}));
 
 /**
  * creates approvals page
@@ -15,12 +25,15 @@ export default function Approvals() {
     {name: 'Opportunities', component: <p>Hello World</p>},
   ];
   return (
-    <Box className='Approvals'>
-      <PageHeader
-        title='Approvals'
-        subtitle='Approve or reject accounts and opportunities'
-      />
-      <CompressedTabBar data={tabs} tab={tab} setTab={setTab}/>
-    </Box>
+    <Page>
+      <MuiBox>
+        <PageHeader
+          title='Approvals'
+          subtitle='Approve or reject accounts and opportunities'
+          tabs={<CompressedTabBar data={tabs} tab={tab} setTab={setTab}/>}
+        />
+        {tabs[tab].component}
+      </MuiBox>
+    </Page>
   );
 }
