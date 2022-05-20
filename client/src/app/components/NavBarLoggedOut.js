@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import ThemedButton from '../components/ThemedButton';
 import PersonIcon from '@mui/icons-material/Person';
@@ -17,7 +16,6 @@ const drawerWidth = 240;
 export default function NavBarLoggedOut() {
   return (
     <div>
-      <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
@@ -49,6 +47,7 @@ export default function NavBarLoggedOut() {
           <Box sx={{display: {xs: 'none', md: 'flex'}}}>
             <Link to='/login'>
               <ThemedButton
+                aria-label='Login page button'
                 startIcon={<PersonIcon />}
                 color={'gray'}
                 variant={'cancel'}
@@ -59,6 +58,7 @@ export default function NavBarLoggedOut() {
             </Link>
             <Link to='/signup'>
               <ThemedButton
+                aria-label='Signup page button'
                 color={'yellow'}
                 variant={'gradient'}
                 type={'submit'}

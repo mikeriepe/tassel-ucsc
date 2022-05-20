@@ -5,7 +5,6 @@ import {Link, useNavigate, useLocation} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ThemedButton from '../components/ThemedButton';
@@ -120,7 +119,6 @@ export default function NavBarLoggedIn() {
 
   return (
     <div>
-      <CssBaseline />
       {/* top navbar */}
       <AppBar
         position="fixed"
