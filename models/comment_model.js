@@ -26,7 +26,11 @@ const pool = new Pool();
  */
 exports.getComment = async (data) =>{
     const query = {
-        text: `SELECT * FROM comment WHERE postid = ($1)`,
+        text: `SELECT comment.commentid, comment.postid, comment.userid, comment.content, 
+                      profile.major, profile.about, profile.profilepicture, profile.firstname, profile.lastname
+        FROM comment 
+        JOIN profile ON comment.userid = profile.userid
+        WHERE postid = ($1)`,
         values: [data.postid],
     };
     const {rows} = await pool.query(query);

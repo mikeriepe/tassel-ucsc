@@ -24,7 +24,13 @@ exports.insertPost = async (data) => {
  */
 exports.getPost = async (data) => {
     const query = {
-        text: `SELECT * FROM post WHERE opportunityid = ($1)`,
+        text: `
+        SELECT post.postid, post.opportunityid, post.userid, post.content,
+        profile.major, profile.about, profile.profilepicture, profile.firstname, profile.lastname
+        FROM post
+        JOIN profile ON post.userid = profile.userid 
+        WHERE opportunityid = ($1)
+        `,
         values: [data.opportunityid],        
     }
     const {rows} = await pool.query(query);
