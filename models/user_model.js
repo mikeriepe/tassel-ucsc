@@ -18,7 +18,6 @@ const pool = new Pool();
     values: [true, useremail],
   };
   const rows = await pool.query(query);
-  console.log(rows);
   return rows;
 };
 

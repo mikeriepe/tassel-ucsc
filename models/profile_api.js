@@ -84,3 +84,28 @@ exports.profileUpdate = async (req, res) => {
   const profile = await profileModel.profileGetName(req.params.profileid);
   res.status(201).send(profile);
 };
+
+/**
+ * getProfilesforApproval:
+ * gets profiles for approval page
+ * @param {*} _ request
+ * @param {*} res response
+ */
+ exports.getProfilesForApproval = async (_, res) => {
+  const profiles = await profileModel.getProfilesForApproval();
+  res.status(200).send(profiles);
+}
+
+exports.changeProfileStatus = async (req, res) => {
+  const {useremail, status} = req.body;
+  // const isapproved = status == 4 ? true : false;
+  const profile = await profileModel.changeProfileStatus(status, useremail);
+  res.status(200).send(profile);
+}
+
+exports.changeProfileStatusForRequest = async (req, res) => {
+  const {useremail, status, requestinfo} = req.body;
+  const profile = await
+    profileModel.changeProfileStatusForRequest(status, requestinfo, useremail);
+  res.status(200).send(profile);
+}

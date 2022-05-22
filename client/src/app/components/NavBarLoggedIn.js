@@ -1,7 +1,7 @@
 import * as React from 'react';
 import useAuth from '../util/AuthContext';
 import {useTheme} from '@mui/material/styles';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -16,10 +16,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import EventIcon from '@mui/icons-material/Event';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Avatar from '@mui/material/Avatar';
@@ -30,6 +32,7 @@ import {
   AppBar,
 } from './NavBarComponents';
 import Notification from './Notification';
+import '../stylesheets/NavBar.css';
 
 /**
  * logged in navbar
@@ -38,16 +41,26 @@ import Notification from './Notification';
  * @return {*} NavBar Component
  */
 export default function NavBarLoggedIn() {
-  const {userProfile, setUser, setLoggedIn, setUserProfile} = useAuth();
+  const {userProfile, user, setUser, setLoggedIn, setUserProfile} = useAuth();
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+
+  // Pages ---------------------------------------------------------------------
 
   const pages = [
     ['Dashboard', '/dashboard', <DashboardIcon key='Dashboard'/>],
     ['Opportunities', '/opportunities', <EventIcon key='Opportunities'/>],
     ['Settings', '/settings', <SettingsIcon key='Settings'/>],
   ];
+  // add approvals page if user is admin
+  if (user && user.isadmin) {
+    pages.splice(1, 0, [
+      'Approvals',
+      '/approvals',
+      <AssignmentTurnedInIcon key='Approvals'/>,
+    ]);
+  }
 
   // Notifications -------------------------------------------------------------
 
@@ -102,6 +115,8 @@ export default function NavBarLoggedIn() {
   };
 
   // NavBar --------------------------------------------------------------------
+  const {pathname} = useLocation();
+
   return (
     <div>
       {/* top navbar */}
@@ -177,8 +192,7 @@ export default function NavBarLoggedIn() {
                 type={'submit'}
                 style={{borderRadius: 30, padding: 10}}
               >
-                {/* TODO: replace with userProfile's first name */}
-                FirstName
+                {userProfile.firstname}
               </ThemedButton>
             </Link>
           </Box>
@@ -219,32 +233,70 @@ export default function NavBarLoggedIn() {
         <Divider />
         {/* main pages */}
         <List>
-          {pages.map((arr, index) => {
+          {pages.map((arr) => {
             const [label, route, icon] = arr;
+            const selected = route === pathname;
             return (
               <Link key={label} to={route}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+                {
+                  open ?
+                  // without tooltip
+                  <ListItem
+                    id={selected ? 'navbar-item-selected' : 'navbar-item'}
+                    button
+                    selected={selected}
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
+                      'minHeight': 48,
+                      'justifyContent': open ? 'initial' : 'center',
+                      'px': 2.5,
                     }}
                   >
-                    {icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={label}
-                    sx={{opacity: open ? 1 : 0}}
-                    style={{fontWeight: 600}}
-                  />
-                </ListItemButton>
+                    <ListItemIcon
+                      id={selected ? 'navbar-icon-selected' : 'navbar-icon'}
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={label}
+                      sx={{opacity: open ? 1 : 0}}
+                      style={{fontWeight: 600}}
+                    />
+                  </ListItem> :
+                  // with tooltip
+                  <Tooltip title={label} placement='right'>
+                    <ListItem
+                      id={selected ? 'navbar-item-selected' : 'navbar-item'}
+                      button
+                      selected={selected}
+                      sx={{
+                        'minHeight': 48,
+                        'justifyContent': open ? 'initial' : 'center',
+                        'px': 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        id={selected ? 'navbar-icon-selected' : 'navbar-icon'}
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : 'auto',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={label}
+                        sx={{opacity: open ? 1 : 0}}
+                        style={{fontWeight: 600}}
+                      />
+                    </ListItem>
+                  </Tooltip>
+                }
               </Link>
             );
           })}

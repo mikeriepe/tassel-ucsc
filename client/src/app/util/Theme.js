@@ -1,10 +1,7 @@
 import {createTheme} from '@mui/material/styles';
-import blue from '@mui/material/colors/blue';
 import red from '@mui/material/colors/red';
-import orange from '@mui/material/colors/orange';
 import yellow from '@mui/material/colors/yellow';
 import green from '@mui/material/colors/green';
-import lightBlue from '@mui/material/colors/lightBlue';
 import grey from '@mui/material/colors/grey';
 
 const theme = createTheme({
@@ -17,23 +14,23 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      lightHover: blue[100],
-      light: blue[300],
-      main: blue[400],
-      dark: blue[500],
+      bright: '#F1FAFF',
+      light: '#DCF2FF',
+      main: '#00C2FF',
+      dark: '#13A5DC',
     },
     secondary: {
-      lightHover: yellow[100],
-      light: yellow[600],
-      main: yellow[700],
+      bright: yellow[100],
+      light: '#FFE03E',
+      main: '#FFBF22',
       dark: yellow[800],
       contrastText: grey[50],
     },
     tertiary: {
-      lightHover: grey[100],
-      light: grey[400],
-      main: grey[500],
-      dark: grey[600],
+      bright: '#F0F0F5',
+      light: '#C0C4CB',
+      main: '#8B95A5',
+      dark: '#3C4047',
     },
     error: {
       light: red[400],
@@ -47,19 +44,13 @@ const theme = createTheme({
       dark: green[600],
       contrastText: grey[50],
     },
-    warning: {
-      light: orange[400],
-      main: orange[500],
-      dark: orange[600],
-      contrastText: grey[50],
-    },
     info: {
-      main: lightBlue[500],
+      main: '#00C2FF',
     },
     text: {
-      primary: grey[600],
-      secondary: grey[500],
-      disabled: grey[400],
+      primary: '#7E8694',
+      secondary: '#7E8694',
+      disabled: '#A4A9AF',
     },
   },
 });
