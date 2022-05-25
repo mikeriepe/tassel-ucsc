@@ -1,22 +1,28 @@
 const app = require("../index");
 const supertest = require("supertest");
 
+afterEach(async() => { 
+    await app.close();
+});
+
 
 it('Testing to see if Jest works', () => {
     expect(1).toBe(1)
 })
 
+
 // Unit test set up example
+// NO AUTHORIZATION, IT WILL RETURN 401
 test("GET users", async () => {
     // Calls the HTTP route
     await supertest(app).get("/api/users")
         // What response code is it supposed to get?
-        .expect(200)
+        .expect(401)
         // What does the actual response code look like?
         .then((response)=>{
             // Does the response.body return with the correct data?
             // Note: response.body is either an array of json objects or a singular json object if successful.
-            expect(response.body[0].active).toBe(true)
+            // expect(response.body[0].active).toBe(true)
         })
 });
 

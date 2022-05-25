@@ -36,8 +36,16 @@ const organizationApi = require('./models/organization_api');
 // OpportunityType API
 const opportunityTypeApi = require('./models/opportunityType_api');
 
+
+// Post api
+const postApi = require('./models/post_api');
+
+// Post api
+const commentApi = require('./models/comment_api');
+
 // Major API
 const majorApi = require('./models/major_api');
+
 
 require('dotenv').config();
 
@@ -76,6 +84,8 @@ app.post('/api/userCreation', authApi.check, userApi.userPost);
 app.get('/api/verifyUserSession', authApi.check, userApi.verifyUserSession);
 
 app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
+
+app.get('/api/getTestingToken', userApi.getTestingToken);
 
 
 //  Profile CRUD operations
@@ -170,16 +180,35 @@ app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportu
 //
 //
 
+
+// Post CRUD operations
+// 
+// 
+app.post('/api/postPost', authApi.check, postApi.postPost);
+
+app.get('/api/getPost', authApi.check, postApi.getPost);
+
+// Comment CRUD operation
+//
+//
+app.post('/api/postComment', authApi.check, commentApi.postComment);
+
+app.get('/api/getComment', authApi.check, commentApi.getComment);
+
 // Major CRUD Operations
 app.get('/api/getAllMajors', authApi.check, majorApi.getAllMajors);
+
 
 // AUTH test 
 //
 // just returns the JWT token upon authentication success
 app.get('/api/dummy', authApi.check, authApi.dummy);
 
-// verifies the jwt token used in the route
-app.get('/api/verify/:token', authApi.verify);
+
+app.get('/api/verify/:token', authApi.verify); // verifies the jwt token used in the route
+
+
+
 
 // redirects any other paths to the client
 app.use(express.static(path.join(__dirname, 'client', 'build')));
@@ -190,7 +219,7 @@ app.get('*', function (req, res) {
 
 
 const port = process.env.PORT || 3001;
-app.listen(port);
+const server = app.listen(port);
 console.log('App is listening on port ' + port);
 
 /**
@@ -198,4 +227,4 @@ console.log('App is listening on port ' + port);
  * COMMENT THIS FOR PRODUCTION
  * UNCOMMENT THIS FOR TESTING
  */
-module.exports = app
+module.exports = server;
