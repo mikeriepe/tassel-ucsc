@@ -104,6 +104,7 @@ exports.userVerifyPost = async (req, res) => {
           userid: user[0].userid,
           useremail: user[0].useremail,
           active: user[0].active,
+          isadmin: user[0].isadmin,
         },
         secrets.accessToken,
         {

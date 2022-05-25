@@ -373,7 +373,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
       </div>
       <div className='grid-flow-large'>
         <div className='grid-flow-small'>
-          <div className='flex-flow-space-between text-bold'>
+          <div className='flex-space-between text-bold'>
             <p>School Email</p>
             <p
               className='text-warning'
@@ -400,7 +400,7 @@ function SignupStepTwo({active, step, handleNextStep, isInputValid}) {
           />
         </div>
         <div className='grid-flow-small'>
-          <div className='flex-flow-space-between text-bold'>
+          <div className='flex-space-between text-bold'>
             <p>
               Year of Graduation <span className='text-warning'>*</span>
             </p>
@@ -497,7 +497,7 @@ function SignupStepThree({
       </div>
       <div className='grid-flow-large'>
         <div className='grid-flow-small'>
-          <div className='flex-flow-space-between text-bold'>
+          <div className='flex-space-between text-bold'>
             <p>
               Email <span className='text-warning'>*</span>
             </p>
@@ -526,7 +526,7 @@ function SignupStepThree({
           />
         </div>
         <div className='grid-flow-small'>
-          <div className='flex-flow-space-between text-bold'>
+          <div className='flex-space-between text-bold'>
             <p>
               Password <span className='text-warning'>*</span>
             </p>

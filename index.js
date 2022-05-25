@@ -36,11 +36,16 @@ const organizationApi = require('./models/organization_api');
 // OpportunityType API
 const opportunityTypeApi = require('./models/opportunityType_api');
 
+
 // Post api
 const postApi = require('./models/post_api');
 
 // Post api
 const commentApi = require('./models/comment_api');
+
+// Major API
+const majorApi = require('./models/major_api');
+
 
 require('dotenv').config();
 
@@ -96,7 +101,13 @@ app.get('/api/getProfileByProfileId/:profileid', authApi.check, profileApi.getPr
 
 app.put('/api/updateProfile', authApi.check, profileApi.profileUpdate);
 
-app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName)
+app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName);
+
+app.get('/api/getProfilesForApproval', authApi.check, profileApi.getProfilesForApproval);
+
+app.post('/api/changeProfileStatus', authApi.check, profileApi.changeProfileStatus);
+
+app.post('/api/changeProfileStatusForRequest', authApi.check, profileApi.changeProfileStatusForRequest);
 
 //  Opportunity CRUD operations
 //
@@ -169,6 +180,7 @@ app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportu
 //
 //
 
+
 // Post CRUD operations
 // 
 // 
@@ -183,12 +195,18 @@ app.post('/api/postComment', authApi.check, commentApi.postComment);
 
 app.get('/api/getComment', authApi.check, commentApi.getComment);
 
+// Major CRUD Operations
+app.get('/api/getAllMajors', authApi.check, majorApi.getAllMajors);
+
+
 // AUTH test 
 //
 // just returns the JWT token upon authentication success
 app.get('/api/dummy', authApi.check, authApi.dummy);
 
+
 app.get('/api/verify/:token', authApi.verify); // verifies the jwt token used in the route
+
 
 
 
