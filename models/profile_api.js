@@ -86,6 +86,18 @@ exports.profileUpdate = async (req, res) => {
 };
 
 /**
+ * GETs a profile status, requestinfo, resquestresponse
+ * retrieves the specified user's status.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.getProfileStatus = async (req, res) => {
+  console.log(req.params.profileid);
+  const profile = await profileModel.getProfileStatus(req.params.profileid);
+  res.status(201).send(profile);
+};
+
+/**
  * getProfilesforApproval:
  * gets profiles for approval page
  * @param {*} _ request
@@ -109,3 +121,12 @@ exports.changeProfileStatusForRequest = async (req, res) => {
     profileModel.changeProfileStatusForRequest(status, requestinfo, useremail);
   res.status(200).send(profile);
 }
+
+exports.changeProfileRequestResponse = async (req, res) => {
+  const {status, response, profileid} = req.body;
+  const profile = await
+    profileModel.changeProfileRequestResponse(status, response, profileid);
+  res.status(200).send(profile);
+}
+
+

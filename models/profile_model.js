@@ -62,6 +62,17 @@ exports.createProfile= async (userid) => {
   return rows[0];
 };
 
+exports.getProfileStatus = async (profileid) => {
+  const query = {
+    text: `SELECT status, requestinfo, requestresponse, profileid FROM profile
+           WHERE profileid = $1`,
+    values: [profileid],
+  };
+  const {rows} = await pool.query(query);
+  console.log('status: ' + rows[0].status);
+  return rows[0];
+}
+
 /**
  * getProfile
  * gets user profile data based on profile id provided
@@ -175,3 +186,17 @@ exports.changeProfileStatusForRequest = async (status, request, useremail) => {
   console.log(rows);
   return rows;
 }
+
+// post requestresponse, update status from 2 to 3
+exports.changeProfileRequestResponse = async (status, response, profileid) => {
+  const query = {
+    text: `UPDATE profile
+           SET status = ($1), requestresponse = ($2)
+           WHERE profileid = ($3)`,
+    values: [status, response, profileid],
+  };
+  const {rows} = await pool.query(query);
+  console.log(rows);
+  return rows;
+}
+
