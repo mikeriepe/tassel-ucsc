@@ -196,7 +196,7 @@ app.post('/api/postComment', authApi.check, commentApi.postComment);
 app.get('/api/getComment', authApi.check, commentApi.getComment);
 
 // Major CRUD Operations
-app.get('/api/getAllMajors', authApi.check, majorApi.getAllMajors);
+app.get('/api/getMajors', authApi.check, majorApi.getMajors);
 
 
 // AUTH test 
