@@ -36,6 +36,9 @@ const organizationApi = require('./models/organization_api');
 // OpportunityType API
 const opportunityTypeApi = require('./models/opportunityType_api');
 
+// Major API
+const majorApi = require('./models/major_api');
+
 require('dotenv').config();
 
 const app = express();
@@ -167,11 +170,13 @@ app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportu
 //
 //
 
+// Major CRUD Operations
+app.get('/api/getAllMajors', authApi.check, majorApi.getAllMajors);
+
 // AUTH test 
 //
 // just returns the JWT token upon authentication success
 app.get('/api/dummy', authApi.check, authApi.dummy);
-
 
 // verifies the jwt token used in the route
 app.get('/api/verify/:token', authApi.verify);
