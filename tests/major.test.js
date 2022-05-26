@@ -28,7 +28,14 @@ test("Obtain a JWT and get all majors from the api", async () => {
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
     .expect(200)
     .then((response) =>{
-        console.log(response.body);
+        // Check if the results contains computer science, the most popular major
+        expect(response.body).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    'majorname' : `Computer Science B.S.`,
+                })
+            ])
+        );
     });
 
 });
