@@ -3,6 +3,8 @@ require('dotenv').config();
 const Pool = require('pg').Pool;
 const pool = new Pool();
 
+const uuid = require('uuid');
+
 /**
  * Get the roles associated with an opportunityid
  * @param {*} data 
@@ -39,7 +41,7 @@ exports.insertRole = async (data) =>{
         text: `INSERT INTO role(opportunityid, tagid, responsibility, isfilled, userid)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING roleid`,
-        values: [data.opportunityid, data.tagid, data.responsibility, data.isfilled, data.userid],
+        values: [data.opportunityid, data.tagid, data.responsibility, data.isfilled, null],
     };
     const {rows} = await pool.query(query);
     return rows;
@@ -51,16 +53,17 @@ exports.insertRole = async (data) =>{
  * {
  *      roleid: <The id of the role>,
  *      userid: <the id of the user who filled the role>,
+ *      isfilled: true or false
  * } 
  */
-exports.updateRoleUserid = async (data) =>{
+exports.updateRoleFill = async (data) =>{
     const query = {
         text: `UPDATE role
-        SET userid = ($2)
+        SET userid = ($2), isfilled = ($3)
         WHERE roleid = ($1)
         RETURNING *
         `,
-        values: [data.roleid, data.userid],
+        values: [data.roleid, data.userid, data.isfilled],
     };
     const {rows} = await pool.query(query);
     return rows;

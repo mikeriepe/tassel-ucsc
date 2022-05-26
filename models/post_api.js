@@ -13,7 +13,7 @@ const postModel = require('./post_model');
  */
 exports.postPost = async (req, res) => {
     // res.status(201).send();
-    console.log(req.body);
+    // console.log(req.body);
     const postid = await postModel.insertPost(req.body);
     res.status(201).send(postid);
 }

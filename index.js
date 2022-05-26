@@ -207,7 +207,9 @@ app.get('/api/getMajors', authApi.check, majorApi.getMajors);
 //
 app.get('/api/getRoles', authApi.check, roleApi.getRoles );
 
+app.post('/api/postRole', authApi.check, roleApi.postRole );
 
+app.put( '/api/updateRoleFill', authApi.check, roleApi.updateRoleFill);
 
 // AUTH
 //
