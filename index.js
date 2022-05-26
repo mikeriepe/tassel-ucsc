@@ -36,7 +36,6 @@ const organizationApi = require('./models/organization_api');
 // OpportunityType API
 const opportunityTypeApi = require('./models/opportunityType_api');
 
-
 // Post api
 const postApi = require('./models/post_api');
 
@@ -45,6 +44,9 @@ const commentApi = require('./models/comment_api');
 
 // Major API
 const majorApi = require('./models/major_api');
+
+// Role API
+const roleApi = require('./models/role_api');
 
 
 require('dotenv').config();
@@ -196,14 +198,21 @@ app.post('/api/postComment', authApi.check, commentApi.postComment);
 app.get('/api/getComment', authApi.check, commentApi.getComment);
 
 // Major CRUD Operations
+//
+//
 app.get('/api/getMajors', authApi.check, majorApi.getMajors);
 
+// Role CRUD operation
+//
+//
+app.get('/api/getRoles', authApi.check, roleApi.getRoles );
 
-// AUTH test 
+
+
+// AUTH
 //
 // just returns the JWT token upon authentication success
 app.get('/api/dummy', authApi.check, authApi.dummy);
-
 
 app.get('/api/verify/:token', authApi.verify); // verifies the jwt token used in the route
 
