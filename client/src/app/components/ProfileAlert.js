@@ -8,7 +8,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CheckIcon from '@mui/icons-material/Check';
+import WarningIcon from '@mui/icons-material/Warning';
 import InfoIcon from '@mui/icons-material/Info';
+import ErrorIcon from '@mui/icons-material/Error';
 import '../stylesheets/MyProfile.css';
 /**
  * creates ProfileAlert
@@ -64,25 +66,46 @@ export default function ProfileAlert({data}) {
   return (
     <div>
       {data.status == 1 &&
-        <Alert severity="success" className="alert-text">
-            Your account is <strong>pending</strong>.
+        <Alert
+          style={{width: '800px', marginTop: '20px'}}
+          severity="warning"
+          icon={<WarningIcon fontSize="inherit" className='icon' />}
+        >
+          <div className='alert-text' color="warning">
+            Your account is <strong>pending</strong>
+          </div>
         </Alert>
       }
+
       {data.status == 99 &&
-        <Alert severity="warning">
-            Your account has been <strong>denied</strong> by an admin.
+        <Alert
+          style={{width: '800px', marginTop: '20px'}}
+          severity="error"
+          icon={<ErrorIcon fontSize="inherit" className='icon' />}
+        >
+          <div className='alert-text' color="error">
+            Your account has been <strong>denied</strong> by an admin
+          </div>
         </Alert>
       }
+
       {data.status == 4 &&
-        <Alert severity="success">
-          You have been <strong>approved</strong> by an admin!
+        <Alert
+          style={{width: '800px', marginTop: '20px'}}
+          severity="success"
+          icon={<CheckIcon fontSize="inherit" className='icon' />}
+        >
+          <div className='alert-text' color="success">
+            You have been <strong>approved</strong> by an admin!
+          </div>
         </Alert>
       }
+
       {data.status == 2 &&
         <Alert
-          style={{width: '800px'}}
+          style={{width: '800px', marginTop: '20px'}}
           severity="info"
-          icon={<InfoIcon fontSize="inherit" className='alert-text' />}
+          icon={<InfoIcon fontSize="inherit" className='icon' />}
           action={
             <Button onClick={handleDialog} color="inherit" size="small">
               <div className='alert-button-text'>Respond</div>
@@ -94,24 +117,18 @@ export default function ProfileAlert({data}) {
           </div>
         </Alert>
       }
+
       {data.status == 3 &&
         <Alert
-          style={{width: '800px'}}
-          icon={<CheckIcon fontSize="inherit" className='alert-text' />}
+          style={{width: '800px', marginTop: '20px'}}
+          icon={<CheckIcon fontSize="inherit" className='icon' />}
           severity="info"
           color="info"
           action={
             <div>
-              {data.status == 2 &&
               <Button onClick={handleViewDialog} color="info" size="small">
                 <div className='alert-button-text'>View</div>
               </Button>
-              }
-              {data.status == 3 &&
-              <Button onClick={handleViewDialog} color="info" size="small">
-                <div className='alert-button-text'></div>
-              </Button>
-              }
             </div>
           }
         >
@@ -129,7 +146,10 @@ export default function ProfileAlert({data}) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            An admin has requested for more info: {data.requestinfo}.
+            <div className='dialog-text'>
+              An admin has requested for more info:
+              <strong> {data.requestinfo}</strong>
+            </div>
           </DialogContentText>
           <TextField
             autoFocus
@@ -157,15 +177,20 @@ export default function ProfileAlert({data}) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {data.requestinfo}:
+            <div className='dialog-text'>{data.requestinfo}:</div>
           </DialogContentText>
           <TextField
             disabled
             value={data.requestresponse}
+            style={{marginTop: '10px'}}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleViewDialogClose}>Cancel</Button>
+          <Button
+            onClick={handleViewDialogClose}
+            className='alert-button-text'>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

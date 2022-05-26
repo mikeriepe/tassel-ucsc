@@ -62,17 +62,6 @@ exports.createProfile= async (userid) => {
   return rows[0];
 };
 
-exports.getProfileStatus = async (profileid) => {
-  const query = {
-    text: `SELECT status, requestinfo, requestresponse, profileid FROM profile
-           WHERE profileid = $1`,
-    values: [profileid],
-  };
-  const {rows} = await pool.query(query);
-  console.log('status: ' + rows[0].status);
-  return rows[0];
-}
-
 /**
  * getProfile
  * gets user profile data based on profile id provided

@@ -86,18 +86,6 @@ exports.profileUpdate = async (req, res) => {
 };
 
 /**
- * GETs a profile status, requestinfo, resquestresponse
- * retrieves the specified user's status.
- * @param {*} req
- * @param {*} res
- */
- exports.getProfileStatus = async (req, res) => {
-  console.log(req.params.profileid);
-  const profile = await profileModel.getProfileStatus(req.params.profileid);
-  res.status(201).send(profile);
-};
-
-/**
  * getProfilesforApproval:
  * gets profiles for approval page
  * @param {*} _ request
