@@ -37,5 +37,14 @@ test("Obtain a JWT and get all majors from the api", async () => {
             ])
         );
     });
-
 });
+
+
+test("No JWT Test, expect 401", async () => {
+
+    // Get all majors, but no jwt
+    await supertest(app).get('/api/getMajors')
+    .expect(401);
+});
+
+

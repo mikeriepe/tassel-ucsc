@@ -1,4 +1,5 @@
 /node_modules
+/coverage
 /client/node_modules
 .DS_Store
 .env
