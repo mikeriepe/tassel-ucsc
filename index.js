@@ -111,6 +111,7 @@ app.post('/api/changeProfileStatus', authApi.check, profileApi.changeProfileStat
 
 app.post('/api/changeProfileStatusForRequest', authApi.check, profileApi.changeProfileStatusForRequest);
 
+app.post('/api/changeProfileRequestResponse', authApi.check, profileApi.changeProfileRequestResponse);
 //  Opportunity CRUD operations
 //
 //

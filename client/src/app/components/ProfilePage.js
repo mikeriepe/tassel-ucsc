@@ -13,7 +13,7 @@ export default function ProfilePage() {
   const params = useParams();
   console.log(params);
   const [profile, setProfile] = React.useState(null);
-
+  
   const getProfile = () => {
     fetch(`/api/getProfile/${params.profileid}`)
         .then((res) => {

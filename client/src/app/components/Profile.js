@@ -8,7 +8,7 @@ import ProfileHeader from '../components/ProfileHeader';
 import ProfileAbout from '../components/ProfileAbout';
 import ProfileWork from '../components/ProfileWork';
 import ProfileVolunteer from '../components/ProfileVolunteer';
-
+import ProfileAlert from '../components/ProfileAlert';
 /**
  * creates Calendar
  * @return {HTML} Calendar component
@@ -19,7 +19,6 @@ export default function Profile() {
   const params = useParams();
   console.log(params);
   const navigate = useNavigate();
-
   const getProfile = () => {
     fetch(`/api/getProfileByProfileId/${params.profileid}`)
         .then((res) => {
@@ -41,9 +40,10 @@ export default function Profile() {
   React.useEffect(() => {
     if (params && params.profileid != null) {
       getProfile();
+      getStatus();
     }
   }, []);
-
+  console.log(status);
   const handleDeactivateAccount = () => {
     fetch(`/api/userDeactivation`, {
       method: 'POST',
@@ -91,6 +91,14 @@ export default function Profile() {
       }}
     >
       {profile == null && userProfile && <>
+        {userProfile && <ProfileAlert
+          data={{
+            'profileid': userProfile.profileid,
+            'status': userProfile.status,
+            'requestinfo': userProfile.requestinfo,
+            'requestresponse': userProfile.requestresponse,
+          }}
+        />}
         {userProfile && <ProfileHeader
           data={userProfile} />}
         {!userProfile && <ProfileHeader
