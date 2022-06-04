@@ -20,7 +20,7 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getJoinedOpportunities = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const opportunities = await opportunityModel.getJoinedOpportunities(req.params.profileid);
   res.status(201).send(opportunities);
 };
@@ -32,7 +32,7 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getCreatedOpportunities = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const opportunities = await opportunityModel.getCreatedOpportunities(req.params.profileid);
   res.status(201).send(opportunities);
 };
@@ -44,14 +44,14 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getPendingOpportunities = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
   const pendingOpps = [];
   for (let index = 0; index < requests.length; index++) {
     const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
     pendingOpps.push(opportunity);
   }
-  console.log(pendingOpps);
+  // console.log(pendingOpps);
   res.status(201).send(pendingOpps);
 };
 
@@ -62,7 +62,7 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getPastOpportunities = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const opportunities = await opportunityModel.getPastOpportunities(req.params.profileid);
   res.status(201).send(opportunities);
 };
@@ -74,15 +74,15 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.postOpportunity = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const newUUID = uuid.v4();
   try {
     const opportunityId = await opportunityModel.postOpportunity(req.body, newUUID);
-    console.log(opportunityId);
+    // console.log(opportunityId);
     res.status(201).send(opportunityId);
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).send('error creating opportunity')
   }
   
@@ -95,7 +95,7 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getOpportunity = async (req, res) => {
-  console.log(req.params.opportunityid);
+  // console.log(req.params.opportunityid);
   const opportunity = await opportunityModel.getOpportunity(req.params.opportunityid);
   res.status(201).send(opportunity);
 };
@@ -106,13 +106,13 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.deleteOpportunity = async (req, res) => {
-  console.log(req.params.eventid);
+  // console.log(req.params.eventid);
   try {
     const opportunity = await opportunityModel.deleteOpportunity(req.params.eventid);
     res.status(200).json({message: 'opportunity deleted'});
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).send('error deleting opportunity')
   }
   
