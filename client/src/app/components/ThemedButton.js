@@ -36,6 +36,16 @@ const ButtonTheme = createTheme({
             backgroundColor: 'white',
           },
         },
+        {
+          props: {variant: 'round'},
+          style: {
+            fontFamily: 'Montserrat',
+            fontWeight: '600',
+            textTransform: 'none',
+            boxShadow: 'none',
+            color: 'white',
+          },
+        },
       ],
       defaultProps: {
         disableElevation: true,
@@ -140,6 +150,34 @@ export default function ThemedButton({
     },
   };
 
+  const roundStyling = {
+    'padding': '8px 22px',
+    'fontSize':
+      size === 'small' ? '0.8rem' :
+      size === 'large' ? '1rem' :
+      '0.9375rem',
+    'borderRadius': '20px',
+    'backgroundColor':
+      color === 'yellow' ? yellow.main :
+      color === 'gray' ? gray.main :
+      color === 'blue' ? blue.main :
+      white,
+    'color':
+      color === 'white' ? gray.dark :
+      white,
+    '&:hover': {
+      backgroundColor:
+        color === 'yellow' ? yellow.dark :
+        color === 'gray' ? gray.dark :
+        color === 'blue' ? blue.dark :
+        gray.bright,
+    },
+    '&:disabled': {
+      backgroundColor: '#ebedf0',
+      color: gray.main,
+    },
+  };
+
   return (
     <ThemeProvider theme={ButtonTheme}>
       <Button
@@ -149,6 +187,7 @@ export default function ThemedButton({
           variant === 'themed' ? themedStyling :
           variant === 'cancel' ? cancelStyling :
           variant === 'gradient' ? gradientStyling :
+          variant === 'round' ? roundStyling :
           null
         }
       >

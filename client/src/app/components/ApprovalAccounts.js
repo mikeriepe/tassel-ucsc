@@ -30,13 +30,23 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {styled} from '@mui/material/styles';
 import '../stylesheets/ApprovalTable.css';
 
+const Page = styled((props) => (
+  <Box {...props} />
+))(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1em',
+  height: 'auto',
+  width: 'auto',
+  marginInline: '3em',
+  marginBlock: '1em',
+}));
 
 const Card = styled((props) => (
   <MuiPaper elevation={0} {...props} />
 ))(() => ({
   display: 'flex',
   flexDirection: 'column',
-  marginTop: '1em',
   padding: '1.5em 2em 1.5em 2em',
   height: 'auto',
   width: 'auto',
@@ -262,7 +272,7 @@ export default function ApprovalAccounts() {
   ];
 
   return (
-    <>
+    <Page>
       <Card style={{padding: '.5rem'}}>
         <Toolbar>
           <Box
@@ -429,6 +439,6 @@ export default function ApprovalAccounts() {
           </Table>
         }
       </Card>
-    </>
+    </Page>
   );
 }

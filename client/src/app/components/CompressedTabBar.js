@@ -1,7 +1,6 @@
 // import React, {useState} from 'react';
 import React from 'react';
 import {Tabs, Tab} from '@mui/material';
-import '../stylesheets/MyProfile.css';
 
 /**
  * Creates reusable tab bar
@@ -10,7 +9,7 @@ import '../stylesheets/MyProfile.css';
  * @param {*} setTab function to switch tab
  * @return {HTML} Tab bar component
  */
-export default function CompressedTabBar({data, tab, setTab}) {
+export default function CompressedTabBar({data, tab, setTab, type}) {
   const handleTabs = (_, value) => {
     setTab(value);
   };
@@ -27,11 +26,15 @@ export default function CompressedTabBar({data, tab, setTab}) {
 
   return (
     <div
-      className='tab-container'
       style={{
-        height: '4rem',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '3.5em',
         width: 'auto',
         paddingLeft: '3em',
+        borderBottom: type === 'viewopportunity' ? 0 :
+          '0.5px solid rgba(0, 0, 0, 0.15)',
       }}
     >
       <Tabs
@@ -40,15 +43,16 @@ export default function CompressedTabBar({data, tab, setTab}) {
         indicatorColor='primary'
         sx={{
           '.MuiTabs-indicator': {
-            height: '3.5px',
+            height: '4px',
+            bottom: '4px',
           },
-          'height': '100%',
+          'height': 'auto',
           'width': '100%',
         }}
       >
-        {data.map((object) => (
+        {data.filter(Boolean).map((object) => (
           <Tab
-            key={`tab-${object.name}`}
+            key={`tab-id-${Math.random()}`}
             label={object.name}
             sx={TabStyles}
             disableRipple

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {useState} from 'react';
-import '../stylesheets/Browse.css';
+import '../stylesheets/_OLD_Browse.css';
 import Box from '@mui/material/Box';
-import BrowseFilterDrawer from '../components/BrowseFilterDrawer';
-import TabBar from '../components/TabBar';
-import BrowseOpportunities from '../components/BrowseOpportunities';
-import BrowsePeople from '../components/BrowsePeople';
+import BrowseFilterDrawer from '../components/_OLD_BrowseFilterDrawer';
+import TabBar from '../components/_OLD_TabBar';
+import BrowseOpportunities from '../components/_OLD_BrowseOpportunities';
+import BrowsePeople from '../components/_OLD_BrowsePeople';
 
 // import useAuth from '../util/AuthContext';
 

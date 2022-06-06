@@ -15,7 +15,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CategoryIcon from '@mui/icons-material/Category';
 import SchoolIcon from '@mui/icons-material/School';
-import '../stylesheets/FilterDrawer.css';
+import '../stylesheets/_OLD_FilterDrawer.css';
 
 /**
  * returns drawer with filters for opportunities

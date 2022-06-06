@@ -13,7 +13,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import '../stylesheets/Opportunities.css';
+import '../stylesheets/_OLD_Opportunities.css';
 import useAuth from '../util/AuthContext';
 import ThemedButton from './ThemedButton';
 

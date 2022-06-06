@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {useState} from 'react';
 import Paper from '@mui/material/Paper';
-import '../stylesheets/Opportunities.css';
+import '../stylesheets/_OLD_Opportunities.css';
 import {List, ListItem} from '@mui/material';
-import OpportunityCard from './OpportunityCard';
-import OpportunityCreation from './OpportunityCreation';
+import OpportunityCard from './_OLD_OpportunityCard';
+import OpportunityCreation from './_OLD_OpportunityCreation';
 
 /**
  * creates Profile

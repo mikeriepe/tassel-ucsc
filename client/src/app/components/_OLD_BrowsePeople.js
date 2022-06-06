@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import List from '@mui/material/List';
-import PeopleCard from '../components/PeopleCard';
+import PeopleCard from './_OLD_PeopleCard';
 
 /**
  * returns list of people

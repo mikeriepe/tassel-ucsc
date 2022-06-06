@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import List from '@mui/material/List';
-import OpportunityCard from './OpportunityCard';
+import OpportunityCard from './_OLD_OpportunityCard';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import '../stylesheets/BrowseOpportunities.css';
+import '../stylesheets/_OLD_BrowseOpportunities.css';
 
 /**
  * returns list of opportunities

@@ -13,7 +13,7 @@ import AccessTimeOutlined from '@mui/icons-material/AccessTimeOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import VolunteerActivismOutlined
   from '@mui/icons-material/VolunteerActivismOutlined';
-import '../stylesheets/Opportunities.css';
+import '../stylesheets/_OLD_Opportunities.css';
 import ThemedButton from './ThemedButton';
 
 /**

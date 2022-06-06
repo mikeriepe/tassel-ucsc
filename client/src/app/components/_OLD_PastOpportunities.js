@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import '../stylesheets/Opportunities.css';
+import '../stylesheets/_OLD_Opportunities.css';
 import {List} from '@mui/material';
-import OpportunityCard from './OpportunityCard';
+import OpportunityCard from './_OLD_OpportunityCard';
 
 /**
  * creates Profile

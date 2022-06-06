@@ -1,7 +1,23 @@
 import React, {useContext, createContext, useState, useEffect} from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import MuiBox from '@mui/material/Box';
 
 // initializes context
 const AuthContext = createContext();
+
+const Progress = () => (
+  <MuiBox
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      width: '100vw',
+    }}
+  >
+    <CircularProgress />
+  </MuiBox>
+);
 
 /**
  * component that provides authcontext
@@ -12,8 +28,10 @@ export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
+    setLoading(true);
     fetch(`/api/verifyUserSession`, {
       method: 'GET',
       headers: {
@@ -31,23 +49,31 @@ export function AuthProvider(props) {
           setUser(json.user);
           setLoggedIn(true);
           setUserProfile(json.profile);
+          setLoading(false);
         })
         .catch( () =>{
+          setLoading(false);
           console.log('No JWT Detected');
         });
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{user,
-        setUser,
-        loggedIn,
-        setLoggedIn,
-        userProfile,
-        setUserProfile,
-      }}>
-      {props.children}
-    </AuthContext.Provider>
+    <>
+      {loading ? <Progress /> : (
+        <AuthContext.Provider
+          value={{
+            user,
+            setUser,
+            loggedIn,
+            setLoggedIn,
+            userProfile,
+            setUserProfile,
+          }}
+        >
+          {props.children}
+        </AuthContext.Provider>
+      )}
+    </>
   );
 }
 

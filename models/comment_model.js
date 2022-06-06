@@ -7,14 +7,18 @@ const pool = new Pool();
  * Creates a post and inserts it into the comment table.
  * @param {*} data This data parameter is a json object that requires the following: postid, userid, content.
  */
- exports.insertComment = async (data) => {
+exports.insertComment = async (data) => {
     const query = {
-        text: `INSERT INTO comment(postid, userid, content)
-                VALUES ($1, $2, $3)
-                RETURNING commentid`,
-        values: [data.postid, data.userid, data.content],
+        text: `WITH insertedComment as (
+            INSERT INTO comment(postid, userid, content, createddate)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
+            ) SELECT * FROM insertedComment
+            JOIN profile ON insertedComment.userid = profile.userid
+            `,
+        values: [data.postid, data.userid, data.content, data.createddate],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     // console.log(rows);
     return rows[0];
 }
@@ -24,15 +28,14 @@ const pool = new Pool();
  * @param {*} data 
  *  
  */
-exports.getComment = async (data) =>{
+exports.getComments = async (data) => {
     const query = {
-        text: `SELECT comment.commentid, comment.postid, comment.userid, comment.content, 
-                      profile.major, profile.about, profile.profilepicture, profile.firstname, profile.lastname
+        text: `SELECT *
         FROM comment 
         JOIN profile ON comment.userid = profile.userid
         WHERE postid = ($1)`,
         values: [data.postid],
     };
-    const {rows} = await pool.query(query);
+    const { rows } = await pool.query(query);
     return rows;
 }

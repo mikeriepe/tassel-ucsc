@@ -45,7 +45,7 @@ test("Post post without JWT", async ()=>{
 // just using a opportunity id from the db. REPLACE LATER
 
 // Posting a post with a JWT
-test("Post post without JWT", async ()=>{
+test("Post post with JWT", async ()=>{
     // GET A JWT FIRST
     const logininfo = await supertest(app).post('/api/login')
     .send(loginData)
@@ -62,6 +62,8 @@ test("Post post without JWT", async ()=>{
         'opportunityid' : 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
         'userid' : logininfo.userid,
         'content' : 'THERE IS NO COW LEVEL',
+        'title': 'Instant victory',
+        'createddate': new Date().toISOString(),
     }
     // console.log(data);
 
@@ -71,12 +73,12 @@ test("Post post without JWT", async ()=>{
     .send(data)
     .expect(201)
     .then((response) =>{
-        // console.log(response.body);
+        console.log(response.body);
     });
 });
 
 // Posting a post with a JWT
-test("Post post without JWT 2", async ()=>{
+test("Post post with JWT 2", async ()=>{
     // GET A JWT FIRST
     const logininfo = await supertest(app).post('/api/login')
     .send(loginData)
@@ -93,6 +95,8 @@ test("Post post without JWT 2", async ()=>{
         'opportunityid' : '25949134-7fb4-4bbe-832f-ec63ae54fc03',
         'userid' : logininfo.userid,
         'content' : 'BLACK SHEEP WALL',
+        'title': 'Removal of the fog of war',
+        'createddate': new Date().toISOString(),
     }
     // console.log(data);
 
@@ -107,7 +111,7 @@ test("Post post without JWT 2", async ()=>{
 });
 
 // Posting a post with a JWT
-test("Post post without JWT 3", async ()=>{
+test("Post post with JWT 3", async ()=>{
     // GET A JWT FIRST
     const logininfo = await supertest(app).post('/api/login')
     .send(loginData)
@@ -124,6 +128,8 @@ test("Post post without JWT 3", async ()=>{
         'opportunityid' : 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
         'userid' : logininfo.userid,
         'content' : 'OPERATION CWAL',
+        'title': 'Extra fast unit production',
+        'createddate': new Date().toISOString(),
     }
     // console.log(data);
 
@@ -153,9 +159,10 @@ test("get posts", async() => {
     }
 
     // Call an authenticated get Posts given opportunityid
-    await supertest(app).get('/api/getPost')
+    // console.log(data);
+    
+    await supertest(app).get(`/api/getPosts/${data.opportunityid}`)
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
-    .send(data)
     .expect(200)
     .then((response) =>{
         // console.log(response.body);
@@ -176,6 +183,8 @@ test("insert comment for post and get the comment", async() =>{
             'opportunityid' : 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
             'userid' : logininfo.userid,
             'content' : 'This post should have a comment with it.',
+            'title': 'Post with comment test',
+            'createddate': new Date().toISOString(),
         }
     
         // SET THE JWT COOKIE BEFORE CALLING POSTPOST
@@ -192,6 +201,7 @@ test("insert comment for post and get the comment", async() =>{
             'postid' : postinfo,
             'userid' : logininfo.userid,
             'content' : `Hi, I'm a comment!`,
+            'createddate': new Date().toISOString(),
         }
         
         // Creates a comment for the post that was just created.
@@ -208,7 +218,7 @@ test("insert comment for post and get the comment", async() =>{
         const getCommentData = {
             'postid' : postinfo,
         }
-        await supertest(app).get('/api/getComment')
+        await supertest(app).get(`/api/getComments/${getCommentData.postid}`)
         .set('Cookie', [`accessToken=${logininfo.accessToken}`])
         .send(getCommentData)
         .expect(200)

@@ -11,7 +11,11 @@ const roleModel = require('./role_model');
  * }
  */
 exports.getRoles = async (req, res) => {
-    const roles = await roleModel.getRoles(req.body);
+    const roles = await roleModel.getRoles(
+        {
+            'opportunityid' : req.params.eventid,
+        }
+    );
     res.status(200).send(roles);
 }
 

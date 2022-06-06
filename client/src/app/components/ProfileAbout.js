@@ -1,6 +1,21 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import '../stylesheets/MyProfile.css';
+import React from 'react';
+import {styled} from '@mui/material';
+import MuiPaper from '@mui/material/Paper';
+
+const About = styled((props) => (
+  <MuiPaper elevation={0} {...props} />
+))(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.5em',
+  padding: '2em',
+  height: 'auto',
+  width: '60%',
+  background: 'white',
+  boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+  border: '0.5px solid rgba(0, 0, 0, 0.15)',
+  borderRadius: '10px',
+}));
 
 /**
  * creates Profile
@@ -8,22 +23,9 @@ import '../stylesheets/MyProfile.css';
  */
 export default function ProfileAbout({data}) {
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        marginBottom: '3rem',
-        width: '850px',
-        height: 'auto',
-        boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
-        borderRadius: '10px',
-      }}
-    >
-      <div className='about card-title'>
-        About
-      </div>
-      <div className='about-text-description'>
-        {data}
-      </div>
-    </Paper>
+    <About>
+      <h4 className='text-dark'>About</h4>
+      {data ? <p>{data}</p> : <p>None</p>}
+    </About>
   );
 }

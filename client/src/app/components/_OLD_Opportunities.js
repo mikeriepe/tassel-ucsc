@@ -2,11 +2,11 @@ import * as React from 'react';
 import {useState, useEffect} from 'react';
 
 import useAuth from '../util/AuthContext';
-import CreatedOpportunities from './CreatedOpportunities';
-import JoinedOpportunities from './JoinedOpportunities';
-import PastOpportunities from './PastOpportunities';
-import PendingOpportunities from './PendingOpportunities';
-import '../stylesheets/OpportunityCard.css';
+import CreatedOpportunities from './_OLD_CreatedOpportunities';
+import JoinedOpportunities from './_OLD_JoinedOpportunities';
+import PastOpportunities from './_OLD_PastOpportunities';
+import PendingOpportunities from './_OLD_PendingOpportunities';
+import '../stylesheets/_OLD_OpportunityCard.css';
 
 /**
  * creates Opportunities

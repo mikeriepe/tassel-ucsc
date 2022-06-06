@@ -16,6 +16,22 @@ export default function Landing() {
     });
   };
 
+  // const getTest = () => {
+  //   fetch(`/api/getRoles/c6feb949-9ea4-4a65-9e36-8acc9fac151d`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   }).then((res) => {
+  //     if (!res.ok) {
+  //       throw res;
+  //     }
+  //     return res.json();
+  //   }).then((json) => {
+  //     console.log(json);
+  //   });
+  // };
+
   return (
     <div className='Landing'>
       <div className='title'>
@@ -26,7 +42,7 @@ export default function Landing() {
           onClick={authTest}
           hidden={true}
         >
-          Test Auth
+          Test
         </button>
       </div>
     </div>

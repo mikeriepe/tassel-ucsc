@@ -8,6 +8,7 @@ const postModel = require('./post_model');
  *  opportunityid : "a valid opportunity id"
  *  userid : "a user id, hopefully active"
  *  content: "content to be displayed onto the post"
+ *  title: "A meaningful title"
  * }
  * 
  */
@@ -27,7 +28,12 @@ exports.postPost = async (req, res) => {
  * }
  * 
  */
-exports.getPost = async (req, res) =>{
-    const data = await postModel.getPost(req.body);
+exports.getPosts = async (req, res) =>{
+    // console.log(req);
+    const data = await postModel.getPosts(
+        {
+            'opportunityid': req.params.eventid,
+        }
+    );
     res.status(200).send(data);
 }

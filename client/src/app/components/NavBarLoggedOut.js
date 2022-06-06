@@ -1,49 +1,49 @@
-import * as React from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import ThemedButton from '../components/ThemedButton';
+import ThemedButton from './ThemedButton';
 import PersonIcon from '@mui/icons-material/Person';
-import {AppBar} from './NavBarComponents';
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
+import * as Nav from './NavBarComponents';
 
-const drawerWidth = 240;
+const BrandStyling = {
+  display: 'flex',
+  alignItems: 'center',
+  paddingLeft: 'calc(20px - 8px + 6px - 2px)',
+  width: '100%',
+  cursor: 'pointer',
+};
 
 /**
- * logged out navbar
- * @return {*} NavBar Component
+ * @return {JSX} NavBar Component
  */
 export default function NavBarLoggedOut() {
   return (
-    <div>
-      <AppBar
-        position="fixed"
+    <>
+      <Nav.AppBarLoggedOut
+        position='fixed'
         sx={{
-          background: 'white',
-          borderBottom: '0.5px solid #D1D1D1',
           boxShadow: '0',
-          ml: {sm: `${drawerWidth}px`},
+          borderBottom: '0.5px solid #C0C4CB',
         }}
       >
-        <Toolbar>
-          {/* header */}
+        <Toolbar className='navbar-height'>
           <Link to='/'>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              color="secondary"
-              style={{
-                fontWeight: 600,
-                fontStyle: 'italic',
-                cursor: 'pointer',
-              }}
-            >
+            <Box sx={BrandStyling}>
+              <StarRoundedIcon
+                className='icon-yellow'
+                sx={{mr: 2, transform: 'scale(1.5)'}}
+              />
+              <h3
+                className='text-italic text-yellow'
+                style={{display: 'block'}}
+              >
                 Tassel
-            </Typography>
+              </h3>
+            </Box>
           </Link>
           <Box sx={{flexGrow: 1}} />
-          {/* icons */}
           <Box sx={{display: {xs: 'none', md: 'flex'}}}>
             <Link to='/login'>
               <ThemedButton
@@ -51,9 +51,8 @@ export default function NavBarLoggedOut() {
                 startIcon={<PersonIcon />}
                 color={'gray'}
                 variant={'cancel'}
-                type={'submit'}
               >
-                  Login
+                Login
               </ThemedButton>
             </Link>
             <Link to='/signup'>
@@ -61,15 +60,14 @@ export default function NavBarLoggedOut() {
                 aria-label='Signup page button'
                 color={'yellow'}
                 variant={'gradient'}
-                type={'submit'}
                 style={{marginLeft: '1rem'}}
               >
-                  Join Now
+                Join Now
               </ThemedButton>
             </Link>
           </Box>
         </Toolbar>
-      </AppBar>
-    </div>
+      </Nav.AppBarLoggedOut>
+    </>
   );
 }

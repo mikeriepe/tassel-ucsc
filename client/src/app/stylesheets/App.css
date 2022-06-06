@@ -48,6 +48,7 @@ h1,
 h2,
 h3,
 h4,
+h5,
 p,
 figure,
 blockquote,
@@ -103,6 +104,10 @@ a, a:hover, a:focus, a:active {
 
 .flow-large > :where(:not(:first-child)) {
   margin-top: var(--flow-large-spacer, 2.5em);
+}
+
+.flow-medium > :where(:not(:first-child)) {
+  margin-top: var(--flow-small-spacer, 1.5em);
 }
 
 .flow-small > :where(:not(:first-child)) {
@@ -181,10 +186,6 @@ a, a:hover, a:focus, a:active {
   justify-content: flex-end;
 }
 
-.width-300-pixels {
-  width: 300px;
-}
-
 /* Utility */
 
 .text-center {
@@ -212,7 +213,7 @@ a, a:hover, a:focus, a:active {
 }
 
 .text-xbold {
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .text-italic {
@@ -223,28 +224,66 @@ a, a:hover, a:focus, a:active {
   color: var(--text-dark);
 }
 
+.text-white {
+  color: var(--text-white);
+}
+
 .text-gray {
   color: var(--text-gray);
 }
 
-.text-white {
-  color: var(--text-white);
+.text-disabled {
+  color: var(--text-disabled);
 }
 
 .text-blue {
   color: var(--primary-blue-main);
 }
 
+.text-yellow {
+  color: var(--secondary-yellow-main);
+}
+
 .text-warning {
   color: var(--error-red-main);
+}
+
+.text-lineheight-16 {
+  line-height: 1rem;
+}
+
+.text-lineheight-20 {
+  line-height: 1.25rem;
 }
 
 .text-lineheight-24 {
   line-height: 1.5rem;
 }
 
+.icon-gray {
+  color: var(--tertiary-gray-main);
+}
+
+.icon-blue {
+  color: var(--primary-blue-main);
+}
+
+.icon-yellow {
+  color: var(--secondary-yellow-main);
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .clickable {
   cursor: pointer;
+}
+
+.no-highlight {
+  user-select: none;
 }
 
 .hover-underline:hover {
@@ -253,6 +292,10 @@ a, a:hover, a:focus, a:active {
 
 .hover-highlight:hover {
   background: var(--tertiary-gray-bright);
+}
+
+.navbar-height {
+  height: 70px;
 }
 
 .padding-64 {

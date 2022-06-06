@@ -1,5 +1,21 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
+import {styled} from '@mui/material';
+import MuiPaper from '@mui/material/Paper';
+
+const Work = styled((props) => (
+  <MuiPaper elevation={0} {...props} />
+))(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1.5em',
+  padding: '2em',
+  height: 'auto',
+  width: '60%',
+  background: 'white',
+  boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+  border: '0.5px solid rgba(0, 0, 0, 0.15)',
+  borderRadius: '10px',
+}));
 
 /**
  * creates Profile
@@ -8,36 +24,21 @@ import Paper from '@mui/material/Paper';
 export default function ProfileWork({data}) {
   // console.log(data.job1);
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        marginBottom: '3rem',
-        width: '850px',
-        height: 'auto',
-        boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
-        borderRadius: '10px',
-      }}
-    >
-      <div className='experience card-title'>
-        Work Experience
+    <Work>
+      <h4 className='text-dark'>Work Experience</h4>
+      <div className='flow-medium'>
+        {data ? Object.keys(data).map((job, index) => (
+          <div key={`work-experience-${index}`}>
+            <h5>{data[job].title}</h5>
+            <p className='text-bold text-blue'>{data[job].company}</p>
+            <p>{data[job].location}</p>
+            <p>{data[job].start + ' - ' + data[job].end}</p>
+            <p style={{marginTop: '0.5em'}}>{data[job].description}</p>
+          </div>
+        )) : (
+          <p>None</p>
+        )}
       </div>
-      {data && data.job1 &&
-        <div className='experience-text'>
-          <div className='experience-text-title'>{data.job1.title}</div>
-          <div className='experience-text-company'>
-            {data.job1.company}
-          </div>
-          <div className='experience-text-location'>
-            {data.job1.location}
-          </div>
-          <div className='experience-text-date'>
-            {data.job1.start + ' - ' + data.job1.end}
-          </div>
-          <div className='experience-text-description'>
-            {data.job1.description}
-          </div>
-        </div>
-      }
-    </Paper>
+    </Work>
   );
 }

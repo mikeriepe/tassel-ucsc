@@ -8,7 +8,8 @@ import ApprovalAccounts from '../components/ApprovalAccounts';
 const Page = styled((props) => (
   <MuiBox {...props} />
 ))(() => ({
-  margin: '2em 8em 2em 8em',
+  display: 'flex',
+  flexDirection: 'column',
   height: 'auto',
   width: 'auto',
   background: 'var(--background-primary)',

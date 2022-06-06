@@ -33,15 +33,15 @@ exports.getRoles = async (data) =>{
  *      tagid:valid majorid,
  *      responsibility: A string description of the role,
  *      isfilled: boolean,
- *      userid: userid ONLY IF FILLED,
+ *      rolename: a text,
  * }
  */
 exports.insertRole = async (data) =>{
     const query = {
-        text: `INSERT INTO role(opportunityid, tagid, responsibility, isfilled, userid)
-        VALUES ($1, $2, $3, $4, $5)
+        text: `INSERT INTO role(opportunityid, tagid, responsibility, isfilled, userid, rolename, qualifications)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING roleid`,
-        values: [data.opportunityid, data.tagid, data.responsibility, data.isfilled, null],
+        values: [data.opportunityid, data.tagid, data.responsibility, data.isfilled, null, data.rolename, data.qualifications],
     };
     const {rows} = await pool.query(query);
     return rows;

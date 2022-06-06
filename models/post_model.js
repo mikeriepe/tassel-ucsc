@@ -9,10 +9,18 @@ const pool = new Pool();
  */
 exports.insertPost = async (data) => {
     const query = {
-        text: `INSERT INTO post(opportunityid, userid, content)
-                VALUES ($1, $2, $3)
-                RETURNING postid`,
-        values: [data.opportunityid, data.userid, data.content],
+        // text: `INSERT INTO post(opportunityid, userid, content, title)
+        //         VALUES ($1, $2, $3, $4)
+        //         RETURNING *
+        //         `,
+        text: `WITH insertedPost as (
+            INSERT INTO post(opportunityid, userid, content, title, createddate)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+        ) SELECT * FROM insertedPost
+        JOIN profile ON insertedPost.userid = profile.userid
+        `,
+        values: [data.opportunityid, data.userid, data.content, data.title,data.createddate],
     };
     const {rows} = await pool.query(query);
     // console.log(rows);
@@ -22,11 +30,11 @@ exports.insertPost = async (data) => {
 /**
  * Gets all posts for a specific opportunity id
  */
-exports.getPost = async (data) => {
+exports.getPosts = async (data) => {
+    // console.log(data);
     const query = {
         text: `
-        SELECT post.postid, post.opportunityid, post.userid, post.content,
-        profile.major, profile.about, profile.profilepicture, profile.firstname, profile.lastname
+        SELECT *
         FROM post
         JOIN profile ON post.userid = profile.userid 
         WHERE opportunityid = ($1)

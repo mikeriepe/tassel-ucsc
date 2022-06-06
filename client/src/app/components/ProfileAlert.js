@@ -11,7 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import WarningIcon from '@mui/icons-material/Warning';
 import InfoIcon from '@mui/icons-material/Info';
 import ErrorIcon from '@mui/icons-material/Error';
-import '../stylesheets/MyProfile.css';
+import '../stylesheets/ProfileAlert.css';
 /**
  * creates ProfileAlert
  * @return {HTML} Alert component

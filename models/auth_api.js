@@ -26,7 +26,7 @@ exports.check = (req, res, next) => {
             next();
         });
     } else {
-        console.log("JWT IS INVALID");
+        // console.log("JWT IS INVALID");
         res.sendStatus(401);
     }
 };

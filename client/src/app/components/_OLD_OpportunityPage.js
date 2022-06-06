@@ -3,9 +3,9 @@ import {useParams} from 'react-router-dom';
 import {IconButton} from '@mui/material';
 import {Link} from 'react-router-dom';
 import ArrowBackSharpIcon from '@mui/icons-material/ArrowBackSharp';
-import OpportunityRequests from './OpportunityRequests';
+import OpportunityRequests from './_OLD_OpportunityRequests';
 import OpportunityDetails from './OpportunityDetails';
-import TabBar from './TabBar';
+import TabBar from './_OLD_TabBar';
 
 /**
  * OpportunityPage component

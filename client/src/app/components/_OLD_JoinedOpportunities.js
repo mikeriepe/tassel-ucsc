@@ -1,28 +1,30 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import '../stylesheets/Opportunities.css';
 import {List} from '@mui/material';
-import OpportunityCard from './OpportunityCard';
+import Paper from '@mui/material/Paper';
+import OpportunityCard from './_OLD_OpportunityCard';
+import '../stylesheets/_OLD_Opportunities.css';
 
 /**
  * creates Profile
  * @return {HTML} Profile component
  */
-export default function PendingOpportunities({data}) {
+export default function JoinedOpportunities({data}) {
+  // console.log(data);
+
   return (
     <Paper
-      className='pending-opportunities'
+      className='joined-opportunities'
       elevation={3}
       sx={{
-        marginBottom: '3rem',
+        marginBlock: '3rem',
         width: '850px',
         height: 'auto',
         boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
         borderRadius: '10px',
       }}
     >
-      <div className='pending card-title'>
-        Pending Opportunities
+      <div className='joined card-title'>
+        Joined Opportunities
       </div>
 
       <List
@@ -36,13 +38,12 @@ export default function PendingOpportunities({data}) {
         }}
       >
         {data && data.map((opportunity, index) => (
-          <OpportunityCard data={opportunity} key={index} />
+          <OpportunityCard
+            key={`opportunity-list-item-${index}`}
+            data={opportunity}
+          />
         ))}
       </List>
-
-      {(!data || data.length == 0) && <h2 className='no_results_message'>
-        No Pending Opportunities found
-      </h2>}
     </Paper>
   );
 }

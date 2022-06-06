@@ -1,34 +1,94 @@
-import * as React from 'react';
-import {useLocation} from 'react-router-dom';
-import TabBar from '../components/TabBar';
-import Profile from '../components/Profile';
-import Opportunities from '../components/Opportunities';
-import Calendar from '../components/Calendar';
+import React from 'react';
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {styled} from '@mui/material';
+import Button from '@mui/material/Button';
+import MuiBox from '@mui/material/Box';
+import useAuth from '../util/AuthContext';
+import ProfileAlert from '../components/ProfileAlert';
+import ProfileHeader from '../components/ProfileHeader';
+import ProfileAbout from '../components/ProfileAbout';
+import ProfileWork from '../components/ProfileWork';
+import ProfileVolunteer from '../components/ProfileVolunteer';
+
+const Page = styled((props) => (
+  <MuiBox {...props} />
+))(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '1em',
+  marginBlock: '1em',
+}));
 
 /**
- * creates the profile page
- * @return {HTML} my profile page
+ * creates Calendar
+ * @return {HTML} Calendar component
  */
-export default function MyProfile() {
-  const location = useLocation();
-  const [tab, setTab] = React.useState(0);
+export default function Profile() {
+  const {user, userProfile} = useAuth();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    if (location.state != null) {
-      console.log(location.state);
-      setTab(location.state.tab);
-    }
-  }, [location.key, location.state]);
-
-  const data = [
-    {name: 'Profile', component: <Profile />},
-    {name: 'Opportunities', component: <Opportunities />},
-    {name: 'Calendar', component: <Calendar />},
-  ];
+  const handleDeactivateAccount = () => {
+    fetch(`/api/userDeactivation`, {
+      method: 'POST',
+      body: JSON.stringify({active: false, userid: user.userid}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          console.log(res);
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          toast.success('Deactivation Successful', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setUser({useremail: '',
+            userid: '',
+            active: false});
+          navigate(`/`);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error deactivating account, please try again');
+        });
+  };
 
   return (
-    <div className='MyProfile'>
-      <TabBar data={data} tab={tab} setTab={setTab}/>
-    </div>
+    <Page>
+      {userProfile && (
+        <>
+          <ProfileAlert
+            data={{
+              'profileid': userProfile.profileid,
+              'status': userProfile.status,
+              'requestinfo': userProfile.requestinfo,
+              'requestresponse': userProfile.requestresponse,
+            }}
+          />
+          <ProfileHeader data={userProfile} />
+          <ProfileAbout data={userProfile?.about}/>
+          <ProfileWork data={userProfile?.experience} />
+          <ProfileVolunteer data={userProfile?.volunteeringexperience} />
+          {user && user.userid === userProfile.userid &&
+            <Button onClick={handleDeactivateAccount}>
+              Deactivate Account
+            </Button>
+          }
+        </>
+      )}
+    </Page>
   );
 }

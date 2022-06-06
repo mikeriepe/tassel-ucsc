@@ -23,37 +23,52 @@ export const closedMixin = (theme) => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(9)} + 1px)`,
   },
 });
-
-// COMPONENTS FOR NAVIGATION BAR  ----------------------------------------------
 
 export const DrawerHeader = styled('div')(({theme}) => ({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-end',
+  justifyContent: 'space-between',
   padding: theme.spacing(0, 1),
+  height: '70px',
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
-export const AppBar = styled(MuiAppBar, {
+// COMPONENTS FOR NAVIGATION BAR  ----------------------------------------------
+
+export const AppBarLoggedIn = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({theme, open}) => ({
-  zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  height: '70px',
+  background: 'white',
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
+  ...(!open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${theme.spacing(9)} - 1px)`,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  }),
+}));
+
+export const AppBarLoggedOut = styled(MuiAppBar)(() => ({
+  height: '70px',
+  background: 'white',
 }));
 
 export const Drawer = styled(MuiDrawer, {
@@ -65,11 +80,17 @@ export const Drawer = styled(MuiDrawer, {
   boxSizing: 'border-box',
   ...(open && {
     ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+    '& .MuiDrawer-paper': {
+      ...openedMixin(theme),
+      borderRight: '0.5px solid rgba(0, 0, 0, 0.15)',
+    },
   }),
   ...(!open && {
     ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    '& .MuiDrawer-paper': {
+      ...closedMixin(theme),
+      borderRight: '0.5px solid rgba(0, 0, 0, 0.15)',
+    },
   }),
 }),
 );
