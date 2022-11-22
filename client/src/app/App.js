@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard';
 import Approvals from './pages/Approvals';
 import Opportunities from './pages/Opportunities';
 import Settings from './pages/Settings';
+import UpdateProfile from './pages/UpdateProfile';
 import ViewOpportunity from './pages/ViewOpportunity';
 import ViewProfile from './pages/ViewProfile';
 import Browse from './pages/_OLD_Browse';
@@ -50,6 +51,7 @@ export default function App() {
             element={<ViewOpportunity />}
           />
           <Route path='/profile/:profileid' element={<ViewProfile />} />
+          <Route path='/updateprofile' element={<UpdateProfile />} />
 
           {/* Reimplemented - This is still here for reference */}
           <Route path='/browse' element={<Browse />}/>
