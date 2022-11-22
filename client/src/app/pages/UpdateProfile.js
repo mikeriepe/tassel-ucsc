@@ -37,8 +37,8 @@ export default function UpdateProfile() {
     },
   });
   const updateProfile = () => {
-    fetch(`/api/profileupdate`, {
-      method: 'POST',
+    fetch(`/api/updateProfile`, {
+      method: 'PUT',
       body: JSON.stringify(values[1]),
       headers: {
         'Content-Type': 'application/json',
