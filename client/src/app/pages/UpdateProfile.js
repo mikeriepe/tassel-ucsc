@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import {styled} from '@mui/material';
 import MuiBox from '@mui/material/Box';
 import {toast} from 'react-toastify';
-// import useAuth from '../util/AuthContext';
+import useAuth from '../util/AuthContext';
 import ThemedInput from '../components/ThemedInput';
 import ThemedButton from '../components/ThemedButton';
 import {InputContext} from '../components/ThemedInput';
@@ -25,7 +25,7 @@ const Page = styled((props) => (
  * @return {HTML} Calendar component
  */
 export default function UpdateProfile() {
-  // const {user, userProfile} = useAuth();
+  const {user} = useAuth();
   // const navigate = useNavigate();
 
   const [values, setValues] = useState({
@@ -39,7 +39,7 @@ export default function UpdateProfile() {
   const updateProfile = () => {
     fetch(`/api/updateProfile`, {
       method: 'POST',
-      body: JSON.stringify(values[1]),
+      body: JSON.stringify({userid: user.userid, ...values[1]}),
       headers: {
         'Content-Type': 'application/json',
       },
