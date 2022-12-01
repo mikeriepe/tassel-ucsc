@@ -87,6 +87,7 @@ exports.createProfile= async (userid) => {
  * @param {*} userProfile
  */
 exports.updateProfile= async (userProfile) => {
+  // console.log(userProfile);
   const query = {
     text: `UPDATE profile
           SET userpreference=($1), graduationyear=($2), major=($3),
@@ -104,7 +105,7 @@ exports.updateProfile= async (userProfile) => {
 
   // Returns the newly created profile object's id
   const {rows} = await pool.query(query);
-  console.log(rows[0].profileid);
+  console.log("here" +rows[0]);
   return rows[0].profileid;
 };
 

@@ -99,7 +99,7 @@ app.get('/api/getProfile/:userid', authApi.check, profileApi.getProfile);
 
 app.get('/api/getProfileByProfileId/:profileid', authApi.check, profileApi.getProfileByProfileId);
 
-app.put('/api/updateProfile', authApi.check, profileApi.profileUpdate);
+app.post('/api/updateProfile', authApi.check, profileApi.profileUpdate);
 
 app.get('/api/getProfileName/:profileid', authApi.check, profileApi.profileGetName);
 

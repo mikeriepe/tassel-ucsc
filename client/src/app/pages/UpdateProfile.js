@@ -37,7 +37,7 @@ export default function UpdateProfile() {
     },
   });
   const updateProfile = () => {
-    fetch(`/api/profileupdate`, {
+    fetch(`/api/updateProfile`, {
       method: 'POST',
       body: JSON.stringify(values[1]),
       headers: {
@@ -49,8 +49,7 @@ export default function UpdateProfile() {
             throw res;
           }
           return res.json();
-        });
-    toast.success('Account updated', {
+        }); toast.success('Account updated', {
       position: 'top-right',
       autoClose: 5000,
       hideProgressBar: false,
