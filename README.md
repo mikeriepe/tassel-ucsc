@@ -1,7 +1,7 @@
 
 **Tassel Documentation
  Table of Contents
- (Use the pdf version to access the pictures)**
+ (Use the pdf version to access the pictures and for better formatting)**
 
 1. **Setup, Startup, and Deployment**
 1. **Wireframe**
@@ -83,12 +83,12 @@ Input the .env info here ^.
 7. Firebase
 [P2]As a user, I want my account to be secured. (set up authentication with a third party)
 
-	1 . Authentication
-   a. The current authentication is self made and uses JWT(JSON Web Tokens). The goal is to replace the existing authentication with Firebase.
-2 . Notification
-   a. Supposedly, the previous team was still developing the notification system using Firebase
-3 . Connect Firebase with PSQL database ([Firebase PostgreSQL Integration: 2 Easy Methods (hevodata.com)](https://hevodata.com/learn/firebase-postgresql-integration-2-easy-methods/#limitations))(probably won’t need to)
-4 . Try to see if you can use firebase for the recommendation system too, otherwise, use O’reilly recommendation system course.
+- Authentication
+   - The current authentication is self made and uses JWT(JSON Web Tokens). The goal is to replace the existing authentication with Firebase.
+- Notification
+	- Supposedly, the previous team was still developing the notification system using Firebase
+- Connect Firebase with PSQL database ([Firebase PostgreSQL Integration: 2 Easy Methods (hevodata.com)](https://hevodata.com/learn/firebase-postgresql-integration-2-easy-methods/#limitations))(probably won’t need to)
+ - Try to see if you can use firebase for the recommendation system too, otherwise, use O’reilly recommendation system course.
 
 \*Note: Webpack is already in Tassel project. No need to install
 
