@@ -72,15 +72,15 @@ Input the .env info here ^.
 
 **To Be completed:**
 
-1. Admin Accounts [P2]As a website admin, I want to be able to approve or deny opportunities/users.
-1. Opportunity events creation and customization
-
+1. Admin Accounts
+[P2]As a website admin, I want to be able to approve or deny opportunities/users.
+3. Opportunity events creation and customization
 [P2]As a host, I want to be able to create/modify an opportunity
 
-1. Set up edit button for an existing opportunity
-1. Modify existing opportunity data
-1. Display modified opportunity
-3. Firebase
+4. Set up edit button for an existing opportunity
+5. Modify existing opportunity data
+6. Display modified opportunity
+7. Firebase
 [P2]As a user, I want my account to be secured. (set up authentication with a third party)
 
 	1 . Authentication
@@ -158,10 +158,9 @@ Created new documentation and coding practices for future collaboration
 The client code uses React styling which can be found on[ the React website](https://reactjs.org/docs/glossary.html#jsx)
 
 1. Naming
-   a. Use Camel case for variable and function names
+   - Use Camel case for variable and function names
 1. Declaration
-
-	a. Initialize and declare within the same line
+	- Initialize and declare within the same line
 
 int x = 5; // Good
 
@@ -170,31 +169,31 @@ int x; // Bad
 x = 5;
 
 3. Spacing and Alignment
-a. Spaces around operators
-b. Use 2 spaces to indent code
-c. Use a new line for the trailing arguments if line length > 100
-d. Space after //
-e. Space between elements in a list
+	- Spaces around operators
+	- Use 2 spaces to indent code
+	- Use a new line for the trailing arguments if line length > 100
+	- Space after //
+	- Space between elements in a list
 
 const cars = ["Volvo", "Saab", "Fiat"];
 
 4. Complex statements
-a. Put the opening bracket at the end of the first line.
-b. Use one space before the opening bracket.
-c. Put the closing bracket on a new line, without leading spaces.
-d. Do not end a complex statement with a semicolon.
+	- Put the opening bracket at the end of the first line.
+	- Use one space before the opening bracket.
+	- Put the closing bracket on a new line, without leading spaces.
+	- Do not end a complex statement with a semicolon.
 
 function toCelsius(fahrenheit) {
 
 return (5 / 9) \* (fahrenheit - 32); }
 
 5. Object rules
-a. Place the opening bracket on the same line as the object name.
-b. Use colon plus one space between each property and its value.
-c. Use quotes around string values, not around numeric values.
-d. Do not add a comma after the last property-value pair.
-e. Place the closing bracket on a new line, without leading spaces.
-f. Always end an object definition with a semicolon.
+	- Place the opening bracket on the same line as the object name.
+	- Use colon plus one space between each property and its value.
+	- Use quotes around string values, not around numeric values.
+	- Do not add a comma after the last property-value pair.
+	- Place the closing bracket on a new line, without leading spaces.
+	- Always end an object definition with a semicolon.
 
 const person = {
 
