@@ -46,7 +46,10 @@ To login, make sure to make a .env file in the main directory with the contents:
 
 PGPORT = "5432"
 
-PGDATABASE = "ACMatchMaker" PGUSER = "ACmm" PGPASSWORD = "ACmmDev115b!" PORT = 3001
+PGDATABASE = "ACMatchMaker"
+PGUSER = "ACmm"
+PGPASSWORD = "ACmmDev115b!"
+PORT = 3001
 
 **Wireframe [https://www.figma.com/file/gUK7iC6Uhk9grIrrc6oUaJ/AC-Match-Maker-Wireframe?node-i d=0%3A1&t=R4zFFeKqpu41HFs9-1**](https://www.figma.com/file/gUK7iC6Uhk9grIrrc6oUaJ/AC-Match-Maker-Wireframe?node-id=0%3A1&t=R4zFFeKqpu41HFs9-1)**
 
@@ -115,7 +118,8 @@ Input the .env info here ^.
 
 - [Library Access (oreilly.com)](https://www.oreilly.com/library-access/)
 5. Search 
-[P3]As a host, I want to search for volunteers and invite them to my opportunity. [P3] As a volunteer, I want to search for opportunities, and request to join.
+[P3]As a host, I want to search for volunteers and invite them to my opportunity. 
+[P3] As a volunteer, I want to search for opportunities, and request to join.
 6. Collaboration 
 [P4] As a host, I want to be able to co-host with another host for an opportunity.
 8. Send first and last name from the signup page to the profile
