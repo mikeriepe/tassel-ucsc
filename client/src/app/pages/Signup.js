@@ -60,7 +60,12 @@ export default function Signup() {
         .then((json) => {
           fetch(`/api/profileCreation`, {
             method: 'POST',
-            body: JSON.stringify({userid: json.userid}),
+            body: JSON.stringify({
+              userid: json.userid,
+              graduationyear: values[1].graduationyear,
+              firstname: values[0].firstname,
+              lastname: values[0].lastname,
+            }),
             headers: {
               'Content-Type': 'application/json',
             },
