@@ -93,7 +93,7 @@ app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
 //
 app.get('/api/getActiveProfiles', authApi.check, profileApi.getActiveProfiles);
 
-app.post('/api/profileCreation', authApi.check, profileApi.profilePost);
+app.post('/api/profileCreation', profileApi.profilePost);
 
 app.get('/api/getProfile/:userid', authApi.check, profileApi.getProfile);
 

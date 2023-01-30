@@ -7,6 +7,7 @@ import useAuth from '../util/AuthContext';
 import ThemedInput from '../components/ThemedInput';
 import ThemedButton from '../components/ThemedButton';
 import {InputContext} from '../components/ThemedInput';
+import {Link} from 'react-router-dom';
 
 
 const Page = styled((props) => (
@@ -61,7 +62,6 @@ export default function UpdateProfile() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
     updateProfile();
   };
 
@@ -132,14 +132,25 @@ export default function UpdateProfile() {
               </div>
               <div className='grid-flow-small'>
                 <div className='flex-flow-large'>
-                  <ThemedButton
-                    aria-label='Next step button'
-                    color={'yellow'}
-                    variant={'themed'}
-                    onClick={(e) => handleSubmit(e)}
-                  >
-                    Save
-                  </ThemedButton>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'blue'}
+                      variant={'themed'}
+                    >
+                      Back
+                    </ThemedButton>
+                  </Link>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'yellow'}
+                      variant={'themed'}
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Save
+                    </ThemedButton>
+                  </Link>
                 </div>
               </div>
             </div>

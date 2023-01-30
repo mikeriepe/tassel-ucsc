@@ -1,0 +1,33 @@
+{
+	"folders": {},
+	"connections": {
+		"postgres-jdbc-185cbafd68e-cfa7063fcd839a6": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "ACMatchMaker",
+			"save-password": true,
+			"configuration": {
+				"host": "acmatchmaker.c5qxtsrwvddh.us-east-1.rds.amazonaws.com",
+				"port": "5432",
+				"database": "ACMatchMaker",
+				"url": "jdbc:postgresql://acmatchmaker.c5qxtsrwvddh.us-east-1.rds.amazonaws.com:5432/ACMatchMaker",
+				"configurationType": "MANUAL",
+				"home": "postgresql_client",
+				"type": "dev",
+				"provider-properties": {},
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}
