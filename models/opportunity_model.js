@@ -43,6 +43,7 @@ const pool = new Pool();
  * Returns the specified user's created opportunities
  * @param {*} profileid
  */
+/* TODO: Active filter doesn't seem to work */
  exports.getCreatedOpportunities = async (profileid) => {
   const query = {
     text: `SELECT * FROM opportunity 

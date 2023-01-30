@@ -6,6 +6,9 @@ import CompressedTabBar from '../components/CompressedTabBar';
 import OpportunitiesList from '../components/OpportunitiesList';
 import PageHeader from '../components/PageHeader';
 import useAuth from '../util/AuthContext';
+import OpportunityForm from '../components/OpportunityForm';
+import { Button, Modal, Box } from '@mui/material';
+import OpportunityCreation from '../components/_OLD_OpportunityCreation';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -51,6 +54,7 @@ const AddButton = (props) => (
       {...props}
     >
       <AddRoundedIcon
+        onClick={props.onClick}
         sx={{
           height: '20px',
           width: '20px',
@@ -202,6 +206,7 @@ function Opportunities({
   const [locationFilter, setLocationFilter] = useState([]);
   const [oppTypeFilter, setOppTypeFilter] = useState([]);
   const [orgTypeFilter, setOrgTypeFilter] = useState([]);
+  const [showOppForm, setShowOppForm] = useState(false);
 
   const tabs = [
     {
@@ -294,8 +299,16 @@ function Opportunities({
         title='Opportunities'
         subtitle='View and join opportunities'
         tabs={<CompressedTabBar data={tabs} tab={tab} setTab={setTab} />}
-        components={<AddButton />}
+        components={<AddButton onClick={() => setShowOppForm(true)}/>}
       />
+      <Modal
+        open={showOppForm}
+        onBackdropClick={() => setShowOppForm(false)}
+        onClose={() => setShowOppForm(false)}
+      >
+        <OpportunityForm onClose={() => setShowOppForm(!showOppForm)}/>
+        {/* <OpportunityCreation toggle={() => setShowOppForm(!showOppForm)}/> */}
+      </Modal>
       {tabs[tab].component}
     </Page>
   );

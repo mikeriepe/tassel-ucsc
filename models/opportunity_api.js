@@ -47,6 +47,7 @@ const uuid = require('uuid');
   // console.log(req.params.profileid);
   const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
   const pendingOpps = [];
+  /* TODO: Should filter to only requeststatus == 'pending' */
   for (let index = 0; index < requests.length; index++) {
     const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
     pendingOpps.push(opportunity);

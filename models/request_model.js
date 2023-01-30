@@ -9,6 +9,7 @@ const pool = new Pool();
  * Returns the specified profiles requests sent to or from the user that are still active
  * @param {*} profileid
  */
+/* TODO: What is toEvent? */
  exports.getUserOutgoingRequests= async (profileid) => {
   const query = {
     text: `SELECT *

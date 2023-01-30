@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {styled} from '@mui/material';
@@ -27,7 +27,12 @@ const Page = styled((props) => (
  */
 export default function Profile() {
   const {user, userProfile} = useAuth();
+  const [currUserInfo, setCurrUserInfo] = useState(userProfile);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setCurrUserInfo(userProfile);
+  }, [userProfile]);
 
   const handleDeactivateAccount = () => {
     fetch(`/api/userDeactivation`, {
@@ -68,21 +73,21 @@ export default function Profile() {
 
   return (
     <Page>
-      {userProfile && (
+      {currUserInfo && (
         <>
           <ProfileAlert
             data={{
-              'profileid': userProfile.profileid,
-              'status': userProfile.status,
-              'requestinfo': userProfile.requestinfo,
-              'requestresponse': userProfile.requestresponse,
+              'profileid': currUserInfo.profileid,
+              'status': currUserInfo.status,
+              'requestinfo': currUserInfo.requestinfo,
+              'requestresponse': currUserInfo.requestresponse,
             }}
           />
-          <ProfileHeader data={userProfile} />
-          <ProfileAbout data={userProfile?.about}/>
-          <ProfileWork data={userProfile?.experience} />
-          <ProfileVolunteer data={userProfile?.volunteeringexperience} />
-          {user && user.userid === userProfile.userid &&
+          <ProfileHeader data={currUserInfo} />
+          <ProfileAbout data={currUserInfo?.about}/>
+          <ProfileWork data={currUserInfo?.experience} />
+          <ProfileVolunteer data={currUserInfo?.volunteeringexperience} />
+          {user && user.userid === currUserInfo.userid &&
             <Button onClick={handleDeactivateAccount}>
               Deactivate Account
             </Button>

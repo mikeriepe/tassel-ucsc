@@ -189,7 +189,7 @@ export default function OpportunityCreation({toggle}) {
           })
           .then((json) => {
             // TODO: should just toggle close instead of navigating to home
-            navigate(`/`);
+            toggle();
           })
           .catch((error) => {
             console.log(error);
@@ -235,14 +235,14 @@ export default function OpportunityCreation({toggle}) {
         className='opportunity-creation'
         elevation={3}
         sx={{
-          display: 'flex',
+          // display: 'flex',
           position: 'fixed',
           top: '3vh',
           right: '16vw',
           alignContent: 'center',
           justifyContent: 'center',
           marginBottom: '3rem',
-          width: '70vw',
+          // width: '70vw',
           minHeight: '870px',
           height: 'auto',
           maxHeight: '700px',
@@ -250,7 +250,7 @@ export default function OpportunityCreation({toggle}) {
           boxShadow: '-3px 5px 8px 0px rgba(84, 84, 84, 0.81)',
           borderRadius: '10px',
           backgroundColor: 'rgb(240, 240, 240)',
-        }}>
+        }} >
 
         <StepLabel
           sx={{display: 'flex',
@@ -267,7 +267,7 @@ export default function OpportunityCreation({toggle}) {
 
         <FormControl
           sx={{display: 'flex', position: 'relative',
-            width: '50vw'}}>
+            /* width: '50vw'*/}}>
 
           <div className='opportunity-creation__name'>
             <FormLabel name='eventname' value='eventname' id='name'
