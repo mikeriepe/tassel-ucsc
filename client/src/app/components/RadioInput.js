@@ -14,6 +14,7 @@ export const RadioInput = ({
   control,
   label,
   options,
+  customOnChange,
 }) => {
   const generateRadioOptions = () => {
     return options.map((option) => (
@@ -43,7 +44,12 @@ export const RadioInput = ({
           fieldState: {error},
           formState,
         }) => (
-          <RadioGroup value={value} onChange={onChange}>
+          <RadioGroup value={value} onChange={(e) => {
+            if (customOnChange) {
+              customOnChange(e);
+            }
+            onChange(e);
+          }}>
             {generateRadioOptions()}
           </RadioGroup>
         )}

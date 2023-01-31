@@ -305,9 +305,9 @@ function Opportunities({
         open={showOppForm}
         onBackdropClick={() => setShowOppForm(false)}
         onClose={() => setShowOppForm(false)}
+        sx={{overflow: 'scroll'}}
       >
         <OpportunityForm onClose={() => setShowOppForm(!showOppForm)}/>
-        {/* <OpportunityCreation toggle={() => setShowOppForm(!showOppForm)}/> */}
       </Modal>
       {tabs[tab].component}
     </Page>

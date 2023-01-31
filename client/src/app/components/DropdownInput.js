@@ -7,6 +7,7 @@ export const DropdownInput = ({
   control,
   label,
   options,
+  customOnChange,
 }) => {
   const generateSingleOptions = () => {
     return options.map((option) => {
@@ -31,7 +32,12 @@ export const DropdownInput = ({
             }}
             label={label}
             labelId='select-label'
-            onChange={onChange}
+            onChange={(e) => {
+              if (customOnChange) {
+                customOnChange(e);
+              }
+              onChange(e);
+            }}
             value={value}
           >
             {generateSingleOptions()}

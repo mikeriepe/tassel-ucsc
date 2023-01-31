@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 
 import {TextInput} from './TextInput';
 import {TimeInput} from './TimeInput';
@@ -29,11 +29,20 @@ export default function OpportunityForm({onClose}) {
   const [organizationTypes, setOrganizationTypes] = useState(null);
   const [organizations, setOrganizations] = useState(null);
 
+  const [currOrganizationType, setCurrOrganizationType] = useState(null);
+  const [currLocationType, setCurrLocationType] = useState('in-person');
+  const [currSponsorType, setCurrSponsorType] = useState('user sponsor');
+
   const formValues = {
     eventname: '',
     usersponsors: {'creator': userProfile.profileid},
     locationtype: 'in-person',
-    eventlocation: {}, // TODO:
+    eventlocation: {
+      'address': '',
+      'state': '',
+      'city': '',
+      'zip': '',
+    },
     eventzoomlink: '',
     organization: null, // TODO:
     description: null,
@@ -45,7 +54,7 @@ export default function OpportunityForm({onClose}) {
     active: true,
     // eslint-disable-next-line max-len
     eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
-    organizationtype: null, // TODO:
+    organizationtype: null,
     opportunitytype: '',
     roles: null, // TODO:
     starttime: null,
@@ -70,8 +79,6 @@ export default function OpportunityForm({onClose}) {
               value: type.name,
             })
           ));
-          console.log('OPP TYPE JSON', json);
-          console.log('OPP TYPE', oppTypes);
           setOpportunityTypes(oppTypes);
         })
         .catch((err) => {
@@ -96,8 +103,6 @@ export default function OpportunityForm({onClose}) {
               value: type.name,
             })
           ));
-          console.log('ORG TYPE JSON', json);
-          console.log('ORG TYPE', orgTypes);
           setOrganizationTypes(orgTypes);
         })
         .catch((err) => {
@@ -107,8 +112,7 @@ export default function OpportunityForm({onClose}) {
   };
 
   const getOrganizations = () => {
-    console.log(getValues());
-    fetch(`/api/getOrganizations/${getValues().organizationtype}`)
+    fetch(`/api/getOrganizations/${currOrganizationType}`)
         .then((res) => {
           if (!res.ok) {
             throw res;
@@ -123,14 +127,27 @@ export default function OpportunityForm({onClose}) {
               value: type.name,
             })
           ));
-          console.log('ORG JSON', json);
-          console.log('ORGS', orgs);
           setOrganizations(orgs);
         })
         .catch((err) => {
           console.log(err);
           alert('Error retrieving organizations');
         });
+  };
+
+  const handleSponsorChange = (e) => {
+    const value = e.target.value;
+    setCurrSponsorType(value);
+  };
+
+  const handleOrganizationTypeChange = (e) => {
+    const value = e.target.value;
+    setCurrOrganizationType(value);
+  };
+
+  const handleLocationTypeChange = (e) => {
+    const value = e.target.value;
+    setCurrLocationType(value);
   };
 
   const subjectOptions = [
@@ -178,6 +195,23 @@ export default function OpportunityForm({onClose}) {
   const {handleSubmit, control, getValues} = methods;
 
   const onSubmit = (data) => {
+    // TODO: check roles under max
+
+    // Make sure no values written
+    // to DB that do not match location/sponsor type
+    if (data.locationtype == 'in-person') {
+      data.eventzoomlink = '';
+    }
+
+    if (data.locationtype == 'remote') {
+      data.eventlocation = {};
+    }
+
+    if (currSponsorType == 'user sponsor') {
+      data.organization = null;
+      data.organizationtype = null;
+    }
+
     console.log(data);
     onClose();
   };
@@ -189,7 +223,7 @@ export default function OpportunityForm({onClose}) {
 
   useEffect(() => {
     getOrganizations();
-  }, [getValues().organizationtype]);
+  }, [currOrganizationType]);
 
   return (
     <Paper
@@ -198,9 +232,7 @@ export default function OpportunityForm({onClose}) {
         zIndex: '10',
         boxShadow: '-3px 5px 8px 0px rgba(84, 84, 84, 0.81)',
         borderRadius: '10px',
-        marginTop: '3rem',
-        marginRight: '3rem',
-        marginLeft: '3rem',
+        margin: '3rem',
         padding: '1rem',
       }}
     >
@@ -257,6 +289,7 @@ export default function OpportunityForm({onClose}) {
               label='Location Type'
               options={locationOptions}
               defaultValue='in-person'
+              customOnChange={handleLocationTypeChange}
             />
           </Box>
 
@@ -265,7 +298,28 @@ export default function OpportunityForm({onClose}) {
             control={control}
             label='Opportunity Sponsor'
             options={sponsorOptions}
+            customOnChange={handleSponsorChange}
           />
+
+          {/* ORGANIZATION DETAILS */}
+          {
+            currSponsorType == 'organization sponsor' &&
+              <Box>
+                <DropdownInput
+                  name='organizationtype'
+                  control={control}
+                  label='Organization Type'
+                  options={organizationTypes}
+                  customOnChange={handleOrganizationTypeChange}
+                />
+                <DropdownInput
+                  name='organization'
+                  control={control}
+                  label='Organization'
+                  options={organizations}
+                />
+              </Box>
+          }
 
           <TextInput
             name='description'
@@ -320,6 +374,52 @@ export default function OpportunityForm({onClose}) {
             </Box>
 
           </LocalizationProvider>
+
+          {/* ADDRESS */}
+          {
+            currLocationType != 'remote' &&
+            <Box>
+              <TextInput
+                name='eventlocation.address'
+                control={control}
+                label='Enter Street Address'
+              />
+              <TextInput
+                name='eventlocation.city'
+                control={control}
+                label='Enter City'
+              />
+
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridAutoFlow: 'column',
+                  gridGap: '10px',
+                }}
+              >
+                <TextInput
+                  name='eventlocation.state'
+                  control={control}
+                  label='Enter State/Province'
+                />
+                <TextInput
+                  name='eventlocation.zip'
+                  control={control}
+                  label='Enter Zipcode'
+                />
+              </Box>
+            </Box>
+          }
+
+          {/* ZOOM LINK */}
+          {
+            currLocationType != 'in-person' &&
+            <TextInput
+              name='eventzoomlink'
+              control={control}
+              label='Event Zoom Link'
+            />
+          }
 
           <DropdownInput
             name='subject'
