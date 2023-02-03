@@ -7,6 +7,9 @@ import Divider from '@mui/material/Divider';
 import MuiAvatar from '@mui/material/Avatar';
 import MuiBox from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
+import Modal from '@mui/material/Modal';
+import Paper from '@mui/material/Paper';
+import {toast} from 'react-toastify';
 import AccessibilityRoundedIcon from '@mui/icons-material/AccessibilityRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -15,6 +18,8 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import ThemedButton from './ThemedButton';
+import useAuth from '../util/AuthContext';
 
 const IconStyling = {
   fontSize: '0.9rem',
@@ -89,38 +94,119 @@ const OutlinedIconButton = ({children}, props) => (
   </ButtonBase>
 );
 
-const OutlinedButton = ({children}, props) => (
-  <ButtonBase
-    component='div'
-    onMouseDown={(e) => {
-      e.stopPropagation();
-    }}
-    onClick={(e) => {
-      e.stopPropagation();
-      e.preventDefault();
-    }}
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '40px',
-      width: '80px',
-      padding: 0,
-      background: 'var(--secondary-yellow-main)',
-      border: '0.5px solid rgba(0, 0, 0, 0.15)',
-      borderRadius: '5px',
-    }}
-    {...props}
-  >
-    {children}
-  </ButtonBase>
-);
+const OutlinedButton = (props) => {
+  const {handleModalOpen, ...rest} = props;
+  return (
+    <ButtonBase
+      component='div'
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
+      onClick={(e) => {
+        handleModalOpen();
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '40px',
+        width: '80px',
+        padding: 0,
+        background: 'var(--secondary-yellow-main)',
+        border: '0.5px solid rgba(0, 0, 0, 0.15)',
+        borderRadius: '5px',
+      }}
+      {...rest}
+    >
+      {props.children}
+    </ButtonBase>
+  );
+};
 
 /**
  * @return {JSX}
  */
 export default function OpportunitiesCard({type, opportunity}) {
   const [creator, setCreator] = useState('');
+
+  const [showReqForm, setshowReqForm] = React.useState(false);
+  const [requestMessage, setRequestMessage] = React.useState('');
+  const {userProfile} = useAuth();
+
+  const handleModalClose = () => {
+    setshowReqForm(false);
+  };
+
+  const handleModalOpen = () => {
+    setshowReqForm(true);
+  };
+
+  const handleRequestMessage = (e) => {
+    setRequestMessage(e.target.value);
+  };
+
+  const handleRequestClick = (e) => {
+    // Send request here
+    const requestData = {
+      requestee: creator.profileid,
+      requester: userProfile.profileid,
+      requestmessage: requestMessage,
+      opportunityid: opportunity.eventid,
+      toevent: true,
+    };
+    postRequestToOpportunity(requestData);
+    setshowReqForm(false);
+    setRequestMessage('');
+  };
+
+  const postRequestToOpportunity = (requestData) => {
+    fetch(`/api/postRequest`, {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (res.status === 201) {
+            toast.success(`Applied to ${opportunity.eventname}`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else if (res.status === 409) {
+            toast.warning(`You Already Applied to This Event`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            toast.error(`Something Went Wrong. Please Try Again.`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something Went Wrong. Please Try Again.');
+        });
+  };
 
   const formatDate = (date) => {
     const dateOptions = {
@@ -237,7 +323,7 @@ export default function OpportunitiesCard({type, opportunity}) {
                   </OutlinedIconButton>
                 )}
                 {type === 'all' && (
-                  <OutlinedButton>
+                  <OutlinedButton handleModalOpen={handleModalOpen}>
                     <p className='text-xbold text-white'>Apply</p>
                   </OutlinedButton>
                 )}
@@ -335,8 +421,94 @@ export default function OpportunitiesCard({type, opportunity}) {
               </div>
             </div>
           </CardActionArea>
+          <RequestModal
+            showReqForm={showReqForm}
+            handleModalClose={handleModalClose}
+            requestMessage={requestMessage}
+            handleRequestMessage={handleRequestMessage}
+            handleRequestClick={handleRequestClick}
+            opportunityName={opportunity.eventname}
+          />
         </Card>
       )}
     </>
+  );
+}
+
+/**
+ * Modal for request request
+ * @param {Object} props
+ * @return {Object} JSX
+ */
+function RequestModal(props) {
+  const {
+    showReqForm,
+    handleModalClose,
+    requestMessage,
+    handleRequestMessage,
+    handleRequestClick,
+    opportunityName,
+  } = props;
+
+  return (
+    <Modal
+      open={showReqForm}
+      onClose={handleModalClose}
+    >
+      <Paper
+        sx={{
+          position: 'absolute',
+          padding: '1.5em',
+          top: '50%',
+          left: '50%',
+          height: 'auto',
+          width: '600px',
+          transform: 'translate(-50%, -50%)',
+          boxShadow: '0px 0px 50px -14px rgba(0, 0, 0, 0.1)',
+          borderRadius: '10px',
+        }}
+      >
+        <div className='request-title'>
+          {opportunityName}
+        </div>
+        <div className='request-subtitle'>
+          Express your interest in {opportunityName}:
+        </div>
+        <div className='request-message'>
+          <textarea
+            value={requestMessage}
+            onChange={handleRequestMessage}
+            placeholder='Optional (Max 400 Characters)'
+            maxLength={400}
+            style={{
+              resize: 'none',
+              height: '200px',
+              width: '595px',
+              outline: 'none',
+            }}
+          />
+        </div>
+        <div className='request-buttons'>
+          <div className='request-buttons-request'>
+            <ThemedButton
+              color={'yellow'}
+              variant={'themed'}
+              onClick={handleRequestClick}
+            >
+              Send Request to Join
+            </ThemedButton>
+          </div>
+          <div className='request-buttons-cancel'>
+            <ThemedButton
+              color={'gray'}
+              variant={'cancel'}
+              onClick={handleModalClose}
+            >
+              Cancel
+            </ThemedButton>
+          </div>
+        </div>
+      </Paper>
+    </Modal>
   );
 }
