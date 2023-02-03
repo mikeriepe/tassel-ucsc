@@ -18,7 +18,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -148,10 +148,10 @@ const pool = new Pool();
   var currentdate = new Date().toISOString();
   const query = {
     text: `INSERT INTO request
-             (requestid, requestee, requester, requeststatus, requestdatetime, requestmessage, opportunityid, role) 
-             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8))
+             (requestid, requestee, requester, requeststatus, requestdatetime, requestmessage, opportunityid, role, toevent) 
+             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9))
              RETURNING requestid`,
-    values: [newUUID, requestInfo.requestee , requestInfo.requester, "pending", currentdate, requestInfo.requestmessage, requestInfo.opportunityid, requestInfo.role],
+    values: [newUUID, requestInfo.requestee , requestInfo.requester, "pending", currentdate, requestInfo.requestmessage, requestInfo.opportunityid, requestInfo.role, requestInfo.toevent],
   };
   const {rows} = await pool.query(query);
   console.log(rows);
