@@ -24,8 +24,16 @@ exports.userPost = async (req, res) => {
   const hash = bcrypt.hashSync(plaintextPassword, salt);
   req.body.userpassword = hash;
   newUUID = uuid.v4();
-
-  const result = await userModel.createUser(req.body, newUUID);
+  let result;
+  try {
+    result = await userModel.createUser(req.body, newUUID);
+  }
+  catch (error) {
+    // console.log(error);
+    res.status(500).send('error creating a user')
+    return
+  }
+  // const result = await userModel.createUser(req.body, newUUID);
   if (result == 1) {
     
     // Signing a JWT Token
@@ -158,4 +166,3 @@ exports.expireUserSession = async (req, res) =>{
   res.cookie('accessToken',req.cookies.accessToken ,{maxAge: 0});
   res.status(200).send();
 }
-

@@ -20,7 +20,7 @@ exports.insertComment = async (data) => {
     };
     const { rows } = await pool.query(query);
     // console.log(rows);
-    return rows[0];
+    return rows[0].commentid;
 }
 
 /**
@@ -37,5 +37,21 @@ exports.getComments = async (data) => {
         values: [data.postid],
     };
     const { rows } = await pool.query(query);
+    return rows;
+}
+
+/**
+ * Delete comment, requires commentid
+ * @param {*} data 
+ *  
+ */
+ exports.deleteComment = async (commentid) => {
+    const query = {
+        text: `DELETE FROM comment 
+        WHERE commentid = $1`,
+        values: [commentid],
+    };
+    const { rows } = await pool.query(query);
+    console.log(rows)
     return rows;
 }

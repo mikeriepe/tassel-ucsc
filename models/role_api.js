@@ -46,3 +46,14 @@ exports.updateRoleFill = async (req,res) =>{
     const role = await roleModel.updateRoleFill(req.body);
     res.status(200).send(role);
 }
+
+/**
+ * DELETEs role by roleid
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.deleteRole = async (req,res) =>{
+    const { roleId } = req.body;
+    const role = await roleModel.deleteRole(roleId);
+    res.status(200).send(role);
+}

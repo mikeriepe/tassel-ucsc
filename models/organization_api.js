@@ -7,7 +7,7 @@ const organizationModel = require('./organization_model');
  * @param {*} res
  */
  exports.getOrganizations = async (req, res) => {
-  console.log(req.params.type);
+  // console.log(req.params.type);
   const organizations = await organizationModel.getOrganizations(req.params.type);
   res.status(201).send(organizations);
 };

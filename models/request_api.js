@@ -141,7 +141,7 @@ const uuid = require('uuid');
     const newUUID = uuid.v4();
     const requestId = await requestModel.postRequest(req.body, newUUID);
     // console.log(requestId);
-    res.status(201).send(requestId);
+    res.status(201).send({requestId});
   }
   catch (error) {
     console.log(error);
@@ -214,6 +214,24 @@ const uuid = require('uuid');
     const requestId = await requestModel.rejectRequest(req.body);
     console.log(requestId);
     res.status(200).send(requestId);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('error rejecting request')
+  }
+  
+};
+
+/**
+ * DELETEs a request object
+ * @param {*} req
+ * @param {*} res
+ */
+exports.deleteRequest = async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    await requestModel.deleteRequest(requestId);
+    res.status(200).send();
   }
   catch (error) {
     console.log(error);

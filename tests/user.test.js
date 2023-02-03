@@ -73,6 +73,7 @@ test("Login using faulty info", async () => {
         .expect(401)
 });
 
+
 /**
  * User creation and deletion
  */
@@ -92,8 +93,8 @@ test("User Created", async () =>{
             console.log(response.body);
             return response.body
         });
-
-    
+        
+    console.log(logininfo);
     // Delete the user
     delete_model.deleteUser(logininfo.userid);
 });
@@ -127,6 +128,57 @@ test("Testing authorized api routes", async () => {
                 expect(row.active).toBe(true); 
             });
         });
+    
+    await supertest(app).post('/api/userDeactivation')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send({'active': false, 'userid': 'e1475b75-f167-4090-a0fb-f2ab4dcb32e8'})
+        .expect(200)
+        .then((response) =>{
+            //console.log(requestid)
+            console.log(response.body)
+    
+            //data.requeststatus = 'canceled';
+        });
+        
+    await supertest(app).get('/api/verifyUserSession')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .expect(200)
+        .then((response) =>{
+            //console.log(requestid)
+            console.log(response.body)
+    
+            //data.requeststatus = 'canceled';
+        });    
+
+    await supertest(app).get('/api/expireUserSession')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .expect(200)
+        .then((response) =>{
+            //console.log(requestid)
+            console.log(response.body)
+    
+            //data.requeststatus = 'canceled';
+        });
+    
 });
 
 
+test("Invalid user creation", async () =>{
+
+    const registerData = {
+        'useremail': 'test77',
+        'userpassword': 'please?',
+        'active': 'notokay',
+    }
+
+    const logininfo = await supertest(app).post('/api/userCreation')
+        .send(registerData)
+        .expect(500)
+        .then((response) =>{
+            // user_model
+            console.log(response.body);
+            return response.body
+        });
+
+    delete_model.deleteUser(logininfo.userid);
+});
