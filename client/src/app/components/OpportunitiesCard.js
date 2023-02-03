@@ -154,6 +154,7 @@ export default function OpportunitiesCard({type, opportunity}) {
       requester: userProfile.profileid,
       requestmessage: requestMessage,
       opportunityid: opportunity.eventid,
+      toevent: true,
     };
     postRequestToOpportunity(requestData);
     setshowReqForm(false);
@@ -171,6 +172,16 @@ export default function OpportunitiesCard({type, opportunity}) {
         .then((res) => {
           if (res.status === 201) {
             toast.success(`Applied to ${opportunity.eventname}`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else if (res.status === 409) {
+            toast.warning(`You Already Applied to This Event`, {
               position: 'top-right',
               autoClose: 5000,
               hideProgressBar: false,
@@ -467,7 +478,8 @@ function RequestModal(props) {
           <textarea
             value={requestMessage}
             onChange={handleRequestMessage}
-            placeholder='Optional'
+            placeholder='Optional (Max 400 Characters)'
+            maxLength={400}
             style={{
               resize: 'none',
               height: '200px',
