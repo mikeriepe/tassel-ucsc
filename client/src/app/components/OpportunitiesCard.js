@@ -126,7 +126,11 @@ const OutlinedButton = (props) => {
 /**
  * @return {JSX}
  */
-export default function OpportunitiesCard({type, opportunity}) {
+export default function OpportunitiesCard({
+  type,
+  opportunity,
+  getPendingOpportunities,
+}) {
   const [creator, setCreator] = useState('');
 
   const [showReqForm, setshowReqForm] = React.useState(false);
@@ -181,6 +185,7 @@ export default function OpportunitiesCard({type, opportunity}) {
               draggable: true,
               progress: undefined,
             });
+            getPendingOpportunities();
           } else if (res.status === 409) {
             toast.warning(`You Already Applied to This Event`, {
               position: 'top-right',
