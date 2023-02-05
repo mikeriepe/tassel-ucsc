@@ -22,7 +22,6 @@ const Work = styled((props) => (
  * @return {HTML} Profile component
  */
 export default function ProfileWork({data}) {
-  // console.log(data.job1);
   return (
     <Work>
       <h4 className='text-dark'>Work Experience</h4>

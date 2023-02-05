@@ -125,6 +125,7 @@ a, a:hover, a:focus, a:active {
 
 .grid-flow-large {
   display: grid;
+  width: 100%;
   gap: 10px;
 }
 
@@ -174,6 +175,13 @@ a, a:hover, a:focus, a:active {
 .flex-space-between {
   display: flex;
   justify-content: space-between;
+}
+
+.flex-space-multi {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .flex-start {

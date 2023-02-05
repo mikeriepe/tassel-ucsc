@@ -11,6 +11,14 @@
   gap: 25px;
 }
 
+.updatepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
 .card-banner {
   display: flex;
   flex-direction: column;
@@ -25,4 +33,11 @@
   flex-direction: column;
   justify-content: center;
   width: 50%;
+}
+
+.update-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 75%;
 }
