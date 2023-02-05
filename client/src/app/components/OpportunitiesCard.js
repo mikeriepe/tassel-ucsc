@@ -147,11 +147,14 @@ export default function OpportunitiesCard({type, opportunity}) {
 
   const handleRequestClick = (e) => {
     // Send request here
+    // For consistency in the db, instead of null
+    // role will be empty string
     const requestData = {
       requestee: creator.profileid,
       requester: userProfile.profileid,
       requestmessage: requestMessage,
       opportunityid: opportunity.eventid,
+      role: '',
       toevent: true,
     };
     postRequestToOpportunity(requestData);
