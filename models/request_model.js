@@ -37,7 +37,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -57,7 +57,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows[0];
 };
 
@@ -76,7 +76,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -96,7 +96,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -116,7 +116,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -135,7 +135,7 @@ const pool = new Pool();
   };
 
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -154,7 +154,7 @@ const pool = new Pool();
     values: [newUUID, requestInfo.requestee , requestInfo.requester, "pending", currentdate, requestInfo.requestmessage, requestInfo.opportunityid, requestInfo.role, requestInfo.toevent],
   };
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows[0].requestid;
 };
 
@@ -168,10 +168,10 @@ const pool = new Pool();
     text: `UPDATE request
     SET requeststatus = $1
     WHERE requestid = $2`,
-    values: ["canceled", requestInfo.requestid],
+    values: ["canceled", requestInfo.requestId],
   };
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -185,10 +185,10 @@ const pool = new Pool();
     text: `UPDATE request
     SET requeststatus = $1, responsedatetime = $2
     WHERE requestid = $3`,
-    values: ["approved", currentdate, requestInfo.requestid],
+    values: ["approved", currentdate, requestInfo.requestId],
   };
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
 
@@ -203,10 +203,23 @@ const pool = new Pool();
     text: `UPDATE request
     SET requeststatus = $1, responsedatetime = $2
     WHERE requestid = $3`,
-    values: ["rejected", currentdate, requestInfo.requestid],
+    values: ["rejected", currentdate, requestInfo.requestId],
   };
   const {rows} = await pool.query(query);
-  console.log(rows);
+  // console.log(rows);
   return rows;
 };
+
+/**
+ * Deletes a user from the user table
+ * @param {*} data 
+ */
+exports.deleteRequest = async (requestid) =>{
+  const query = {
+      text: `DELETE FROM request
+              WHERE requestid = ($1)`,
+      values: [requestid],
+    };
+  const {rows} = await pool.query(query);
+}
 
