@@ -35,7 +35,7 @@ export default function VolunteerExperienceForm({onClose}) {
   };
 
   const methods = useForm({defaultValues: formValues});
-  const {handleSubmit, control} = methods;
+  const {handleSubmit, control, register} = methods;
 
   const addVolunteerExperienceToProfile = (data) => {
     let startDate = '';
@@ -145,12 +145,14 @@ export default function VolunteerExperienceForm({onClose}) {
             name='jobtitle'
             control={control}
             label='Voluneer Position Title'
+            register={register}
           />
 
           <TextInput
             name='company'
             control={control}
             label='Company'
+            register={register}
           />
 
           {/* Dropdown Menus*/}
@@ -190,11 +192,13 @@ export default function VolunteerExperienceForm({onClose}) {
                   name='startdate'
                   control={control}
                   label='Start Date'
+                  register={register}
                 />
                 <DateInput
                   name='enddate'
                   control={control}
                   label='End Date'
+                  register={register}
                 />
               </Box>
             </LocalizationProvider>
