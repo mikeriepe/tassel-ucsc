@@ -131,6 +131,7 @@ const uuid = require('uuid');
  exports.postRequest = async (req, res) => {
   try {
     const alreadySentRequests = await requestModel.getUserOutgoingRequests(req.body.requester);
+    console.log(alreadySentRequests);
     // for loop to check if a request already exists from this profile to this opportunity
     for(let i = 0; i < alreadySentRequests.length; i++) {
       if (alreadySentRequests[i].opportunityid === req.body.opportunityid) {

@@ -25,6 +25,8 @@ test("Login using a dev account", async () => {
       return response.body;
     });
 
+    // README: this data is then only one of the 3 that is not initially in the db.
+    // It gets inserted and then deleted by the test.
     const data = {
         'requestee': 'cfbb760e-4b2e-44b7-aeab-4e04c7db4da7',
         'requester': '038f4043-2f73-40d3-9b70-30c50c5d0fce',
@@ -48,7 +50,7 @@ test("Login using a dev account", async () => {
         'requestmessage': 'I would like to volunteer please',
         'opportunityid': '25949134-7fb4-4bbe-832f-ec63ae54fc03',
         'role': '',
-        'toevent': false,
+        'toevent': true,
     };
     
     const data3 = {
@@ -100,14 +102,14 @@ test("Login using a dev account", async () => {
         expect(response.body[response.body.length - 1].requestee).toEqual(data.requestee);
     });
 
-    await supertest(app).get(`/api/getUserOutgoingRequests/${data.requester}`)
+    await supertest(app).get(`/api/getUserOutgoingRequests/${data2.requester}`)
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
     .expect(200)
     .then((response) =>{
         console.log(response.body);
         // The most recent inserted row should be at the end of the array
         // console.log(response.body[response.body.length - 1]);
-        expect(response.body[response.body.length - 1].requester).toEqual(data.requester);
+        expect(response.body[response.body.length - 1].requester).toEqual(data2.requester);
     });
 
     //delete_model.deleteRole(logininfo.roleid);
@@ -141,16 +143,6 @@ test("Login using a dev account", async () => {
         // console.log(response.body[response.body.length - 1]);
         //console.log(response.body.requeststatus);
         expect(response.body[response.body.length - 1].requeststatus).toEqual(data2.requeststatus);
-    });
-    
-    await supertest(app).get(`/api/getApprovedRequests/${data.requester}/${data.opportunityid}`)
-    .set('Cookie', [`accessToken=${logininfo.accessToken}`])
-    .expect(200)
-    .then((response) =>{
-        // The most recent inserted row should be at the end of the array
-        // console.log(response.body[response.body.length - 1]);
-        console.log(response.body.requeststatus);
-        expect(response.body[response.body.length - 1].requeststatus).toEqual(data.requeststatus);
     });
 
     
@@ -187,6 +179,16 @@ test("Login using a dev account", async () => {
         console.log(response.body)
 
         //data.requeststatus = 'canceled';
+    });
+
+    await supertest(app).get(`/api/getApprovedRequests/${data.requester}/${data.opportunityid}`)
+    .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+    .expect(200)
+    .then((response) =>{
+        // The most recent inserted row should be at the end of the array
+        // console.log(response.body[response.body.length - 1]);
+        console.log(response.body.requeststatus);
+        expect(response.body[response.body.length - 1].requeststatus).toEqual(data.requeststatus);
     });
 
     await supertest(app).post('/api/rejectRequest')
