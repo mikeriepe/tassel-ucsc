@@ -110,6 +110,10 @@ app.post('/api/changeProfileStatus', authApi.check, profileApi.changeProfileStat
 app.post('/api/changeProfileStatusForRequest', authApi.check, profileApi.changeProfileStatusForRequest);
 
 app.post('/api/changeProfileRequestResponse', authApi.check, profileApi.changeProfileRequestResponse);
+
+// app.delete('/api/deleteProfile', authApi.check, profileApi.deleteProfile);
+
+
 //  Opportunity CRUD operations
 //
 //
@@ -154,6 +158,8 @@ app.post('/api/approveRequest', authApi.check, requestApi.approveRequest);
 
 app.post('/api/rejectRequest', authApi.check, requestApi.rejectRequest);
 
+app.delete('/api/deleteRequest', authApi.check, requestApi.deleteRequest);
+
 // OrganizationType CRUD operations
 //
 //
@@ -168,6 +174,9 @@ app.get('/api/getOrganizations/:type', authApi.check, organizationApi.getOrganiz
 //
 //
 app.get('/api/getOpportunityTypes', authApi.check, opportunityTypeApi.getOpportunityTypes);
+
+// app.delete('/api/deleteOpportunityType', authApi.check, opportunityTypeApi.deleteOpportunityType);
+
 
 //  Preferences CRUD operations
 //
@@ -189,6 +198,8 @@ app.post('/api/postPost', authApi.check, postApi.postPost);
 
 app.get('/api/getPosts/:eventid', authApi.check, postApi.getPosts);
 
+app.delete('/api/deletePost', authApi.check, postApi.deletePost);
+
 // Comment CRUD operation
 //
 //
@@ -196,10 +207,16 @@ app.post('/api/postComment', authApi.check, commentApi.postComment);
 
 app.get('/api/getComments/:postid', authApi.check, commentApi.getComments);
 
+app.delete('/api/deleteComment/:commentid', authApi.check, commentApi.deleteComment);
+
 // Major CRUD Operations
 //
 //
 app.get('/api/getMajors', authApi.check, majorApi.getMajors);
+
+app.post('/api/postMajor', authApi.check, majorApi.postMajor);
+
+app.delete('/api/deleteMajor/:majorid', authApi.check, majorApi.deleteMajor);
 
 // Role CRUD operation
 //
@@ -208,7 +225,9 @@ app.get('/api/getRoles/:eventid', authApi.check, roleApi.getRoles );
 
 app.post('/api/postRole', authApi.check, roleApi.postRole );
 
-app.put( '/api/updateRoleFill', authApi.check, roleApi.updateRoleFill);
+app.put('/api/updateRoleFill', authApi.check, roleApi.updateRoleFill);
+
+app.delete('/api/deleteRole', authApi.check, roleApi.deleteRole);
 
 // AUTH
 //

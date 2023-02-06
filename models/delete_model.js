@@ -24,3 +24,25 @@ exports.deleteUser = async (userid) =>{
     const {rows} = await pool.query(query);
 }
 
+// /**
+//  * Deletes a user from the user table
+//  * @param {*} data 
+//  */
+// exports.deleteRequest = async (requestid) =>{
+//   const query = {
+//       text: `DELETE FROM request
+//               WHERE requestid = ($1)`,
+//       values: [requestid],
+//     };
+//   const {rows} = await pool.query(query);
+// }
+
+// exports.deleteRole = async (roleid) =>{
+//   const query = {
+//       text: `DELETE FROM role
+//               WHERE roleid = ($1)`,
+//       values: [roleid],
+//     };
+//   const {rows} = await pool.query(query);
+// }
+

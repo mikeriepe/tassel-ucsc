@@ -9,9 +9,14 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getUserIncomingRequests = async (req, res) => {
-  console.log(req.params.profileid);
-  const requests = await requestModel.getUserIncomingRequests(req.params.profileid);
-  res.status(201).send(requests);
+  // console.log(req.params.profileid);
+  try {
+    const requests = await requestModel.getUserIncomingRequests(req.params.profileid);
+    res.status(200).send(requests);
+  }
+  catch (err) {
+    res.status(500).send('error getting incoming requests');
+  }
 };
 
 /**
@@ -21,9 +26,14 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getUserOutgoingRequests = async (req, res) => {
-  console.log(req.params.profileid);
-  const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
-  res.status(201).send(requests);
+  // console.log(req.params.profileid);
+  try {
+    const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
+    res.status(200).send(requests);
+  }
+  catch (err) {
+    res.status(500).send('error getting outgoing requests');
+  }
 };
 
 /**
@@ -33,10 +43,15 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getPendingRequest = async (req, res) => {
-  console.log(req.params.profileid);
-  console.log(req.params.eventid)
-  const pending = await requestModel.getPendingRequest(req.params.profileid, req.params.eventid);
-  res.status(201).send(pending);
+  // console.log(req.params.profileid);
+  // console.log(req.params.eventid)
+  try {
+    const pending = await requestModel.getPendingRequest(req.params.profileid, req.params.eventid);
+    res.status(200).send(pending);
+  }
+  catch (err) {
+    res.status(500).send('error getting pending requests');
+  }
 };
 
 
@@ -47,8 +62,13 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getPendingRequestsReceived = async (req, res) => {
-  const pending = await requestModel.getPendingRequestsReceived(req.params.profileid, req.params.eventid);
-  res.status(201).send(pending);
+  try {
+    const pending = await requestModel.getPendingRequestsReceived(req.params.profileid, req.params.eventid);
+    res.status(200).send(pending);
+  }
+  catch (err) {
+    res.status(500).send('error getting pending requests received');
+  }
 };
 
 
@@ -59,8 +79,13 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getPendingRequestsSent = async (req, res) => {
-  const pending = await requestModel.getPendingRequestsSent(req.params.profileid, req.params.eventid);
-  res.status(201).send(pending);
+  try {
+    const pending = await requestModel.getPendingRequestsSent(req.params.profileid, req.params.eventid);
+    res.status(200).send(pending);
+  }
+  catch (err) {
+    res.status(500).send('error getting pending requests sent');
+  }
 };
 
 
@@ -71,8 +96,13 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getApprovedRequests = async (req, res) => {
-  const approved = await requestModel.getApprovedRequests(req.params.profileid, req.params.eventid);
-  res.status(201).send(approved);
+  try {
+    const approved = await requestModel.getApprovedRequests(req.params.profileid, req.params.eventid);
+    res.status(200).send(approved);
+  }
+  catch (err) {
+    res.status(500).send('error getting approved requests');
+  }
 };
 
 /**
@@ -82,8 +112,13 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.getRejectedRequests = async (req, res) => {
-  const rejected = await requestModel.getRejectedRequests(req.params.profileid, req.params.eventid);
-  res.status(201).send(rejected);
+  try {
+    const rejected = await requestModel.getRejectedRequests(req.params.profileid, req.params.eventid);
+    res.status(200).send(rejected);
+  }
+  catch (err) {
+    res.status(500).send('error getting rejected requests');
+  }
 };
 
 
@@ -94,18 +129,25 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.postRequest = async (req, res) => {
-  console.log(req.body);
-  const newUUID = uuid.v4();
   try {
+    const alreadySentRequests = await requestModel.getUserOutgoingRequests(req.body.requester);
+    console.log(alreadySentRequests);
+    // for loop to check if a request already exists from this profile to this opportunity
+    for(let i = 0; i < alreadySentRequests.length; i++) {
+      if (alreadySentRequests[i].opportunityid === req.body.opportunityid) {
+        res.status(409).send("a request already exists from this profile to this opportunity")
+        return;
+      }
+    }
+    const newUUID = uuid.v4();
     const requestId = await requestModel.postRequest(req.body, newUUID);
-    console.log(requestId);
-    res.status(201).send(requestId);
+    // console.log(requestId);
+    res.status(201).send({requestId});
   }
   catch (error) {
     console.log(error);
     res.status(500).send('error creating request')
   }
-  
 };
 
 
@@ -116,7 +158,7 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.cancelRequest = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const requestId = await requestModel.cancelRequest(req.body);
     console.log(requestId);
@@ -168,11 +210,29 @@ const uuid = require('uuid');
  * @param {*} res
  */
  exports.rejectRequest = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const requestId = await requestModel.rejectRequest(req.body);
     console.log(requestId);
     res.status(200).send(requestId);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('error rejecting request')
+  }
+  
+};
+
+/**
+ * DELETEs a request object
+ * @param {*} req
+ * @param {*} res
+ */
+exports.deleteRequest = async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    await requestModel.deleteRequest(requestId);
+    res.status(200).send();
   }
   catch (error) {
     console.log(error);

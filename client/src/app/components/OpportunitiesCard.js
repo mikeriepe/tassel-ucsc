@@ -7,6 +7,7 @@ import Divider from '@mui/material/Divider';
 import MuiAvatar from '@mui/material/Avatar';
 import MuiBox from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
+import {toast} from 'react-toastify';
 import AccessibilityRoundedIcon from '@mui/icons-material/AccessibilityRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -15,6 +16,8 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import useAuth from '../util/AuthContext';
+import RequestModal from './RequestOpportunityModal';
 
 const IconStyling = {
   fontSize: '0.9rem',
@@ -62,7 +65,12 @@ const Banner = ({image}, props) => {
   );
 };
 
-const OutlinedIconButton = ({children}, props) => (
+const OutlinedIconButton = ({
+  children,
+  type,
+  opportunityid,
+  profileid,
+  getPendingOpportunities}, props) => (
   <ButtonBase
     component='div'
     onMouseDown={(e) => {
@@ -71,6 +79,32 @@ const OutlinedIconButton = ({children}, props) => (
     onClick={(e) => {
       e.stopPropagation();
       e.preventDefault();
+      if (type === 'pending') {
+        // fetch the request
+        fetch(`/api/getPendingRequestsSent/${profileid}/${opportunityid}`)
+            .then((res) => {
+              if (!res.ok) {
+                throw res;
+              }
+              return res.json();
+            })
+            .then((json) => {
+              fetch(`/api/deleteRequest/`, {
+                method: 'DELETE',
+                body: JSON.stringify({requestId: json[0].requestid}),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              })
+                  .then(() => {
+                    getPendingOpportunities();
+                  });
+            })
+            .catch((err) => {
+              console.log(err);
+              alert('Error deleting request');
+            });
+      }
     }}
     sx={{
       display: 'flex',
@@ -89,38 +123,127 @@ const OutlinedIconButton = ({children}, props) => (
   </ButtonBase>
 );
 
-const OutlinedButton = ({children}, props) => (
-  <ButtonBase
-    component='div'
-    onMouseDown={(e) => {
-      e.stopPropagation();
-    }}
-    onClick={(e) => {
-      e.stopPropagation();
-      e.preventDefault();
-    }}
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '40px',
-      width: '80px',
-      padding: 0,
-      background: 'var(--secondary-yellow-main)',
-      border: '0.5px solid rgba(0, 0, 0, 0.15)',
-      borderRadius: '5px',
-    }}
-    {...props}
-  >
-    {children}
-  </ButtonBase>
-);
+const OutlinedButton = (props) => {
+  const {handleModalOpen, ...rest} = props;
+  return (
+    <ButtonBase
+      component='div'
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
+      onClick={(e) => {
+        handleModalOpen();
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '40px',
+        width: '80px',
+        padding: 0,
+        background: 'var(--secondary-yellow-main)',
+        border: '0.5px solid rgba(0, 0, 0, 0.15)',
+        borderRadius: '5px',
+      }}
+      {...rest}
+    >
+      {props.children}
+    </ButtonBase>
+  );
+};
 
 /**
  * @return {JSX}
  */
-export default function OpportunitiesCard({type, opportunity}) {
+export default function OpportunitiesCard({
+  type,
+  opportunity,
+  getPendingOpportunities,
+}) {
   const [creator, setCreator] = useState('');
+
+  const [showReqForm, setshowReqForm] = React.useState(false);
+  const [requestMessage, setRequestMessage] = React.useState('');
+  const {userProfile} = useAuth();
+
+  const handleModalClose = () => {
+    setshowReqForm(false);
+  };
+
+  const handleModalOpen = () => {
+    setshowReqForm(true);
+  };
+
+  const handleRequestMessage = (e) => {
+    setRequestMessage(e.target.value);
+  };
+
+  const handleRequestClick = (e) => {
+    // Send request here
+    // For consistency in the db, instead of null
+    // role will be empty string
+    const requestData = {
+      requestee: creator.profileid,
+      requester: userProfile.profileid,
+      requestmessage: requestMessage,
+      opportunityid: opportunity.eventid,
+      role: '',
+      toevent: true,
+    };
+    postRequestToOpportunity(requestData);
+    setshowReqForm(false);
+    setRequestMessage('');
+  };
+
+  const postRequestToOpportunity = (requestData) => {
+    fetch(`/api/postRequest`, {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (res.status === 201) {
+            toast.success(`Applied to ${opportunity.eventname}`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            getPendingOpportunities();
+          } else if (res.status === 409) {
+            toast.warning(`You Already Applied to This Event`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            toast.error(`Something Went Wrong. Please Try Again.`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something Went Wrong. Please Try Again.');
+        });
+  };
 
   const formatDate = (date) => {
     const dateOptions = {
@@ -213,7 +336,12 @@ export default function OpportunitiesCard({type, opportunity}) {
                   type === 'created' ||
                   type === 'pending'
                 ) && (
-                  <OutlinedIconButton>
+                  <OutlinedIconButton
+                    type={type}
+                    opportunityid={opportunity.eventid}
+                    profileid={userProfile.profileid}
+                    getPendingOpportunities={getPendingOpportunities}
+                  >
                     <CloseRoundedIcon
                       sx={{
                         height: '20px',
@@ -237,7 +365,7 @@ export default function OpportunitiesCard({type, opportunity}) {
                   </OutlinedIconButton>
                 )}
                 {type === 'all' && (
-                  <OutlinedButton>
+                  <OutlinedButton handleModalOpen={handleModalOpen}>
                     <p className='text-xbold text-white'>Apply</p>
                   </OutlinedButton>
                 )}
@@ -335,6 +463,14 @@ export default function OpportunitiesCard({type, opportunity}) {
               </div>
             </div>
           </CardActionArea>
+          <RequestModal
+            showReqForm={showReqForm}
+            handleModalClose={handleModalClose}
+            requestMessage={requestMessage}
+            handleRequestMessage={handleRequestMessage}
+            handleRequestClick={handleRequestClick}
+            opportunityName={opportunity.eventname}
+          />
         </Card>
       )}
     </>

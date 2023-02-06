@@ -1,5 +1,10 @@
 const app = require("../index");
 const supertest = require("supertest");
+const deleteModel = require("../models/delete_model");
+
+// beforeEach(() => {
+//     jest.setTimeout(20*1000);
+// });
 
 afterEach(async() => { 
     await app.close();
@@ -68,13 +73,23 @@ test("Post post with JWT", async ()=>{
     // console.log(data);
 
     // SET THE JWT COOKIE BEFORE CALLING POSTPOST
-    await supertest(app).post('/api/postPost')
+    const postInfo = await supertest(app).post('/api/postPost')
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
     .send(data)
     .expect(201)
     .then((response) =>{
-        console.log(response.body);
+        // console.log(response.body);
+        return response.body.postid;
     });
+
+    // delete the newly created post and associated comments
+    const deleteData = {
+        'postid': postInfo,
+    }
+    await supertest(app).delete('/api/deletePost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(deleteData)
+        .expect(200);
 });
 
 // Posting a post with a JWT
@@ -101,13 +116,23 @@ test("Post post with JWT 2", async ()=>{
     // console.log(data);
 
     // SET THE JWT COOKIE BEFORE CALLING POSTPOST
-    await supertest(app).post('/api/postPost')
+    const postInfo = await supertest(app).post('/api/postPost')
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
     .send(data)
     .expect(201)
     .then((response) =>{
         // console.log(response.body);
+        return response.body.postid;
     });
+
+    // delete the newly created post and associated comments
+    const deleteData = {
+        'postid': postInfo,
+    }
+    await supertest(app).delete('/api/deletePost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(deleteData)
+        .expect(200);
 });
 
 // Posting a post with a JWT
@@ -134,13 +159,23 @@ test("Post post with JWT 3", async ()=>{
     // console.log(data);
 
     // SET THE JWT COOKIE BEFORE CALLING POSTPOST
-    await supertest(app).post('/api/postPost')
+    const postInfo = await supertest(app).post('/api/postPost')
     .set('Cookie', [`accessToken=${logininfo.accessToken}`])
     .send(data)
     .expect(201)
     .then((response) =>{
         // console.log(response.body);
+        return response.body.postid;
     });
+
+    // delete the newly created post and associated comments
+    const deleteData = {
+        'postid': postInfo,
+    }
+    await supertest(app).delete('/api/deletePost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(deleteData)
+        .expect(200);
 });
 
 
@@ -154,6 +189,7 @@ test("get posts", async() => {
        return response.body;
     });
 
+    // FIXME: this should not be hardcoded
     const data = {
         'opportunityid' : 'c6feb949-9ea4-4a65-9e36-8acc9fac151d'
     }
@@ -170,61 +206,135 @@ test("get posts", async() => {
 });
 
 // insert a comment into the comments table.
-test("insert comment for post and get the comment", async() =>{
-        // GET A JWT FIRST
-        const logininfo = await supertest(app).post('/api/login')
+test("create post, post comment on it, get comments, delete post", async () => {
+    // GET A JWT FIRST
+    const logininfo = await supertest(app).post('/api/login')
         .send(loginData)
         .expect(200)
-        .then( (response) =>{
-           return response.body;
+        .then((response) => {
+            return response.body;
         });
 
-        const data = {
-            'opportunityid' : 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
-            'userid' : logininfo.userid,
-            'content' : 'This post should have a comment with it.',
-            'title': 'Post with comment test',
-            'createddate': new Date().toISOString(),
-        }
-    
-        // SET THE JWT COOKIE BEFORE CALLING POSTPOST
-        const postinfo = await supertest(app).post('/api/postPost')
+
+    // create new post
+    const data = {
+        'opportunityid': 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
+        'userid': logininfo.userid,
+        'content': 'This post should have a comment with it.',
+        'title': 'Post with comment test',
+        'createddate': new Date().toISOString(),
+    }
+    const postInfo = await supertest(app).post('/api/postPost')
         .set('Cookie', [`accessToken=${logininfo.accessToken}`])
         .send(data)
         .expect(201)
-        .then((response) =>{
-            // console.log(response.body);
+        .then((response) => {
+            console.log(response.body.postid);
             return response.body.postid;
         });
 
-        const commentdata = {
-            'postid' : postinfo,
-            'userid' : logininfo.userid,
-            'content' : `Hi, I'm a comment!`,
-            'createddate': new Date().toISOString(),
-        }
-        
-        // Creates a comment for the post that was just created.
-        await supertest(app).post('/api/postComment')
+
+    // Creates a comment for the post that was just created.
+    const commentdata = {
+        'postid': postInfo,
+        'userid': logininfo.userid,
+        'content': `Hi, I'm a comment!`,
+        'createddate': new Date().toISOString(),
+    }
+    await supertest(app).post('/api/postComment')
         .set('Cookie', [`accessToken=${logininfo.accessToken}`])
         .send(commentdata)
         .expect(201)
-        .then((response) =>{
+        .then((response) => {
             // console.log(response.body);
             return response.body;
         });
 
 
-        const getCommentData = {
-            'postid' : postinfo,
-        }
-        await supertest(app).get(`/api/getComments/${getCommentData.postid}`)
+    // get comments
+    const getCommentData = {
+        'postid': postInfo,
+    }
+    await supertest(app).get(`/api/getComments/${getCommentData.postid}`)
         .set('Cookie', [`accessToken=${logininfo.accessToken}`])
         .send(getCommentData)
         .expect(200)
-        .then((response) =>{
+        .then((response) => {
             // console.log(response.body);
         });
+
+
+    // delete the newly created post and associated comments
+    const deleteData = {
+        'postid': postInfo,
+    }
+    await supertest(app).delete('/api/deletePost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(deleteData)
+        .expect(200)
 });
 
+// insert a comment into the comments table.
+test("create post, post comment on it, delete comment, delete post", async () => {
+    // GET A JWT FIRST
+    const logininfo = await supertest(app).post('/api/login')
+        .send(loginData)
+        .expect(200)
+        .then((response) => {
+            return response.body;
+        });
 
+
+    // create new post
+    const data = {
+        'opportunityid': 'c6feb949-9ea4-4a65-9e36-8acc9fac151d',
+        'userid': logininfo.userid,
+        'content': 'This post should have a comment with it.',
+        'title': 'Post with comment test',
+        'createddate': new Date().toISOString(),
+    }
+    const postInfo = await supertest(app).post('/api/postPost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(data)
+        .expect(201)
+        .then((response) => {
+            console.log(response.body.postid);
+            return response.body.postid;
+        });
+
+
+    // Creates a comment for the post that was just created.
+    const commentdata = {
+        'postid': postInfo,
+        'userid': logininfo.userid,
+        'content': `Hi, I'm another comment!`,
+        'createddate': new Date().toISOString(),
+    }
+    const myCommentId = await supertest(app).post('/api/postComment')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(commentdata)
+        .expect(201)
+        .then((response) => {
+            console.log(response.body);
+            return response.body.commentid;
+        });
+
+    console.log(myCommentId);
+
+    // delete comment
+    await supertest(app).delete(`/api/deleteComment/${myCommentId}`)
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .expect(200)
+        .then((response) => {
+            console.log(response.body);
+        });
+
+    // delete the newly created post and associated comments
+    const deleteData = {
+        'postid': postInfo,
+    }
+    await supertest(app).delete('/api/deletePost')
+        .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+        .send(deleteData)
+        .expect(200)
+});

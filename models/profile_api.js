@@ -11,7 +11,7 @@ exports.profilePost = async (req, res) => {
   console.log('profilePost req.body');
   console.log(req.body);
   const profileId = await profileModel.createProfile(req.body);
-  res.status(201).send(profileId);
+  res.status(201).send({profileId});
 };
 
 exports.getActiveProfiles = async (_, res) => {
@@ -31,7 +31,7 @@ exports.getActiveProfiles = async (_, res) => {
  * @param {*} res
  */
  exports.getProfile = async (req, res) => {
-  console.log(req.params.userid);
+  // console.log(req.params.userid);
   const profile = await profileModel.getProfile(req.params.userid);
   res.status(201).send(profile);
 };
@@ -44,22 +44,22 @@ exports.getActiveProfiles = async (_, res) => {
  * @param {*} res
  */
  exports.getProfileByProfileId = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const profile = await profileModel.getProfileByProfileId(req.params.profileid);
   res.status(201).send(profile);
 };
 
-/**
- * GETs a profile object
- * retrieves the specified user profile.
- * @param {*} req
- * @param {*} res
- */
- exports.getProfileByProfileId = async (req, res) => {
-  console.log(req.params.profileid);
-  const profile = await profileModel.getProfileByProfileId(req.params.profileid);
-  res.status(201).send(profile);
-};
+// /**
+//  * GETs a profile object
+//  * retrieves the specified user profile.
+//  * @param {*} req
+//  * @param {*} res
+//  */
+//  exports.getProfileByProfileId = async (req, res) => {
+//   console.log(req.params.profileid);
+//   const profile = await profileModel.getProfileByProfileId(req.params.profileid);
+//   res.status(201).send(profile);
+// };
 
 /**
  * POSTs a profile object
@@ -68,9 +68,9 @@ exports.getActiveProfiles = async (_, res) => {
  * @param {*} res
  */
 exports.profileUpdate = async (req, res) => {
-  console.log(req.body.userid);
+  // console.log(req.body.userid);
   const profileId = await profileModel.updateProfile(req.body);
-  res.status(200).send(profileId);
+  res.status(200).send({profileId});
 };
 
 
@@ -81,7 +81,7 @@ exports.profileUpdate = async (req, res) => {
  * @param {*} res
  */
  exports.profileGetName = async (req, res) => {
-  console.log(req.params.profileid);
+  // console.log(req.params.profileid);
   const profile = await profileModel.profileGetName(req.params.profileid);
   res.status(201).send(profile);
 };
@@ -99,23 +99,45 @@ exports.profileUpdate = async (req, res) => {
 
 exports.changeProfileStatus = async (req, res) => {
   const {useremail, status} = req.body;
+  // console.log('gothere');
   // const isapproved = status == 4 ? true : false;
   const profile = await profileModel.changeProfileStatus(status, useremail);
-  res.status(200).send(profile);
+  res.status(200).send(profile); // this just sends back an empty []
 }
 
 exports.changeProfileStatusForRequest = async (req, res) => {
   const {useremail, status, requestinfo} = req.body;
   const profile = await
     profileModel.changeProfileStatusForRequest(status, requestinfo, useremail);
-  res.status(200).send(profile);
+  res.status(200).send(profile); // this just sends back an empty []
 }
 
 exports.changeProfileRequestResponse = async (req, res) => {
   const {status, response, profileid} = req.body;
   const profile = await
     profileModel.changeProfileRequestResponse(status, response, profileid);
-  res.status(200).send(profile);
+  res.status(200).send(profile); // this just sends back an empty []
 }
+
+// /**
+//  * deletes profile profile of profileid
+//  * @param {*} req request
+//  * @param {*} res response
+//  */
+// exports.deleteProfile = async (req, res) => {
+//   try {
+//     const { profileid } = req.body;
+//     // get requestid's of all requests where request.requester = profileid
+//     // delete those requests
+//     // delete Profile
+//     await profileModel.deleteProfile(profileid);
+//     res.status(200).send();
+//   } catch (error) {
+//     console.log(`error deleting post ${error}`);
+//     res.status(500).send({ message: 'error deleting post' });
+//   }
+// }
+
+
 
 

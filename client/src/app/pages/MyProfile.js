@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {styled} from '@mui/material';
@@ -22,17 +22,12 @@ const Page = styled((props) => (
 }));
 
 /**
- * creates Calendar
- * @return {HTML} Calendar component
+ * creates Proflie Page
+ * @return {HTML} Profile component
  */
 export default function Profile() {
   const {user, userProfile} = useAuth();
-  const [currUserInfo, setCurrUserInfo] = useState(userProfile);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setCurrUserInfo(userProfile);
-  }, [userProfile]);
 
   const handleDeactivateAccount = () => {
     fetch(`/api/userDeactivation`, {
@@ -73,21 +68,21 @@ export default function Profile() {
 
   return (
     <Page>
-      {currUserInfo && (
+      {userProfile && (
         <>
           <ProfileAlert
             data={{
-              'profileid': currUserInfo.profileid,
-              'status': currUserInfo.status,
-              'requestinfo': currUserInfo.requestinfo,
-              'requestresponse': currUserInfo.requestresponse,
+              'profileid': userProfile.profileid,
+              'status': userProfile.status,
+              'requestinfo': userProfile.requestinfo,
+              'requestresponse': userProfile.requestresponse,
             }}
           />
-          <ProfileHeader data={currUserInfo} />
-          <ProfileAbout data={currUserInfo?.about}/>
-          <ProfileWork data={currUserInfo?.experience} />
-          <ProfileVolunteer data={currUserInfo?.volunteeringexperience} />
-          {user && user.userid === currUserInfo.userid &&
+          <ProfileHeader data={userProfile} />
+          <ProfileAbout data={userProfile?.about}/>
+          <ProfileWork data={userProfile?.experience} />
+          <ProfileVolunteer data={userProfile?.volunteeringexperience} />
+          {user && user.userid === userProfile.userid &&
             <Button onClick={handleDeactivateAccount}>
               Deactivate Account
             </Button>
