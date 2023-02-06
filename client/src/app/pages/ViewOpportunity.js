@@ -11,6 +11,8 @@ import ViewOpportunityForums from '../components/ViewOpportunityForums';
 import ViewOpportunityMembers from '../components/ViewOpportunityMembers';
 import ViewOpportunityRequests from '../components/ViewOpportunityRequests';
 import useAuth from '../util/AuthContext';
+import RequestModal from '../components/RequestOpportunityModal';
+import {toast} from 'react-toastify';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -98,6 +100,87 @@ function ViewOpportunity({opportunity}) {
   const [creator, setCreator] = useState(null);
   const [tab, setTab] = useState(0);
 
+  const [showReqForm, setshowReqForm] = React.useState(false);
+  const [requestMessage, setRequestMessage] = React.useState('');
+  const [requestedRole, setRequestedRole] = React.useState('');
+  // REMOVE REQUESTED ROLE STATE
+
+  const handleModalClose = () => {
+    setRequestedRole('');
+    setshowReqForm(false);
+  };
+
+  const handleModalOpen = (role) => {
+    setRequestedRole(role);
+    setshowReqForm(true);
+  };
+
+  const handleRequestMessage = (e) => {
+    setRequestMessage(e.target.value);
+  };
+
+  const handleRequestClick = (e) => {
+    // Send request here
+    const requestData = {
+      requestee: creator.profileid,
+      requester: userProfile.profileid,
+      requestmessage: requestMessage,
+      opportunityid: opportunity.eventid,
+      role: requestedRole,
+      toevent: true,
+    };
+    postRequestToOpportunity(requestData);
+    setshowReqForm(false);
+    setRequestMessage('');
+  };
+
+  const postRequestToOpportunity = (requestData) => {
+    fetch(`/api/postRequest`, {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (res.status === 201) {
+            toast.success(`Applied to ${opportunity.eventname}`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else if (res.status === 409) {
+            toast.warning(`You Already Applied to This Event`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            toast.error(`Something Went Wrong. Please Try Again.`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something Went Wrong. Please Try Again.');
+        });
+  };
+
   const noncreatorTabs = [
     {
       name: 'About',
@@ -106,6 +189,9 @@ function ViewOpportunity({opportunity}) {
           isCreator={isCreator && isCreator}
           description={opportunity?.description}
           roles={opportunity?.roles}
+          opportunityName={opportunity?.eventname}
+          opportunityid={opportunity?.eventid}
+          creator={creator}
         />,
     },
     {
@@ -191,7 +277,14 @@ function ViewOpportunity({opportunity}) {
               backUrl={'/opportunities'}
               data={opportunity}
               components={
-                <ThemedButton variant='gradient' color='yellow' size='small'>
+                <ThemedButton
+                  variant='gradient'
+                  color='yellow'
+                  size='small'
+                  onClick={() => {
+                    handleModalOpen('');
+                  }}
+                >
                   Request to Join
                 </ThemedButton>
               }
@@ -227,6 +320,14 @@ function ViewOpportunity({opportunity}) {
               members={opportunity?.assignedroles}
             />
           </MuiBox>
+          <RequestModal
+            showReqForm={showReqForm}
+            handleModalClose={handleModalClose}
+            requestMessage={requestMessage}
+            handleRequestMessage={handleRequestMessage}
+            handleRequestClick={handleRequestClick}
+            opportunityName={opportunity.eventname}
+          />
         </>
       }
     </Page>

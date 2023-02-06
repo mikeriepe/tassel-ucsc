@@ -222,4 +222,3 @@ exports.deleteRequest = async (requestid) =>{
     };
   const {rows} = await pool.query(query);
 }
-

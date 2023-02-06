@@ -176,6 +176,7 @@ export default function FetchWrapper() {
         pendingOpportunities &&
         allOpportunities &&
           <Opportunities
+            getPendingOpportunities={getPendingOpportunities}
             joinedOpportunities={joinedOpportunities}
             createdOpportunities={createdOpportunities}
             pastOpportunities={pastOpportunities}
@@ -197,6 +198,7 @@ function Opportunities({
   pastOpportunities,
   pendingOpportunities,
   allOpportunities,
+  getPendingOpportunities,
 }) {
   const [tab, setTab] = useState(0);
   const [locationFilter, setLocationFilter] = useState([]);
@@ -247,6 +249,7 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
         />,
     },
     {
@@ -277,6 +280,7 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
         />,
     },
   ];
