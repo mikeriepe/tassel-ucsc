@@ -6,8 +6,8 @@ import MuiBox from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import useAuth from '../util/AuthContext';
-import WorkExperienceEditModal from '../components/WorkExperienceEditModal';
-import WorkExperienceDeleteModal from '../components/WorkExperienceDeleteModal';
+import VolunteerExperienceEditModal from './VolunteerExperienceEditModal';
+import VolunteerExperienceDeleteModal from './VolunteerExperienceDeleteModal';
 import {Modal} from '@mui/material';
 
 const Card = styled((props) => (
@@ -54,7 +54,7 @@ const OutlinedIconButton = ({children}, props) => (
  * @param {Object} jobExperience
  * @return {JSX}
  */
-export default function WorkExperienceCard({jobIndex}) {
+export default function VolunteerExperienceCard({jobIndex}) {
   const {userProfile} = useAuth();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -71,14 +71,14 @@ export default function WorkExperienceCard({jobIndex}) {
         >
           <MuiBox>
             <div>
-              <h5>{userProfile.experience[jobIndex].title}</h5>
+              <h5>{userProfile.volunteeringexperience[jobIndex].title}</h5>
               <p className='text-bold text-blue'>
-                {userProfile.experience[jobIndex].company}</p>
-              <p>{userProfile.experience[jobIndex].location}</p>
-              <p>{userProfile.experience[jobIndex].start +
-                ' - ' + userProfile.experience[jobIndex].end}</p>
+                {userProfile.volunteeringexperience[jobIndex].company}</p>
+              <p>{userProfile.volunteeringexperience[jobIndex].location}</p>
+              <p>{userProfile.volunteeringexperience[jobIndex].start +
+                ' - ' + userProfile.volunteeringexperience[jobIndex].end}</p>
               <p style={{marginTop: '0.5em'}}>
-                {userProfile.experience[jobIndex].description}</p>
+                {userProfile.volunteeringexperience[jobIndex].description}</p>
             </div>
           </MuiBox>
           <div className='flex-flow-large' style={{marginLeft: '50px'}}>
@@ -105,7 +105,7 @@ export default function WorkExperienceCard({jobIndex}) {
         onBackdropClick={() => setShowEditModal(false)}
         onClose={() => setShowEditModal(false)}
       >
-        <WorkExperienceEditModal onClose={() =>
+        <VolunteerExperienceEditModal onClose={() =>
           setShowEditModal(!showEditModal)}
         index={jobIndex}/>
       </Modal>
@@ -114,7 +114,7 @@ export default function WorkExperienceCard({jobIndex}) {
         onBackdropClick={() => setShowDeleteModal(false)}
         onClose={() => setShowDeleteModal(false)}
       >
-        <WorkExperienceDeleteModal onClose={() =>
+        <VolunteerExperienceDeleteModal onClose={() =>
           setShowDeleteModal(!showDeleteModal)}
         index={index}/>
       </Modal>

@@ -14,6 +14,10 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ButtonBase from '@mui/material/ButtonBase';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import WorkExperienceDeleteModal from '../components/WorkExperienceDeleteModal';
+import VolunteerExperienceForm from '../components/VolunteerExperienceForm';
+import VolunteerExperienceDeleteModal from
+  '../components/VolunteerExperienceDeleteModal';
+import VolunteerExperienceList from '../components/VolunteerExperienceList';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -61,6 +65,9 @@ export default function UpdateProfile() {
   const {user, userProfile} = useAuth();
   const [showWorkForm, setShowWorkForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showVolunteerForm, setShowVolunteerForm] = useState(false);
+  const [showDeleteVolunteerModal,
+    setShowDeleteVolunteerModal] = useState(false);
 
   const [values, setValues] = useState({
     1: {
@@ -220,6 +227,48 @@ export default function UpdateProfile() {
                   <WorkExperienceList
                     workExperience={userProfile.experience} />
                 </div>
+                <div className='grid-flow-small'>
+                  <div
+                    className='flex-space-between flex-align-center'
+                    style={{background: 'var(--background-primary)'}}
+                  >
+                    <p className='text-bold'>
+                    Volunteer Experience
+                    </p>
+                    <div className='flex-space-between flex-align-center'>
+                      {(
+                        <OutlinedIconButton>
+                          <RemoveIcon
+                            sx={{
+                              height: '20px',
+                              width: '20px',
+                              color: 'var(--text-gray)',
+                              stroke: 'var(--text-gray)',
+                              strokeWidth: '2px',
+                            }}
+                            onClick={() => setShowDeleteVolunteerModal(true)}
+                          />
+                        </OutlinedIconButton>
+                      )}
+                      {(
+                        <OutlinedIconButton>
+                          <AddIcon
+                            sx={{
+                              height: '20px',
+                              width: '20px',
+                              color: 'var(--text-gray)',
+                              stroke: 'var(--text-gray)',
+                              strokeWidth: '2px',
+                            }}
+                            onClick={() => setShowVolunteerForm(true)}
+                          />
+                        </OutlinedIconButton>
+                      )}
+                    </div>
+                  </div>
+                  <VolunteerExperienceList
+                    volunteerExperience={userProfile.volunteeringexperience} />
+                </div>
               </div>
               <div className='grid-flow-small'>
                 <div className='flex-flow-large'>
@@ -263,6 +312,22 @@ export default function UpdateProfile() {
       >
         <WorkExperienceDeleteModal onClose={() =>
           setShowDeleteModal(!showDeleteModal)}/>
+      </Modal>
+      <Modal
+        open={showVolunteerForm}
+        onBackdropClick={() => setShowVolunteerForm(false)}
+        onClose={() => setShowVolunteerForm(false)}
+      >
+        <VolunteerExperienceForm onClose={() =>
+          setShowVolunteerForm(!showVolunteerForm)}/>
+      </Modal>
+      <Modal
+        open={showDeleteVolunteerModal}
+        onBackdropClick={() => setShowDeleteVolunteerModal(false)}
+        onClose={() => setShowDeleteVolunteerModal(false)}
+      >
+        <VolunteerExperienceDeleteModal onClose={() =>
+          setShowDeleteVolunteerModal(!showDeleteVolunteerModal)}/>
       </Modal>
     </Page>
   );
