@@ -22,7 +22,6 @@
     "jsonwebtoken": "^8.5.1",
     "node-pg": "^1.0.1",
     "pg": "^8.7.3",
-    "react-hook-form": "^7.43.0",
     "supertest": "^6.2.2"
   },
   "devDependencies": {

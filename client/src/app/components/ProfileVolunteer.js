@@ -22,29 +22,6 @@ const Volunteer = styled((props) => (
  * @return {HTML} Profile component
  */
 export default function ProfileVolunteer({data}) {
-  // Volunteering experience data in database returns a string
-  // Hasn't been changed yet to be an object like the work experience data
-  // console.log(data.experience1);
-
-  // const exampleData1 = {
-  //   title: 'Beach Cleanup',
-  //   company: 'Marine Biology Club',
-  //   location: 'Santa Cruz, CA',
-  //   startDate: '2015',
-  //   endDate: '2015',
-  //   description: 'I picked up trash.',
-  // };
-  // const exampleData2 = {
-  //   title: 'Speaker',
-  //   company: 'Microsoft',
-  //   location: 'Seattle, CA',
-  //   startDate: '2017',
-  //   endDate: '2018',
-  //   description: 'I spoke about Microsoft.',
-  // };
-  // const exampleDataArray = [exampleData1, exampleData2];
-  // const exampleDataArray = data;
-
   return (
     <Volunteer>
       <h4 className='text-dark'>Volunteer Experience</h4>
