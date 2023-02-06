@@ -1,8 +1,10 @@
 import React from 'react';
-import {Controller, useFormContext} from 'react-hook-form';
+import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
 
-export const TextInput = ({name, control, label}) => {
+export const TextInput = ({name, control, label, register}) => {
   return (
     <Controller
       name={name}
@@ -12,20 +14,24 @@ export const TextInput = ({name, control, label}) => {
         fieldState: {error},
         formState,
       }) => (
-        <TextField
-          sx={{
-            input: {color: '#fdc700'},
-            backgroundColor: 'rgb(255, 255, 255)',
-            marginBottom: '10px',
-          }}
-          helperText={error ? error.message : null}
-          error={!!error}
-          onChange={onChange}
-          value={value}
-          fullWidth
-          label={label}
-          variant='outlined'
-        />
+        <Box>
+          <TextField
+            sx={{
+              input: {color: '#fdc700'},
+              backgroundColor: 'rgb(255, 255, 255)',
+              marginBottom: '5px',
+            }}
+            {...register(name)}
+            onChange={onChange}
+            value={value}
+            fullWidth
+            label={label}
+            variant='outlined'
+          />
+          <FormHelperText error={!!error}>
+            {error ? error.message : ''}
+          </FormHelperText>
+        </Box>
       )}
     />
   );

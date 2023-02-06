@@ -7,8 +7,7 @@ import OpportunitiesList from '../components/OpportunitiesList';
 import PageHeader from '../components/PageHeader';
 import useAuth from '../util/AuthContext';
 import OpportunityForm from '../components/OpportunityForm';
-import { Button, Modal, Box } from '@mui/material';
-import OpportunityCreation from '../components/_OLD_OpportunityCreation';
+import {Modal} from '@mui/material';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -286,6 +285,62 @@ function Opportunities({
     },
   ];
 
+  const formValues = {
+    eventname: '',
+    locationtype: 'in-person',
+    eventlocation: {
+      'address': '',
+      'state': '',
+      'city': '',
+      'zip': '',
+    },
+    sponsortype: 'user sponsor',
+    eventzoomlink: '',
+    organization: '',
+    description: '',
+    eventdata: '',
+    startdate: new Date(),
+    enddate: new Date(),
+    organizationtype: '',
+    opportunitytype: '',
+    starttime: new Date(),
+    endtime: new Date(),
+    subject: '',
+  };
+
+  const onSubmit = (data) => {
+    const newOpportunity = {
+      assignedroles: {},
+      eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
+      active: true,
+      userparticipants: [],
+      preferences: {},
+      usersponsors: {'creator': userProfile.profileid},
+      roles: currRoles,
+      ...data,
+    };
+
+    fetch(`/api/postOpportunity`, {
+      method: 'POST',
+      body: JSON.stringify(newOpportunity),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res;
+        })
+        .then((json) => {
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
   // Reset filters when switching tabs
   useEffect(() => {
     setLocationFilter([]);
@@ -307,7 +362,11 @@ function Opportunities({
         onClose={() => setShowOppForm(false)}
         sx={{overflow: 'scroll'}}
       >
-        <OpportunityForm onClose={() => setShowOppForm(!showOppForm)}/>
+        <OpportunityForm
+          onClose={() => setShowOppForm(!showOppForm)}
+          defaultValues={formValues}
+          onSubmit={onSubmit}
+        />
       </Modal>
       {tabs[tab].component}
     </Page>

@@ -1,12 +1,21 @@
 import Box from '@mui/material/Box';
 import React, {useState, useEffect} from 'react';
-import {Button, StepLabel} from '@mui/material';
+import {StepLabel, IconButton, FormHelperText} from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TextField from '@mui/material/TextField';
+import FormLabel from '@mui/material/FormLabel';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import {toast} from 'react-toastify';
+
+import {yupResolver} from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import {useForm} from 'react-hook-form';
 
+import ThemedButton from '../components/ThemedButton';
 import {TextInput} from './TextInput';
 import {TimeInput} from './TimeInput';
 import {DropdownInput} from './DropdownInput';
@@ -22,9 +31,7 @@ import useAuth from '../util/AuthContext';
  * @param {Function} onClose
  * @return {HTML} OpportunityForm component
  */
-export default function OpportunityForm({onClose}) {
-  const {userProfile} = useAuth();
-
+export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const [opportunityTypes, setOpportunityTypes] = useState(null);
   const [organizationTypes, setOrganizationTypes] = useState(null);
   const [organizations, setOrganizations] = useState(null);
@@ -32,36 +39,72 @@ export default function OpportunityForm({onClose}) {
   const [currOrganizationType, setCurrOrganizationType] = useState(null);
   const [currLocationType, setCurrLocationType] = useState('in-person');
   const [currSponsorType, setCurrSponsorType] = useState('user sponsor');
+  const [currRoles, setCurrRoles] = useState([]);
+  const [roleError, setRoleError] = useState('');
+  const maxRoles = 3;
 
-  const formValues = {
-    eventname: '',
-    usersponsors: {'creator': userProfile.profileid},
-    locationtype: 'in-person',
-    eventlocation: {
-      'address': '',
-      'state': '',
-      'city': '',
-      'zip': '',
-    },
-    eventzoomlink: '',
-    organization: null, // TODO:
-    description: null,
-    userparticipants: [],
-    preferences: null,
-    eventdata: null,
-    startdate: (new Date()),
-    enddate: null,
-    active: true,
-    // eslint-disable-next-line max-len
-    eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
-    organizationtype: null,
-    opportunitytype: '',
-    roles: null, // TODO:
-    starttime: null,
-    endtime: null,
-    subject: null,
-    assignedroles: {},
-  };
+  const validationSchema = Yup.object().shape({
+    eventname: Yup.string().required('Event name is required'),
+    locationtype: Yup.string().required('Location type is required'),
+    sponsortype: Yup.string().required('Sponsor type is required'),
+    eventlocation: Yup.object().shape({
+      'address': Yup.string().when([], {
+        is: () => currLocationType != 'remote',
+        then: Yup.string().required('Street address is required'),
+        otherwise: Yup.string().notRequired(),
+      }),
+      'city': Yup.string().when([], {
+        is: () => currLocationType != 'remote',
+        then: Yup.string().required('City is required'),
+        otherwise: Yup.string().notRequired(),
+      }),
+      'state': Yup.string().when([], {
+        is: () => currLocationType != 'remote',
+        then: Yup.string().required('State/province is required'),
+        otherwise: Yup.string().notRequired(),
+      }),
+      'zip': Yup.string().when([], {
+        is: () => currLocationType != 'remote',
+        then: Yup.string().required('Zip code is required'),
+        otherwise: Yup.string().notRequired(),
+      }),
+    }),
+    // TODO: check website format?
+    eventzoomlink: Yup.string().when([], {
+      is: () => currLocationType != 'in-person',
+      then: Yup.string().required('Event zoom link is required'),
+      otherwise: Yup.string().notRequired(),
+    }),
+    organization: Yup.string().when([], {
+      is: () => currSponsorType == 'organization sponsor',
+      then: Yup.string().required('Organization is required'),
+      otherwise: Yup.string().notRequired(),
+    }),
+    description: Yup.string().required('Description is required'),
+    // TODO: eventdata required?
+    eventdata: Yup.string().required('Other details required'),
+    startdate: Yup
+        .date()
+        .required('Start date is required'),
+    enddate: Yup
+        .date()
+        .min(Yup.ref('startdate'), 'End date must be after start date')
+        .required('End date is required'),
+    organizationtype: Yup.string().when([], {
+      is: () => currSponsorType == 'organization sponsor',
+      then: Yup.string().required('Organization type is required'),
+      otherwise: Yup.string().notRequired(),
+    }),
+    opportunitytype: Yup.string().required('Opportunity type is required'),
+    starttime: Yup
+        .date()
+        .required('Start time is required'),
+    endtime: Yup
+        .date()
+        .min(Yup.ref('starttime'), 'End time must be after start time')
+        .required('End time is required'),
+    subject: Yup.string().required('Subject is required'),
+  });
 
   const getOpportunityTypes = () => {
     fetch(`/api/getOpportunityTypes`)
@@ -137,6 +180,7 @@ export default function OpportunityForm({onClose}) {
 
   const handleSponsorChange = (e) => {
     const value = e.target.value;
+    console.log(value);
     setCurrSponsorType(value);
   };
 
@@ -148,6 +192,53 @@ export default function OpportunityForm({onClose}) {
   const handleLocationTypeChange = (e) => {
     const value = e.target.value;
     setCurrLocationType(value);
+  };
+
+  const combineTimeDate = (time, date) => {
+    const combined = new Date();
+
+    // get and set time elements
+    combined.setHours(time.getHours(), time.getMinutes());
+
+    // get date elements
+    combined.setDate(date.getDate());
+    combined.setMonth(date.getMonth());
+    combined.setFullYear(date.getFullYear());
+
+    return combined;
+  };
+
+  const handleAdditionalRoleClick = () => {
+    if (currRoles.length < maxRoles) {
+      const rolesCopy = [...currRoles];
+      rolesCopy.push('');
+      console.log(rolesCopy);
+      setCurrRoles(rolesCopy);
+    } else {
+      toast.error('Maximum number of roles reached', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
+  const handleRemoveRoleClick = (e) => {
+    const rolesCopy = [...currRoles];
+    const roleIndex = parseInt(e.target.parentElement.id, 10);
+    rolesCopy.splice(roleIndex, 1);
+    setCurrRoles(rolesCopy);
+  };
+
+  const handleRoleChange = (e) => {
+    const roleIndex = parseInt(e.target.id, 10);
+    const rolesCopy = [...currRoles];
+    rolesCopy[roleIndex] = e.target.value;
+    setCurrRoles(rolesCopy);
   };
 
   const subjectOptions = [
@@ -180,7 +271,7 @@ export default function OpportunityForm({onClose}) {
     },
   ];
 
-  const sponsorOptions = [
+  const sponsorTypeOptions = [
     {
       label: 'User Sponsored',
       value: 'user sponsor',
@@ -191,30 +282,16 @@ export default function OpportunityForm({onClose}) {
     },
   ];
 
-  const methods = useForm({defaultValues: formValues});
-  const {handleSubmit, control, getValues} = methods;
-
-  const onSubmit = (data) => {
-    // TODO: check roles under max
-
-    // Make sure no values written
-    // to DB that do not match location/sponsor type
-    if (data.locationtype == 'in-person') {
-      data.eventzoomlink = '';
-    }
-
-    if (data.locationtype == 'remote') {
-      data.eventlocation = {};
-    }
-
-    if (currSponsorType == 'user sponsor') {
-      data.organization = null;
-      data.organizationtype = null;
-    }
-
-    console.log(data);
-    onClose();
-  };
+  const {
+    register,
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: defaultValues,
+  });
 
   useEffect(() => {
     getOrganizationTypes();
@@ -253,7 +330,7 @@ export default function OpportunityForm({onClose}) {
           gridAutoFlow: 'column',
           gridGap: '1vw',
           gridTemplateColumns: '45vw',
-          marginBottom: '10px',
+          marginBottom: '5px',
         }}
       >
 
@@ -263,6 +340,7 @@ export default function OpportunityForm({onClose}) {
             name='eventname'
             control={control}
             label='Opportunity Title'
+            register={register}
           />
 
           {/* Dropdown Menus*/}
@@ -271,6 +349,7 @@ export default function OpportunityForm({onClose}) {
               display: 'grid',
               gridAutoFlow: 'column',
               gridGap: '10px',
+              marginTop: '5px',
             }}
           >
             {
@@ -280,6 +359,7 @@ export default function OpportunityForm({onClose}) {
                   control={control}
                   label='Opportunity Type'
                   options={opportunityTypes}
+                  register={register}
                 />:
                 <Skeleton variant="rectangular" width={325} height={26} />
             }
@@ -290,15 +370,18 @@ export default function OpportunityForm({onClose}) {
               options={locationOptions}
               defaultValue='in-person'
               customOnChange={handleLocationTypeChange}
+              register={register}
             />
           </Box>
 
           <RadioInput
-            name='sponsor'
+            name='sponsortype'
             control={control}
             label='Opportunity Sponsor'
-            options={sponsorOptions}
+            options={sponsorTypeOptions}
             customOnChange={handleSponsorChange}
+            register={register}
+            defaultValue='user sponsor'
           />
 
           {/* ORGANIZATION DETAILS */}
@@ -311,12 +394,14 @@ export default function OpportunityForm({onClose}) {
                   label='Organization Type'
                   options={organizationTypes}
                   customOnChange={handleOrganizationTypeChange}
+                  register={register}
                 />
                 <DropdownInput
                   name='organization'
                   control={control}
                   label='Organization'
                   options={organizations}
+                  register={register}
                 />
               </Box>
           }
@@ -326,14 +411,82 @@ export default function OpportunityForm({onClose}) {
             control={control}
             label='Enter Description'
             multi={true}
+            register={register}
           />
+
+          <Box sx={{marginTop: '5px'}}>
+            <Box sx={{
+              marginBottom: '5px',
+              display: 'grid',
+              gridAutoFlow: 'column',
+              gridGap: '5px',
+            }}>
+              <FormLabel value='eventroles'
+                sx={{display: 'flex',
+                  position: 'relative',
+                  fontSize: '12pt',
+                  height: '25px',
+                  top: '6px',
+                  ml: '2px',
+                }}
+              >
+                Opportunity Roles
+              </FormLabel>
+              {/* TODO: check shadow */}
+              <IconButton
+                size='small'
+                sx = {{color: '#fdc700'}}
+                aria-label="additional opportunity role"
+                onClick={handleAdditionalRoleClick}
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Box>
+
+            {
+              currRoles.length > 0 &&
+              currRoles.map((role, index) => (
+                <Box
+                  key={`role${index}`}
+                  id={index.toString()}
+                >
+                  <TextField
+                    sx={{
+                      marginTop: '5px',
+                      backgroundColor: 'rgb(255, 255, 255)',
+                    }}
+                    name={`role${index}`}
+                    id={index.toString()}
+                    value={role}
+                    onChange={handleRoleChange}
+                    label='Role Name'
+                  />
+                  <IconButton
+                    id={index.toString()}
+                    aria-label="remove opportunity role"
+                    color="inherit"
+                    sx = {{position: 'relative',
+                      marginTop: '12px',
+                      marginLeft: '5px'}}
+                    onClick={handleRemoveRoleClick}
+                  >
+                    <RemoveCircleOutlineIcon
+                      sx={{color: 'red'}}
+                      fontSize="large"
+                    />
+                  </IconButton>
+                </Box>
+              ))
+            }
+            <FormHelperText sx={{color: 'red'}}>{roleError}</FormHelperText>
+          </Box>
         </Box>
 
         {/* RIGHT SECTION */}
         <Box>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-            {/* DATE PICKER WRAPPER */}
+          {/* DATE PICKERS */}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box
               sx={{
                 display: 'grid',
@@ -345,15 +498,17 @@ export default function OpportunityForm({onClose}) {
                 name='startdate'
                 control={control}
                 label='Start Date'
+                register={register}
               />
               <DateInput
                 name='enddate'
                 control={control}
                 label='End Date'
+                register={register}
               />
             </Box>
 
-            {/* TIME PICKER WRAPPER */}
+            {/* TIME PICKERS */}
             <Box
               sx={{
                 display: 'grid',
@@ -365,11 +520,13 @@ export default function OpportunityForm({onClose}) {
                 name='starttime'
                 control={control}
                 label='Start Time'
+                register={register}
               />
               <TimeInput
                 name='endtime'
                 control={control}
                 label='End Time'
+                register={register}
               />
             </Box>
 
@@ -378,16 +535,18 @@ export default function OpportunityForm({onClose}) {
           {/* ADDRESS */}
           {
             currLocationType != 'remote' &&
-            <Box>
+            <Box sx={{marginTop: '5px'}}>
               <TextInput
                 name='eventlocation.address'
                 control={control}
                 label='Enter Street Address'
+                register={register}
               />
               <TextInput
                 name='eventlocation.city'
                 control={control}
                 label='Enter City'
+                register={register}
               />
 
               <Box
@@ -401,11 +560,13 @@ export default function OpportunityForm({onClose}) {
                   name='eventlocation.state'
                   control={control}
                   label='Enter State/Province'
+                  register={register}
                 />
                 <TextInput
                   name='eventlocation.zip'
                   control={control}
                   label='Enter Zipcode'
+                  register={register}
                 />
               </Box>
             </Box>
@@ -418,6 +579,7 @@ export default function OpportunityForm({onClose}) {
               name='eventzoomlink'
               control={control}
               label='Event Zoom Link'
+              register={register}
             />
           }
 
@@ -426,11 +588,13 @@ export default function OpportunityForm({onClose}) {
             control={control}
             label='Subject'
             options={subjectOptions}
+            register={register}
           />
           <TextInput
             name='eventdata'
             control={control}
             label='Other details'
+            register={register}
           />
         </Box>
       </Box>
@@ -441,36 +605,71 @@ export default function OpportunityForm({onClose}) {
           display: 'grid',
           gridAutoFlow: 'column',
           gridAutoColumns: 'max-content',
+          gridGap: '10px',
           justifyContent: 'end',
         }}
       >
-        <Button
+        <ThemedButton
+          aria-label='Next step button'
+          color={'blue'}
+          variant={'themed'}
           onClick={onClose}
-          sx={{
-            display: 'flex',
-            position: 'relative',
-            width: '100px',
-            height: '50px',
-            marginRight: '5px',
-            backgroundColor: 'gray',
-            fontSize: '8pt',
+        >
+          Back
+        </ThemedButton>
+        <ThemedButton
+          aria-label='Next step button'
+          color={'yellow'}
+          variant={'themed'}
+          onClick={() => {
+            // convert times to those on given days
+            const values = getValues();
+
+            if (values.starttime) {
+              const newStartTime = combineTimeDate(
+                  values.starttime,
+                  values.startdate,
+              );
+              setValue('starttime', newStartTime);
+            }
+
+            if (values.endtime) {
+              const newEndTime = combineTimeDate(
+                  values.endtime,
+                  values.enddate,
+              );
+
+              setValue('endtime', newEndTime);
+            }
+
+            // manual role validation
+            // ensure none are empty
+            if (currRoles.includes('')) {
+              setRoleError('Role name is required');
+              return;
+            }
+
+            // Make sure no values written
+            // to DB that do not match location/sponsor type
+            if (values.locationtype == 'in-person') {
+              values.eventzoomlink = '';
+            }
+
+            if (values.locationtype == 'remote') {
+              values.eventlocation = {};
+            }
+
+            // TODO: null or empty string?
+            if (currSponsorType == 'user sponsor') {
+              values.organization = null;
+              values.organizationtype = null;
+            }
+
+            handleSubmit(onSubmit)();
           }}
         >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          sx={{
-            display: 'flex',
-            position: 'relative',
-            width: '100px',
-            height: '50px',
-            backgroundColor: '#fdc700',
-            fontSize: '8pt',
-          }}
-        >
-          Create Opportunity
-        </Button>
+          Save
+        </ThemedButton>
       </Box>
     </Paper>
   );

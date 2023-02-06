@@ -15,6 +15,7 @@ export const RadioInput = ({
   label,
   options,
   customOnChange,
+  defaultValue,
 }) => {
   const generateRadioOptions = () => {
     return options.map((option) => (
@@ -29,7 +30,7 @@ export const RadioInput = ({
 
   return (
     <FormControl component="fieldset">
-      <FormLabel name='sponsor' value='sponsor' id='sponsorlabel'
+      <FormLabel name={name}
         sx={{
           fontSize: '16pt',
           marginRight: '20px',
@@ -44,12 +45,16 @@ export const RadioInput = ({
           fieldState: {error},
           formState,
         }) => (
-          <RadioGroup value={value} onChange={(e) => {
-            if (customOnChange) {
-              customOnChange(e);
-            }
-            onChange(e);
-          }}>
+          <RadioGroup
+            value={value}
+            onChange={(e) => {
+              if (customOnChange) {
+                customOnChange(e);
+              }
+              onChange(e);
+            }}
+            defaultValue={defaultValue}
+          >
             {generateRadioOptions()}
           </RadioGroup>
         )}

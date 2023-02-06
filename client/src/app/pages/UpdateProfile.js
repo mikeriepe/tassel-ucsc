@@ -156,6 +156,357 @@ export default function UpdateProfile() {
             </div>
           </Box>
         </Box>
+        <Box className='page' aria-label='Signup form'>
+          <Box className='card-content padding-64'>
+            <div className='flow-large' style={
+              {display: null}
+            }>
+              <div>
+                <h2 className='text-normal'>Update Profile</h2>
+                <p className='text-light text-warning'>
+                  Required <span className='text-bold'>*</span>
+                </p>
+              </div>
+              <div className='grid-flow-large'>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Graduation Year
+                    <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'2022'}
+                    type={'text'}
+                    index={'graduationyear'}
+                    step={1}
+                    fill={'graduationyear'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Major <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'Engineering'}
+                    type={'text'}
+                    index={'major'}
+                    step={1}
+                    fill={'major'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Location
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'userlocation'}
+                    step={1}
+                    fill={'userlocation'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    About You
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'about'}
+                    step={1}
+                    fill={'about'}
+                  />
+                </div>
+              </div>
+              <div className='grid-flow-small'>
+                <div className='flex-flow-large'>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'blue'}
+                      variant={'themed'}
+                    >
+                      Back
+                    </ThemedButton>
+                  </Link>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'yellow'}
+                      variant={'themed'}
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Save
+                    </ThemedButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Box><Box className='page' aria-label='Signup form'>
+          <Box className='card-content padding-64'>
+            <div className='flow-large' style={
+              {display: null}
+            }>
+              <div>
+                <h2 className='text-normal'>Update Profile</h2>
+                <p className='text-light text-warning'>
+                  Required <span className='text-bold'>*</span>
+                </p>
+              </div>
+              <div className='grid-flow-large'>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Graduation Year
+                    <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'2022'}
+                    type={'text'}
+                    index={'graduationyear'}
+                    step={1}
+                    fill={'graduationyear'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Major <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'Engineering'}
+                    type={'text'}
+                    index={'major'}
+                    step={1}
+                    fill={'major'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Location
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'userlocation'}
+                    step={1}
+                    fill={'userlocation'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    About You
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'about'}
+                    step={1}
+                    fill={'about'}
+                  />
+                </div>
+              </div>
+              <div className='grid-flow-small'>
+                <div className='flex-flow-large'>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'blue'}
+                      variant={'themed'}
+                    >
+                      Back
+                    </ThemedButton>
+                  </Link>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'yellow'}
+                      variant={'themed'}
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Save
+                    </ThemedButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Box>
+        <Box className='page' aria-label='Signup form'>
+          <Box className='card-content padding-64'>
+            <div className='flow-large' style={
+              {display: null}
+            }>
+              <div>
+                <h2 className='text-normal'>Update Profile</h2>
+                <p className='text-light text-warning'>
+                  Required <span className='text-bold'>*</span>
+                </p>
+              </div>
+              <div className='grid-flow-large'>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Graduation Year
+                    <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'2022'}
+                    type={'text'}
+                    index={'graduationyear'}
+                    step={1}
+                    fill={'graduationyear'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Major <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'Engineering'}
+                    type={'text'}
+                    index={'major'}
+                    step={1}
+                    fill={'major'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Location
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'userlocation'}
+                    step={1}
+                    fill={'userlocation'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    About You
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'about'}
+                    step={1}
+                    fill={'about'}
+                  />
+                </div>
+              </div>
+              <div className='grid-flow-small'>
+                <div className='flex-flow-large'>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'blue'}
+                      variant={'themed'}
+                    >
+                      Back
+                    </ThemedButton>
+                  </Link>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'yellow'}
+                      variant={'themed'}
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Save
+                    </ThemedButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Box>
+        <Box className='page' aria-label='Signup form'>
+          <Box className='card-content padding-64'>
+            <div className='flow-large' style={
+              {display: null}
+            }>
+              <div>
+                <h2 className='text-normal'>Update Profile</h2>
+                <p className='text-light text-warning'>
+                  Required <span className='text-bold'>*</span>
+                </p>
+              </div>
+              <div className='grid-flow-large'>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Graduation Year
+                    <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'2022'}
+                    type={'text'}
+                    index={'graduationyear'}
+                    step={1}
+                    fill={'graduationyear'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Major <span className='text-bold text-warning'>*</span>
+                  </p>
+                  <ThemedInput
+                    placeholder={'Engineering'}
+                    type={'text'}
+                    index={'major'}
+                    step={1}
+                    fill={'major'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    Location
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'userlocation'}
+                    step={1}
+                    fill={'userlocation'}
+                  />
+                </div>
+                <div className='grid-flow-small'>
+                  <p className='text-bold'>
+                    About You
+                  </p>
+                  <ThemedInput
+                    placeholder={'Let people know more about yourself'}
+                    type={'text'}
+                    index={'about'}
+                    step={1}
+                    fill={'about'}
+                  />
+                </div>
+              </div>
+              <div className='grid-flow-small'>
+                <div className='flex-flow-large'>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'blue'}
+                      variant={'themed'}
+                    >
+                      Back
+                    </ThemedButton>
+                  </Link>
+                  <Link to='/myprofile'>
+                    <ThemedButton
+                      aria-label='Next step button'
+                      color={'yellow'}
+                      variant={'themed'}
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Save
+                    </ThemedButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Box>
       </InputContext.Provider>
     </Page>
   );
