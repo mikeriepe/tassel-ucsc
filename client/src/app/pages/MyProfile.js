@@ -22,8 +22,8 @@ const Page = styled((props) => (
 }));
 
 /**
- * creates Calendar
- * @return {HTML} Calendar component
+ * creates Proflie Page
+ * @return {HTML} Profile component
  */
 export default function Profile() {
   const {user, userProfile} = useAuth();

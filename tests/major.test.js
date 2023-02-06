@@ -48,3 +48,31 @@ test("No JWT Test, expect 401", async () => {
 });
 
 
+test("Obtain a JWT and post and delete a major", async () => {
+    // GET A JWT FIRST, access it using logininfo.accessToken
+    const logininfo = await supertest(app).post('/api/login')
+    .send(loginData)
+    .expect(200)
+    .then( (response) =>{
+       return response.body;
+    });
+
+    // post a major
+    let majorid;
+    await supertest(app).post('/api/postMajor')
+    .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+    .send({majorname: "dummy major"})
+    .expect(201)
+    .then((response) =>{
+        //console.log(response.body)
+        majorid = response.body.majorid
+    });
+
+    //delete the created major
+    await supertest(app).delete(`/api/deleteMajor/${majorid}`)
+    .set('Cookie', [`accessToken=${logininfo.accessToken}`])
+    .expect(200)
+    .then((response) =>{
+        // console.log(response.body);
+    })
+});

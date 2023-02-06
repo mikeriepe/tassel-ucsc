@@ -68,3 +68,16 @@ exports.updateRoleFill = async (data) =>{
     const {rows} = await pool.query(query);
     return rows;
 } 
+
+/**
+ * DELETE role by roleid
+ * @param {*} roleid
+ */
+exports.deleteRole = async (roleid) =>{
+    const query = {
+        text: `DELETE FROM role
+                WHERE roleid = ($1)`,
+        values: [roleid],
+      };
+    const {rows} = await pool.query(query);
+  }

@@ -131,6 +131,7 @@ const uuid = require('uuid');
  exports.postRequest = async (req, res) => {
   try {
     const alreadySentRequests = await requestModel.getUserOutgoingRequests(req.body.requester);
+    console.log(alreadySentRequests);
     // for loop to check if a request already exists from this profile to this opportunity
     for(let i = 0; i < alreadySentRequests.length; i++) {
       if (alreadySentRequests[i].opportunityid === req.body.opportunityid) {
@@ -141,7 +142,7 @@ const uuid = require('uuid');
     const newUUID = uuid.v4();
     const requestId = await requestModel.postRequest(req.body, newUUID);
     // console.log(requestId);
-    res.status(201).send(requestId);
+    res.status(201).send({requestId});
   }
   catch (error) {
     console.log(error);
@@ -222,13 +223,12 @@ const uuid = require('uuid');
   
 };
 
-
 /**
  * DELETEs a request object
  * @param {*} req
  * @param {*} res
  */
- exports.deleteRequest = async (req, res) => {
+exports.deleteRequest = async (req, res) => {
   try {
     const { requestId } = req.body;
     await requestModel.deleteRequest(requestId);

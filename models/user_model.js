@@ -84,3 +84,4 @@ exports.createUser = async (userInfo, newUUID) => {
   const rows = await pool.query(query);
   return rows.rowCount;
 };
+

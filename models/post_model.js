@@ -45,3 +45,27 @@ exports.getPosts = async (data) => {
     // console.log(rows);
     return rows;
 }
+
+/**
+ * Deletes post of a specific post id
+ */
+exports.deletePost = async (data) => {
+    // console.log(data);
+    const query = {
+        text: `DELETE FROM post
+               WHERE postid = $1`,
+        values: [data.postid],
+    }
+    const {rows} = await pool.query(query);
+    // console.log(rows);
+    return rows;
+}
+
+
+
+
+
+
+
+
+

@@ -14,7 +14,7 @@ const commentModel = require('./comment_model');
 exports.postComment = async (req, res) => {
     // console.log(req.body);
     const commentid = await commentModel.insertComment(req.body);
-    res.status(201).send(commentid);
+    res.status(201).send({commentid});
 }
 
 /**
@@ -31,3 +31,21 @@ exports.getComments = async(req,res) =>{
     });
     res.status(200).send(data);
 }
+
+/**
+ * DELETEs a comment object
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.deleteComment = async (req, res) => {
+    // console.log(req.params.eventid);
+    try {
+      const comment = await commentModel.deleteComment(req.params.commentid);
+      res.status(200).json({message: 'comment deleted'});
+    }
+    catch (error) {
+      // console.log(error);
+      res.status(500).send('error deleting comment')
+    }
+    
+  };

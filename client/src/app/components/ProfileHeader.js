@@ -133,7 +133,7 @@ const MoreIcon = ({anchorEl, open, handleClick, handleClose}) => (
       }}
     >
       <Link to='/updateprofile'>
-        <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+        <MenuItem onClick={handleClose}>Edit Personal Info</MenuItem>
       </Link>
     </Menu>
   </MuiBox>
