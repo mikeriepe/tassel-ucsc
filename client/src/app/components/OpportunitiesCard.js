@@ -95,10 +95,10 @@ const OutlinedIconButton = ({
                 headers: {
                   'Content-Type': 'application/json',
                 },
-              });
-            })
-            .then(() => {
-              getPendingOpportunities();
+              })
+                  .then(() => {
+                    getPendingOpportunities();
+                  });
             })
             .catch((err) => {
               console.log(err);
