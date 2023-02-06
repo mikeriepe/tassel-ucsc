@@ -210,3 +210,15 @@ const pool = new Pool();
   return rows;
 };
 
+/**
+ * Deletes a user from the user table
+ * @param {*} data 
+ */
+ exports.deleteRequest = async (requestid) =>{
+  const query = {
+      text: `DELETE FROM request
+              WHERE requestid = ($1)`,
+      values: [requestid],
+    };
+  const {rows} = await pool.query(query);
+}

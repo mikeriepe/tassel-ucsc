@@ -65,7 +65,12 @@ const Banner = ({image}, props) => {
   );
 };
 
-const OutlinedIconButton = ({children}, props) => (
+const OutlinedIconButton = ({
+  children,
+  type,
+  opportunityid,
+  profileid,
+  getPendingOpportunities}, props) => (
   <ButtonBase
     component='div'
     onMouseDown={(e) => {
@@ -74,6 +79,32 @@ const OutlinedIconButton = ({children}, props) => (
     onClick={(e) => {
       e.stopPropagation();
       e.preventDefault();
+      if (type === 'pending') {
+        // fetch the request
+        fetch(`/api/getPendingRequestsSent/${profileid}/${opportunityid}`)
+            .then((res) => {
+              if (!res.ok) {
+                throw res;
+              }
+              return res.json();
+            })
+            .then((json) => {
+              fetch(`/api/deleteRequest/`, {
+                method: 'DELETE',
+                body: JSON.stringify({requestId: json[0].requestid}),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+            })
+            .then(() => {
+              getPendingOpportunities();
+            })
+            .catch((err) => {
+              console.log(err);
+              alert('Error deleting request');
+            });
+      }
     }}
     sx={{
       display: 'flex',
@@ -305,7 +336,12 @@ export default function OpportunitiesCard({
                   type === 'created' ||
                   type === 'pending'
                 ) && (
-                  <OutlinedIconButton>
+                  <OutlinedIconButton
+                    type={type}
+                    opportunityid={opportunity.eventid}
+                    profileid={userProfile.profileid}
+                    getPendingOpportunities={getPendingOpportunities}
+                  >
                     <CloseRoundedIcon
                       sx={{
                         height: '20px',

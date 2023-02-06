@@ -221,3 +221,22 @@ const uuid = require('uuid');
   }
   
 };
+
+
+/**
+ * DELETEs a request object
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.deleteRequest = async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    await requestModel.deleteRequest(requestId);
+    res.status(200).send();
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('error rejecting request')
+  }
+  
+};

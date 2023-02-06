@@ -249,6 +249,7 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
         />,
     },
     {

@@ -154,6 +154,8 @@ app.post('/api/approveRequest', authApi.check, requestApi.approveRequest);
 
 app.post('/api/rejectRequest', authApi.check, requestApi.rejectRequest);
 
+app.delete('/api/deleteRequest', authApi.check, requestApi.deleteRequest);
+
 // OrganizationType CRUD operations
 //
 //
