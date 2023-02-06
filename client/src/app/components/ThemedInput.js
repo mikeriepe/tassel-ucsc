@@ -43,6 +43,7 @@ export default function ThemedInput({
   step,
   fill,
   error,
+  content=null,
 }) {
   const value = useInputContext();
   const [values, setValues] = value;
@@ -70,7 +71,7 @@ export default function ThemedInput({
           inputProps={{'aria-label': 'Input text'}}
           placeholder={placeholder}
           type={type}
-          value={values[index]}
+          value={content !== null ? content : values[index]}
           onChange={handleChange}
           autoComplete={fill}
           error={error}
