@@ -115,6 +115,41 @@ const pool = new Pool();
 };
 
 /**
+ * updateOpportunity
+ *      updates an opportunity in the database
+ *      Returns the updated opportunity's opportunity id
+ * @param {*} opportunity
+ */
+ exports.updateProfile= async (opportunity) => {
+  const query = {
+    text: `UPDATE opportunity
+          SET usersponsors=($1), eventzoomlink=($2), organization=($3),
+           description=($4), preferences=($5), active=($6),
+           eventbanner=($7), eventname=($8), organizationtype=($9),
+           opportunitytype=($10), startdate=($11), enddate=($12),
+           roles=($13), starttime=($14), endtime=($15),
+           locationtype=($16), eventlocation=($17), eventdata=($18),
+           subject=($19), assignedroles=($20), userparticipants=($21)
+          WHERE eventid=($22)
+          RETURNING eventid`,
+    values: [opportunity.usersponsors, opportunity.eventzoomlink, opportunity.organization,
+      opportunity.description, opportunity.preferences, opportunity.active,
+      opportunity.eventbanner, opportunity.eventname, opportunity.organizationtype,
+      opportunity.opportunitytype, opportunity.startdate, opportunity.enddate,
+      opportunity.roles, opportunity.starttime, opportunity.endtime,
+      opportunity.locationtype, opportunity.eventlocation, opportunity.eventdata,
+      opportunity.subject, opportunity.assignedroles, opportunity.userparticipants,
+      opportunity.eventid
+    ],
+  };
+
+  // Returns the newly created profile object's id
+  const {rows} = await pool.query(query);
+  // console.log("here" +rows[0].profileid);
+  return rows[0].eventid;
+};
+
+/**
  * deleteOpportunities
  * deletes opportunity data based on opportunity id provided
  * Returns the user's past opportunities @param {*} opportunityInfo
