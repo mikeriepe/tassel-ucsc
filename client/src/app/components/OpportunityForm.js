@@ -21,7 +21,6 @@ import {TimeInput} from './TimeInput';
 import {DropdownInput} from './DropdownInput';
 import {RadioInput} from './RadioInput';
 import {DateInput} from './DateInput';
-import useAuth from '../util/AuthContext';
 
 
 /**
@@ -664,6 +663,9 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
               values.organization = null;
               values.organizationtype = null;
             }
+
+            // set curr roles in values
+            setValue('roles', currRoles);
 
             handleSubmit(onSubmit)();
           }}

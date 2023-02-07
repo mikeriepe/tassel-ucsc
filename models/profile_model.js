@@ -32,16 +32,16 @@ exports.createProfile= async (userInfo) => {
  * @param {*} userid
  */
  exports.getProfile= async (userid) => {
-  const query = {
-    text: `SELECT * FROM profile`,
-    values: [],
-  };
-
   // const query = {
-  //   text: `SELECT * FROM profile 
-  //          WHERE userid = $1`,
-  //   values: [userid],
+  //   text: `SELECT * FROM profile`,
+  //   values: [],
   // };
+
+  const query = {
+    text: `SELECT * FROM profile 
+           WHERE userid = $1`,
+    values: [userid],
+  };
 
   const {rows} = await pool.query(query);
   // caused errors with undefined .profileid

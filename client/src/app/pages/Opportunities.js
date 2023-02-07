@@ -8,6 +8,7 @@ import PageHeader from '../components/PageHeader';
 import useAuth from '../util/AuthContext';
 import OpportunityForm from '../components/OpportunityForm';
 import {Modal} from '@mui/material';
+import {toast} from 'react-toastify';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -203,6 +204,8 @@ function Opportunities({
   allOpportunities,
   getPendingOpportunities,
 }) {
+  const {userProfile} = useAuth();
+
   const [tab, setTab] = useState(0);
   const [locationFilter, setLocationFilter] = useState([]);
   const [oppTypeFilter, setOppTypeFilter] = useState([]);
@@ -312,6 +315,10 @@ function Opportunities({
     subject: '',
   };
 
+  const handleModalClose = () => {
+    setShowOppForm(!showOppForm);
+  };
+
   const onSubmit = (data) => {
     const newOpportunity = {
       assignedroles: {},
@@ -320,7 +327,6 @@ function Opportunities({
       userparticipants: [],
       preferences: {},
       usersponsors: {'creator': userProfile.profileid},
-      roles: currRoles,
       ...data,
     };
 
@@ -338,7 +344,16 @@ function Opportunities({
           return res;
         })
         .then((json) => {
-          onClose();
+          toast.success('Opportunity Created', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          handleModalClose();
         })
         .catch((error) => {
           console.log(error);
@@ -367,7 +382,7 @@ function Opportunities({
         sx={{overflow: 'scroll'}}
       >
         <OpportunityForm
-          onClose={() => setShowOppForm(!showOppForm)}
+          onClose={handleModalClose}
           defaultValues={formValues}
           onSubmit={onSubmit}
         />
