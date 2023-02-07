@@ -36,8 +36,14 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const [organizations, setOrganizations] = useState(null);
 
   const [currOrganizationType, setCurrOrganizationType] = useState(null);
-  const [currLocationType, setCurrLocationType] = useState('in-person');
-  const [currSponsorType, setCurrSponsorType] = useState('user sponsor');
+  const [currLocationType, setCurrLocationType] = useState(
+      defaultValues.locationtype,
+  );
+  const [currSponsorType, setCurrSponsorType] = useState(
+      defaultValues.organizationtype ?
+      'organization sponsor' :
+      'user sponsor',
+  );
   const [currRoles, setCurrRoles] = useState([]);
   const [roleError, setRoleError] = useState('');
   const maxRoles = 3;
@@ -624,22 +630,19 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             // convert times to those on given days
             const values = getValues();
 
-            if (values.starttime) {
-              const newStartTime = combineTimeDate(
-                  values.starttime,
-                  values.startdate,
-              );
-              setValue('starttime', newStartTime);
-            }
+            const combinedStart = combineTimeDate(
+                new Date(values.starttime),
+                new Date(values.startdate),
+            );
+            setValue('starttime', combinedStart);
+            // setValue('startdate', combinedStart);
 
-            if (values.endtime) {
-              const newEndTime = combineTimeDate(
-                  values.endtime,
-                  values.enddate,
-              );
-
-              setValue('endtime', newEndTime);
-            }
+            const combinedEnd = combineTimeDate(
+                new Date(values.endtime),
+                new Date(values.enddate),
+            );
+            setValue('endtime', combinedEnd);
+            // setValue('enddate', combinedEnd);
 
             // manual role validation
             // ensure none are empty

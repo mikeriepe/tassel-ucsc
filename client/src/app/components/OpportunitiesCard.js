@@ -245,7 +245,7 @@ export default function OpportunitiesCard({
         });
   };
 
-  const formatDate = (date) => {
+  const formatDate = (date, time) => {
     const dateOptions = {
       year: 'numeric',
       month: 'long',
@@ -258,7 +258,7 @@ export default function OpportunitiesCard({
     };
 
     const convertDate = new Date(date).toLocaleDateString([], dateOptions);
-    const convertTime = new Date(date).toLocaleTimeString([], timeOptions);
+    const convertTime = new Date(time).toLocaleTimeString([], timeOptions);
 
     return `${convertDate} at ${convertTime}`;
   };
@@ -384,11 +384,11 @@ export default function OpportunitiesCard({
                 >
                   <EventNoteRoundedIcon sx={IconStyling} />
                   <p className='text-bold ellipsis'>
-                    {formatDate(opportunity.startdate)}
+                    {formatDate(opportunity.startdate, opportunity.starttime)}
                   </p>
                   <ArrowForwardRoundedIcon sx={IconStyling} />
                   <p className='text-bold ellipsis'>
-                    {formatDate(opportunity.enddate)}
+                    {formatDate(opportunity.enddate, opportunity.endtime)}
                   </p>
                 </div>
                 <div

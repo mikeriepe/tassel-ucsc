@@ -23,11 +23,7 @@ export const DateInput = ({name, control, label, register}) => {
             name={name}
             value={value}
             {...register(name)}
-            onChange={(date) => {
-              // set date time to midnight
-              date.setHours(0, 0);
-              onChange(date);
-            }}
+            onChange={onChange}
             renderInput={(params) => <TextField {...params}
               name={name}
               sx={{
