@@ -68,6 +68,25 @@ const uuid = require('uuid');
 };
 
 /**
+ * UPDATE an opportunity
+ * sends the eventid back.
+ * @param {*} req
+ * @param {*} res
+ */
+ exports.opportunityUpdate = async (req, res) => {
+  // console.log(req.body.userid);
+  try {
+    const opportunityId = await opportunityModel.updateProfile(req.body);
+    res.status(200).send({opportunityId});
+  }
+  catch (error) {
+    // console.log(error);
+    res.status(500).send('error updating opportunity')
+  }
+
+};
+
+/**
  * POSTs a opportunity object
  * sends the newly created id back.
  * @param {*} req
