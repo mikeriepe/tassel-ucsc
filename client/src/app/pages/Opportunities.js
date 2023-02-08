@@ -6,6 +6,9 @@ import CompressedTabBar from '../components/CompressedTabBar';
 import OpportunitiesList from '../components/OpportunitiesList';
 import PageHeader from '../components/PageHeader';
 import useAuth from '../util/AuthContext';
+import OpportunityForm from '../components/OpportunityForm';
+import {Modal} from '@mui/material';
+import {toast} from 'react-toastify';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -51,6 +54,7 @@ const AddButton = (props) => (
       {...props}
     >
       <AddRoundedIcon
+        onClick={props.onClick}
         sx={{
           height: '20px',
           width: '20px',
@@ -200,10 +204,13 @@ function Opportunities({
   allOpportunities,
   getPendingOpportunities,
 }) {
+  const {userProfile} = useAuth();
+
   const [tab, setTab] = useState(0);
   const [locationFilter, setLocationFilter] = useState([]);
   const [oppTypeFilter, setOppTypeFilter] = useState([]);
   const [orgTypeFilter, setOrgTypeFilter] = useState([]);
+  const [showOppForm, setShowOppForm] = useState(false);
 
   const tabs = [
     {
@@ -285,6 +292,74 @@ function Opportunities({
     },
   ];
 
+  const formValues = {
+    eventname: '',
+    locationtype: 'in-person',
+    eventlocation: {
+      'address': '',
+      'state': '',
+      'city': '',
+      'zip': '',
+    },
+    sponsortype: 'user sponsor',
+    eventzoomlink: '',
+    organization: '',
+    description: '',
+    eventdata: '',
+    startdate: new Date(),
+    enddate: new Date(),
+    organizationtype: '',
+    opportunitytype: '',
+    starttime: new Date(),
+    endtime: new Date(),
+    subject: '',
+  };
+
+  const handleModalClose = () => {
+    setShowOppForm(!showOppForm);
+  };
+
+  const onSubmit = (data) => {
+    const newOpportunity = {
+      assignedroles: {},
+      eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
+      active: true,
+      userparticipants: [],
+      preferences: {},
+      usersponsors: {'creator': userProfile.profileid},
+      ...data,
+    };
+
+    fetch(`/api/postOpportunity`, {
+      method: 'POST',
+      body: JSON.stringify(newOpportunity),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res;
+        })
+        .then((json) => {
+          toast.success('Opportunity Created', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          handleModalClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
   // Reset filters when switching tabs
   useEffect(() => {
     setLocationFilter([]);
@@ -298,9 +373,21 @@ function Opportunities({
         title='Opportunities'
         subtitle='View and join opportunities'
         tabs={<CompressedTabBar data={tabs} tab={tab} setTab={setTab} />}
-        components={<AddButton />}
+        components={<AddButton onClick={() => setShowOppForm(true)}/>}
       />
+      <Modal
+        open={showOppForm}
+        onBackdropClick={() => setShowOppForm(false)}
+        onClose={() => setShowOppForm(false)}
+        sx={{overflow: 'scroll'}}
+      >
+        <OpportunityForm
+          onClose={handleModalClose}
+          defaultValues={formValues}
+          onSubmit={onSubmit}
+        />
+      </Modal>
       {tabs[tab].component}
     </Page>
   );
-}
+};

@@ -1,10 +1,11 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
+import TimePicker from '@mui/lab/TimePicker';
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
 
-export const TextInput = ({name, control, label, register}) => {
+export const TimeInput = ({name, control, label, register}) => {
   return (
     <Controller
       name={name}
@@ -15,18 +16,22 @@ export const TextInput = ({name, control, label, register}) => {
         formState,
       }) => (
         <Box>
-          <TextField
-            sx={{
-              input: {color: '#fdc700'},
-              backgroundColor: 'rgb(255, 255, 255)',
-              marginBottom: '5px',
+          <TimePicker
+            onChange={(e) => {
+              const time = new Date(e);
+              onChange(time);
             }}
-            {...register(name)}
-            onChange={onChange}
             value={value}
-            fullWidth
             label={label}
-            variant='outlined'
+            timeFormat="HH:mm"
+            name={name}
+            renderInput={(params) => <TextField {...params}
+              sx={{
+                input: {color: '#fdc700'},
+                backgroundColor: 'rgb(255, 255, 255)',
+                marginBottom: '10px',
+              }}
+            />}
           />
           <FormHelperText error={!!error}>
             {error ? error.message : ''}
