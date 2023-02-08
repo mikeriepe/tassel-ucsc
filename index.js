@@ -129,6 +129,8 @@ app.get('/api/getPastOpportunities/:profileid', authApi.check, opportunityApi.ge
 
 app.post('/api/postOpportunity', authApi.check, opportunityApi.postOpportunity);
 
+app.post('/api/updateOpportunity', authApi.check, opportunityApi.opportunityUpdate);
+
 app.get('/api/getOpportunity/:opportunityid', authApi.check, opportunityApi.getOpportunity);
 
 app.delete('/api/deleteOpportunity/:eventid', authApi.check, opportunityApi.deleteOpportunity);

@@ -509,12 +509,14 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
                 control={control}
                 label='Start Date'
                 register={register}
+                minDate={new Date()}
               />
               <DateInput
                 name='enddate'
                 control={control}
                 label='End Date'
                 register={register}
+                minDate={new Date()}
               />
             </Box>
 

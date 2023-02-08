@@ -39,7 +39,7 @@ export default function WorkExperienceEditModal({onClose, index}) {
   };
 
   const methods = useForm({defaultValues: formValues});
-  const {handleSubmit, control} = methods;
+  const {handleSubmit, control, register} = methods;
 
   const updateWorkExperience = (data) => {
     let startDate = '';
@@ -146,12 +146,14 @@ export default function WorkExperienceEditModal({onClose, index}) {
             name='jobtitle'
             control={control}
             label='Job Title'
+            register={register}
           />
 
           <TextInput
             name='company'
             control={control}
             label='Company'
+            register={register}
           />
 
           {/* Dropdown Menus*/}
@@ -167,12 +169,14 @@ export default function WorkExperienceEditModal({onClose, index}) {
                 name='jobcity'
                 control={control}
                 label='City'
+                register={register}
               />
             }
             <TextInput
               name='jobstate'
               control={control}
               label='State'
+              register={register}
             />
           </Box>
 
@@ -191,11 +195,13 @@ export default function WorkExperienceEditModal({onClose, index}) {
                   name='startdate'
                   control={control}
                   label='Start Date'
+                  register={register}
                 />
                 <DateInput
                   name='enddate'
                   control={control}
                   label='End Date'
+                  register={register}
                 />
               </Box>
             </LocalizationProvider>
@@ -206,6 +212,7 @@ export default function WorkExperienceEditModal({onClose, index}) {
             control={control}
             label='Enter Description'
             multi={true}
+            register={register}
           />
 
           <CheckboxInput
