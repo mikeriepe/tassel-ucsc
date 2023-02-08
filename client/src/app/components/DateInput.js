@@ -1,10 +1,11 @@
 import React from 'react';
-// import {Controller, useFormContext} from 'react-hook-form';
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import FormHelperText from '@mui/material/FormHelperText';
+import Box from '@mui/material/Box';
 
-export const DateInput = ({name, control, label}) => {
+export const DateInput = ({name, control, label, register}) => {
   return (
     <Controller
       name={name}
@@ -14,19 +15,27 @@ export const DateInput = ({name, control, label}) => {
         fieldState: {error},
         formState,
       }) => (
-        <DesktopDatePicker
-          label={label}
-          inputFormat="MM/dd/yyyy"
-          name={name}
-          value={value}
-          onChange={onChange}
-          renderInput={(params) => <TextField {...params}
-            sx={{
-              input: {color: '#fdc700'},
-              backgroundColor: 'rgb(255, 255, 255)',
-              marginBottom: '10px',
-            }}/>}
-        />
+        <Box>
+          <DesktopDatePicker
+            minDate={new Date()}
+            label={label}
+            inputFormat="MM/dd/yyyy"
+            name={name}
+            value={value}
+            {...register(name)}
+            onChange={onChange}
+            renderInput={(params) => <TextField {...params}
+              name={name}
+              sx={{
+                input: {color: '#fdc700'},
+                backgroundColor: 'rgb(255, 255, 255)',
+                marginBottom: '5px',
+              }}/>}
+          />
+          <FormHelperText error={!!error}>
+            {error ? error.message : ''}
+          </FormHelperText>
+        </Box>
       )}
     />
   );
