@@ -16,8 +16,15 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import {Modal} from '@mui/material';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+
 import useAuth from '../util/AuthContext';
 import RequestModal from './RequestOpportunityModal';
+import OpportunityForm from './OpportunityForm';
+import ThemedButton from './ThemedButton';
+
 
 const IconStyling = {
   fontSize: '0.9rem',
@@ -68,6 +75,7 @@ const Banner = ({image}, props) => {
 const OutlinedIconButton = ({
   children,
   type,
+  onClick,
   opportunityid,
   profileid,
   getPendingOpportunities}, props) => (
@@ -76,7 +84,7 @@ const OutlinedIconButton = ({
     onMouseDown={(e) => {
       e.stopPropagation();
     }}
-    onClick={(e) => {
+    onClick={onClick ? onClick : (e) => {
       e.stopPropagation();
       e.preventDefault();
       if (type === 'pending') {
@@ -164,16 +172,34 @@ export default function OpportunitiesCard({
 }) {
   const [creator, setCreator] = useState('');
 
-  const [showReqForm, setshowReqForm] = React.useState(false);
+  const [showReqForm, setshowReqForm] = useState(false);
+  const [showOppForm, setShowOppForm] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [requestMessage, setRequestMessage] = React.useState('');
   const {userProfile} = useAuth();
 
-  const handleModalClose = () => {
+  const handleReqModalClose = () => {
     setshowReqForm(false);
   };
 
-  const handleModalOpen = () => {
+  const handleReqModalOpen = () => {
     setshowReqForm(true);
+  };
+
+  const handleOppModalClose = () => {
+    setShowOppForm(false);
+  };
+
+  const handleOppModalOpen = () => {
+    setShowOppForm(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setShowDeleteForm(false);
+  };
+
+  const handleDeleteModalOpen = () => {
+    setShowDeleteForm(true);
   };
 
   const handleRequestMessage = (e) => {
@@ -195,6 +221,68 @@ export default function OpportunitiesCard({
     postRequestToOpportunity(requestData);
     setshowReqForm(false);
     setRequestMessage('');
+  };
+
+  const handleEditOpp = (data) => {
+    fetch(`/api/updateOpportunity`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res;
+        })
+        .then((json) => {
+          toast.success('Opportunity Updated', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          handleOppModalClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
+  const handleDeleteOpp = (opportunity) => {
+    fetch(`/api/deleteOpportunity/${opportunity.eventid}`, {
+      method: 'DELETE',
+      body: JSON.stringify(opportunity),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res;
+        })
+        .then((json) => {
+          toast.success('Opportunity Deleted', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          handleDeleteModalClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   const postRequestToOpportunity = (requestData) => {
@@ -269,6 +357,10 @@ export default function OpportunitiesCard({
 
     const compare = Math.abs(convertDate1 - convertDate2);
 
+    if (compare == 0) {
+      return 'No Duration';
+    };
+
     const compareInMinutes = Math.floor(compare / (1000 * 60));
     const compareInHours = Math.floor(compare / (1000 * 60 * 60));
     const compareInDays = Math.floor(compare / (1000 * 60 * 60 * 24));
@@ -308,13 +400,13 @@ export default function OpportunitiesCard({
     <>
       {opportunity && creator && (
         <Card className='clickable'>
-          <CardActionArea
-            component={RouterLink}
-            to={`/Opportunity/${opportunity.eventid}`}
+          <div
+            className='flex-space-between flex-align-center'
+            style={{padding: '1.5em'}}
           >
-            <div
-              className='flex-space-between flex-align-center'
-              style={{padding: '1.5em'}}
+            <CardActionArea
+              component={RouterLink}
+              to={`/Opportunity/${opportunity.eventid}`}
             >
               <MuiBox>
                 <h4 className='text-dark ellipsis'>
@@ -330,17 +422,20 @@ export default function OpportunitiesCard({
                   </p>
                 </div>
               </MuiBox>
-              <div className='flex-flow-large' style={{marginLeft: '50px'}}>
-                {(
-                  type === 'upcoming' ||
-                  type === 'created' ||
-                  type === 'pending'
-                ) && (
+            </CardActionArea>
+            <div className='flex-flow-large' style={{marginLeft: '50px'}}>
+              {(
+                type === 'upcoming' ||
+                type === 'created' ||
+                type === 'pending'
+              ) && (
+                <Box>
                   <OutlinedIconButton
                     type={type}
                     opportunityid={opportunity.eventid}
                     profileid={userProfile.profileid}
                     getPendingOpportunities={getPendingOpportunities}
+                    onClick={handleDeleteModalOpen}
                   >
                     <CloseRoundedIcon
                       sx={{
@@ -352,9 +447,73 @@ export default function OpportunitiesCard({
                       }}
                     />
                   </OutlinedIconButton>
-                )}
-                {type === 'created' && (
-                  <OutlinedIconButton>
+                  {/* DELETE OPP MODAL */}
+                  <Modal
+                    open={showDeleteForm}
+                    onBackdropClick={handleDeleteModalClose}
+                    onClose={handleDeleteModalClose}
+                    sx={{
+                      overflow: 'scroll',
+                      display: 'grid',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Paper
+                      sx={{
+                        backgroundColor: 'rgb(240, 240, 240)',
+                        zIndex: '10',
+                        boxShadow: '-3px 5px 8px 0px rgba(84, 84, 84, 0.81)',
+                        borderRadius: '10px',
+                        margin: '3rem',
+                        padding: '2rem',
+                        display: 'grid',
+                        gridGap: '5px',
+                        justifyContent: 'center',
+                        height: 'fit-content',
+                      }}
+                    >
+                      <Box>
+                        Are you sure you would like to
+                        delete {opportunity.eventname}?
+                      </Box>
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridAutoFlow: 'column',
+                          gridGap: '10px',
+                        }}
+                      >
+                        <ThemedButton
+                          color={'blue'}
+                          variant={'themed'}
+                          onClick={handleDeleteModalClose}
+                          sx={{
+                            height: 'fit-content',
+                          }}
+                        >
+                          Back
+                        </ThemedButton>
+                        <ThemedButton
+                          color={'gray'}
+                          variant={'cancel'}
+                          onClick={() => handleDeleteOpp(opportunity)}
+                          sx={{
+                            height: 'fit-content',
+                          }}
+                        >
+                          Delete
+                        </ThemedButton>
+                      </Box>
+                    </Paper>
+                  </Modal>
+                </Box>
+              )}
+              {type === 'created' && (
+                <Box>
+                  <OutlinedIconButton
+                    type={type}
+                    onClick={handleOppModalOpen}
+                  >
                     <EditRoundedIcon
                       sx={{
                         height: '20px',
@@ -363,14 +522,32 @@ export default function OpportunitiesCard({
                       }}
                     />
                   </OutlinedIconButton>
-                )}
-                {type === 'all' && (
-                  <OutlinedButton handleModalOpen={handleModalOpen}>
-                    <p className='text-xbold text-white'>Apply</p>
-                  </OutlinedButton>
-                )}
-              </div>
+                  {/* EDIT OPP FORM */}
+                  <Modal
+                    open={showOppForm}
+                    onBackdropClick={() => setShowOppForm(false)}
+                    onClose={() => setShowOppForm(false)}
+                    sx={{overflow: 'scroll'}}
+                  >
+                    <OpportunityForm
+                      onClose={handleOppModalClose}
+                      defaultValues={opportunity}
+                      onSubmit={handleEditOpp}
+                    />
+                  </Modal>
+                </Box>
+              )}
+              {type === 'all' && (
+                <OutlinedButton handleModalOpen={handleReqModalOpen}>
+                  <p className='text-xbold text-white'>Apply</p>
+                </OutlinedButton>
+              )}
             </div>
+          </div>
+          <CardActionArea
+            component={RouterLink}
+            to={`/Opportunity/${opportunity.eventid}`}
+          >
             <Divider sx={{borderBottom: '0.5px solid rgba(0, 0, 0, 0.15)'}} />
             <div
               className='flex-horizontal flex-align-center'
@@ -465,7 +642,7 @@ export default function OpportunitiesCard({
           </CardActionArea>
           <RequestModal
             showReqForm={showReqForm}
-            handleModalClose={handleModalClose}
+            handleModalClose={handleReqModalClose}
             requestMessage={requestMessage}
             handleRequestMessage={handleRequestMessage}
             handleRequestClick={handleRequestClick}

@@ -13,13 +13,17 @@ export const DropdownInput = ({
   register,
 }) => {
   const generateSingleOptions = () => {
-    return options.map((option) => {
-      return (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      );
-    });
+    if (options) {
+      return options.map((option) => {
+        return (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        );
+      });
+    } else {
+      return [];
+    }
   };
 
   return (

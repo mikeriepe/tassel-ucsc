@@ -31,11 +31,15 @@ import {DateInput} from './DateInput';
  * @return {HTML} OpportunityForm component
  */
 export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
-  const [opportunityTypes, setOpportunityTypes] = useState(null);
-  const [organizationTypes, setOrganizationTypes] = useState(null);
-  const [organizations, setOrganizations] = useState(null);
+  const [opportunityTypes, setOpportunityTypes] = useState([]);
+  const [organizationTypes, setOrganizationTypes] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
 
-  const [currOrganizationType, setCurrOrganizationType] = useState(null);
+  const [currOrganizationType, setCurrOrganizationType] = useState(
+    defaultValues.organizationtype ?
+    defaultValues.organizationtype :
+    null,
+  );
   const [currLocationType, setCurrLocationType] = useState(
       defaultValues.locationtype,
   );
@@ -44,7 +48,10 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
       'organization sponsor' :
       'user sponsor',
   );
-  const [currRoles, setCurrRoles] = useState([]);
+  const [currRoles, setCurrRoles] = useState(
+    defaultValues.roles && defaultValues.roles !== null ?
+    defaultValues.roles : [],
+  );
   const [roleError, setRoleError] = useState('');
   const maxRoles = 3;
 
@@ -86,7 +93,6 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
       otherwise: Yup.string().notRequired(),
     }),
     description: Yup.string().required('Description is required'),
-    // TODO: eventdata required?
     eventdata: Yup.string().required('Other details required'),
     startdate: Yup
         .date()
@@ -437,7 +443,6 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
               >
                 Opportunity Roles
               </FormLabel>
-              {/* TODO: check shadow */}
               <IconButton
                 size='small'
                 sx = {{color: '#fdc700'}}
@@ -627,6 +632,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
           color={'yellow'}
           variant={'themed'}
           onClick={() => {
+            console.log('SAVE CLICKED');
             // convert times to those on given days
             const values = getValues();
 
@@ -635,14 +641,14 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
                 new Date(values.startdate),
             );
             setValue('starttime', combinedStart);
-            // setValue('startdate', combinedStart);
+            setValue('startdate', combinedStart);
 
             const combinedEnd = combineTimeDate(
                 new Date(values.endtime),
                 new Date(values.enddate),
             );
             setValue('endtime', combinedEnd);
-            // setValue('enddate', combinedEnd);
+            setValue('enddate', combinedEnd);
 
             // manual role validation
             // ensure none are empty
@@ -658,6 +664,11 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             }
 
             if (values.locationtype == 'remote') {
+              values.eventlocation.zip = null;
+              values.eventlocation.city = null;
+              values.eventlocation.state = null;
+              values.eventlocation.address = null;
+
               values.eventlocation = {};
             }
 
