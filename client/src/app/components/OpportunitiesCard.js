@@ -435,7 +435,9 @@ export default function OpportunitiesCard({
                     opportunityid={opportunity.eventid}
                     profileid={userProfile.profileid}
                     getPendingOpportunities={getPendingOpportunities}
-                    onClick={handleDeleteModalOpen}
+                    onClick={ type === 'created' ?
+                      handleDeleteModalOpen : null
+                    }
                   >
                     <CloseRoundedIcon
                       sx={{
