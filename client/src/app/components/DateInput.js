@@ -5,7 +5,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 
-export const DateInput = ({name, control, label, register}) => {
+export const DateInput = ({name, control, label, register, minDate}) => {
   return (
     <Controller
       name={name}
@@ -17,7 +17,7 @@ export const DateInput = ({name, control, label, register}) => {
       }) => (
         <Box>
           <DesktopDatePicker
-            minDate={new Date()}
+            minDate={minDate ? minDate : null}
             label={label}
             inputFormat="MM/dd/yyyy"
             name={name}
