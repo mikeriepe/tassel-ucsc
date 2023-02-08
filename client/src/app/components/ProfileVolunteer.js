@@ -26,13 +26,14 @@ export default function ProfileVolunteer({data}) {
     <Volunteer>
       <h4 className='text-dark'>Volunteer Experience</h4>
       <div className='flow-medium'>
-        {data ? Object.keys(data).map((job, index) => (
+        {data ? Object.keys(data).map((exp, index) => (
           <div key={`volunteer-experience-${index}`}>
-            <h5>{data[job].title}</h5>
-            <p className='text-bold text-blue'>{data[job].company}</p>
-            <p>{data[job].location}</p>
-            <p>{data[job].startDate + ' - ' + data[job].endDate}</p>
-            <p style={{marginTop: '0.5em'}}>{data[job].description}</p>
+            <h5>{data[exp].title}</h5>
+            <p className='text-bold text-blue'>{data[exp].company}</p>
+            <p>{data[exp].location}</p>
+            <p>{data[exp].end !== '' ?
+            (data[exp].start + ' - ' + data[exp].end) : data[exp].start}</p>
+            <p style={{marginTop: '0.5em'}}>{data[exp].description}</p>
           </div>
         )) : (
           <p>None</p>

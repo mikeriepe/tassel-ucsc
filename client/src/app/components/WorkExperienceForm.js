@@ -13,6 +13,26 @@ import {CheckboxInput} from './CheckboxInput';
 import ThemedButton from '../components/ThemedButton';
 import useAuth from '../util/AuthContext';
 
+export const sortWorkExperience = (experience) => {
+  const totalNumJobs = Object.keys(experience).length;
+  const tempSortArray = [];
+  for (let i = 0; i < totalNumJobs; i++) {
+    const job = 'job' + (i+1);
+    const startDate = new Date(experience[job].start).getTime();
+    tempSortArray.push([job, startDate]);
+  }
+  const sortedArray = tempSortArray.sort((a, b) => (a[1] > b[1] ? -1 : 1));
+
+  const newExperience = {};
+
+  for (let i = 0; i < totalNumJobs; i++) {
+    const jobIndex = 'job' + (i+1);
+    const sortedJob = sortedArray[i][0];
+    newExperience[jobIndex] = experience[sortedJob];
+  }
+
+  return newExperience;
+};
 
 /**
  * WorkExperienceForm
@@ -105,6 +125,8 @@ export default function WorkExperienceForm({onClose}) {
 
   const onSubmit = (data) => {
     addWorkExperienceToProfile(data);
+    const sortedExperience = sortWorkExperience(userProfile.experience);
+    userProfile.experience = sortedExperience;
     updateProfile();
     onClose();
   };

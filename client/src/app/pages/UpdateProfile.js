@@ -80,7 +80,7 @@ export default function UpdateProfile() {
   const updateProfile = () => {
     fetch(`/api/updateProfile`, {
       method: 'POST',
-      body: JSON.stringify({userid: user.userid, ...values[1]}),
+      body: JSON.stringify({userid: user.userid, ...userProfile}),
       headers: {
         'Content-Type': 'application/json',
       },

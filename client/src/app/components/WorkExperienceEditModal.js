@@ -33,7 +33,8 @@ export default function WorkExperienceEditModal({onClose, index}) {
     jobstate: existingLocation[1],
     description: userProfile.experience[index].description,
     startdate: (new Date(userProfile.experience[index].start)),
-    enddate: (new Date(userProfile.experience[index].end)),
+    enddate: userProfile.experience[index].end === '' ? '' :
+    (new Date(userProfile.experience[index].end)),
     currentposition: userProfile.experience[index].currentposition,
   };
 

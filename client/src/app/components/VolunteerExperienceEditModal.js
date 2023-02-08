@@ -9,7 +9,6 @@ import {toast} from 'react-toastify';
 
 import {TextInput} from './TextInput';
 import {DateInput} from './DateInput';
-import {CheckboxInput} from './CheckboxInput';
 import ThemedButton from './ThemedButton';
 import useAuth from '../util/AuthContext';
 
@@ -34,8 +33,8 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
     jobstate: existingLocation[1],
     description: userProfile.volunteeringexperience[index].description,
     startdate: (new Date(userProfile.volunteeringexperience[index].start)),
-    enddate: (new Date(userProfile.volunteeringexperience[index].end)),
-    currentposition: userProfile.volunteeringexperience[index].currentposition,
+    enddate: userProfile.volunteeringexperience[index].end === '' ? '' :
+    (new Date(userProfile.volunteeringexperience[index].end)),
   };
 
   const methods = useForm({defaultValues: formValues});
@@ -51,6 +50,10 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
     }
 
     let endDate = '';
+    console.log(data.enddate);
+    if (data.enddate === null) {
+      console.log(data.enddate);
+    }
     if (data.enddate !== '' && data.enddate !== null) {
       endDate = data.enddate.toISOString().split('T')[0];
       const endDateValues = endDate.split('-').reverse('');
@@ -73,7 +76,6 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
       description: data.description,
       start: startDate,
       end: data.enddate !== null ? endDate : '',
-      currentposition: data.currentposition,
     };
     userProfile.volunteeringexperience[index] = newVolunteerExperience;
   };
@@ -151,7 +153,7 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
           <TextInput
             name='company'
             control={control}
-            label='Company'
+            label='Organization'
           />
 
           {/* Dropdown Menus*/}
@@ -208,11 +210,6 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
             multi={true}
           />
 
-          <CheckboxInput
-            name='currentposition'
-            control={control}
-            label='Current Position'
-          />
         </Box>
       </Box>
 

@@ -11,6 +11,7 @@ import {TextInput} from './TextInput';
 import {DateInput} from './DateInput';
 import ThemedButton from '../components/ThemedButton';
 import useAuth from '../util/AuthContext';
+import {sortWorkExperience} from './WorkExperienceForm';
 
 
 /**
@@ -31,7 +32,6 @@ export default function VolunteerExperienceForm({onClose}) {
     description: '',
     startdate: (new Date()),
     enddate: null,
-    currentposition: false,
   };
 
   const methods = useForm({defaultValues: formValues});
@@ -69,7 +69,6 @@ export default function VolunteerExperienceForm({onClose}) {
       description: data.description,
       start: startDate,
       end: data.enddate !== null ? endDate : '',
-      currentposition: data.currentposition,
     };
     const newJobIndex =
       (Object.keys(userProfile.volunteeringexperience).length+1).toString();
@@ -104,6 +103,8 @@ export default function VolunteerExperienceForm({onClose}) {
 
   const onSubmit = (data) => {
     addVolunteerExperienceToProfile(data);
+    const sortedExp = sortWorkExperience(userProfile.volunteeringexperience);
+    userProfile.volunteeringexperience = sortedExp;
     updateProfile();
     onClose();
   };
@@ -144,13 +145,13 @@ export default function VolunteerExperienceForm({onClose}) {
           <TextInput
             name='jobtitle'
             control={control}
-            label='Voluneer Position Title'
+            label='Volunteer Position Title'
           />
 
           <TextInput
             name='company'
             control={control}
-            label='Company'
+            label='Organization'
           />
 
           {/* Dropdown Menus*/}

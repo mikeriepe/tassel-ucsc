@@ -31,7 +31,8 @@ export default function ProfileWork({data}) {
             <h5>{data[job].title}</h5>
             <p className='text-bold text-blue'>{data[job].company}</p>
             <p>{data[job].location}</p>
-            <p>{data[job].start + ' - ' + data[job].end}</p>
+            <p>{data[job].start + ' - ' +
+            (data[job].end === '' ? 'present' : data[job].end)}</p>
             <p style={{marginTop: '0.5em'}}>{data[job].description}</p>
           </div>
         )) : (
