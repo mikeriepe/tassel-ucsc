@@ -17,7 +17,7 @@ export const DateInput = ({name, control, label, register}) => {
       }) => (
         <Box>
           <DesktopDatePicker
-            minDate={minDate ? minDate : null}
+            minDate={new Date()}
             label={label}
             inputFormat="MM/dd/yyyy"
             name={name}
