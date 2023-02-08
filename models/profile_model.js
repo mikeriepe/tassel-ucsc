@@ -33,15 +33,10 @@ exports.createProfile= async (userInfo) => {
  */
  exports.getProfile= async (userid) => {
   const query = {
-    text: `SELECT * FROM profile`,
-    values: [],
+    text: `SELECT * FROM profile 
+           WHERE userid = $1`,
+    values: [userid],
   };
-
-  // const query = {
-  //   text: `SELECT * FROM profile 
-  //          WHERE userid = $1`,
-  //   values: [userid],
-  // };
 
   const {rows} = await pool.query(query);
   // caused errors with undefined .profileid
