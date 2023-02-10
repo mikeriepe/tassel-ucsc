@@ -7,6 +7,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import OpportunitiesCard from './OpportunitiesCard';
 import OpportunitiesFilters from './OpportunitiesFilters';
 import ThemedDropdown from './ThemedDropdown';
+import Fuse from 'fuse.js';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -46,6 +47,26 @@ export default function OpportunitiesList({
   useEffect(() => {
     applyFilters();
   }, [locationFilter, oppTypeFilter, orgTypeFilter]);
+
+  const searchOpportunity = (query) => {
+    if (!query) {
+      setDisplayOpps(opportunities);
+      return;
+    }
+    const fuse = new Fuse(displayOpps, {
+      keys: ['eventname'], // more parameters can be added for search
+    });
+    const result = fuse.search(query);
+    const finalResult = [];
+    if (result.length) {
+      result.forEach((item) => {
+        finalResult.push(item.item);
+      });
+      setDisplayOpps(finalResult);
+    } else {
+      setDisplayOpps([]);
+    }
+  };
 
   const applyFilters = () => {
     // Set all filters to lowercase for comparison
@@ -95,6 +116,7 @@ export default function OpportunitiesList({
           <TextField
             placeholder='Search'
             size='small'
+            onChange={(e) => searchOpportunity(e.target.value)}
             InputProps={{
               style: {
                 fontSize: '0.9rem',
