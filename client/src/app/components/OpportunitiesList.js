@@ -37,6 +37,7 @@ export default function OpportunitiesList({
   getPendingOpportunities,
 }) {
   const [displayOpps, setDisplayOpps] = useState([]);
+  const [search, setSearch] = useState('');
 
   // Component first renders
   useEffect(() => {
@@ -46,14 +47,18 @@ export default function OpportunitiesList({
   // Update displayed opportunities when filters are updated
   useEffect(() => {
     applyFilters();
-  }, [locationFilter, oppTypeFilter, orgTypeFilter]);
+  }, [locationFilter, oppTypeFilter, orgTypeFilter, search]);
 
-  const searchOpportunity = (query) => {
+  // Fuzzy search on given searchData
+  // If the search bar is empty, the searchData is all the opps
+  // Function is called at the end of applyFilters() with the
+  // filtered data set
+  const searchOpportunity = (query, searchData=opportunities) => {
     if (!query) {
-      setDisplayOpps(opportunities);
+      setDisplayOpps(searchData);
       return;
     }
-    const fuse = new Fuse(displayOpps, {
+    const fuse = new Fuse(searchData, {
       keys: ['eventname'], // more parameters can be added for search
     });
     const result = fuse.search(query);
@@ -103,7 +108,9 @@ export default function OpportunitiesList({
       return location && oppType && orgType;
     });
 
-    setDisplayOpps(copyOpps);
+    // setDisplayOpps(copyOpps);
+    // searches the filtered opp list
+    searchOpportunity(search, copyOpps);
   };
 
   return (
@@ -116,7 +123,7 @@ export default function OpportunitiesList({
           <TextField
             placeholder='Search'
             size='small'
-            onChange={(e) => searchOpportunity(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             InputProps={{
               style: {
                 fontSize: '0.9rem',
