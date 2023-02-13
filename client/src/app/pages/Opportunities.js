@@ -214,12 +214,59 @@ function Opportunities({
 
   const tabs = [
     {
+      name: 'Browse',
+      component:
+        <OpportunitiesList
+          key='all'
+          type='all'
+          opportunities={allOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
+        />,
+    },
+    {
+      name: 'Pending',
+      component:
+        <OpportunitiesList
+          key='pending'
+          type='pending'
+          opportunities={pendingOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
+        />,
+    },
+    {
       name: 'Upcoming',
       component:
         <OpportunitiesList
           key='upcoming'
           type='upcoming'
           opportunities={joinedOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+        />,
+    },
+    {
+      name: 'Completed',
+      component:
+        <OpportunitiesList
+          key='completed'
+          type='completed'
+          opportunities={pastOpportunities}
           locationFilter={locationFilter}
           setLocationFilter={setLocationFilter}
           oppTypeFilter={oppTypeFilter}
@@ -241,53 +288,6 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
-        />,
-    },
-    {
-      name: 'Pending',
-      component:
-        <OpportunitiesList
-          key='pending'
-          type='pending'
-          opportunities={pendingOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-          getPendingOpportunities={getPendingOpportunities}
-        />,
-    },
-    {
-      name: 'Completed',
-      component:
-        <OpportunitiesList
-          key='completed'
-          type='completed'
-          opportunities={pastOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-        />,
-    },
-    {
-      name: 'Browse',
-      component:
-        <OpportunitiesList
-          key='all'
-          type='all'
-          opportunities={allOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-          getPendingOpportunities={getPendingOpportunities}
         />,
     },
   ];
