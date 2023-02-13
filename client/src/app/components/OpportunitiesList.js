@@ -59,7 +59,8 @@ export default function OpportunitiesList({
       return;
     }
     const fuse = new Fuse(searchData, {
-      keys: ['eventname'], // more parameters can be added for search
+      // more parameters can be added for search
+      keys: ['eventname', 'description'],
     });
     const result = fuse.search(query);
     const finalResult = [];
