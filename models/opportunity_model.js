@@ -121,7 +121,7 @@ const pool = new Pool();
 *      Returns the updated opportunity's opportunity id
 * @param {*} opportunity
 */
-exports.updateProfile= async (opportunity) => {
+exports.updateOpportunity= async (opportunity) => {
   const query = {
     text: `UPDATE opportunity
           SET usersponsors=($1), eventzoomlink=($2), organization=($3),
