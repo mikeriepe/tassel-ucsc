@@ -7,6 +7,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import OpportunitiesCard from './OpportunitiesCard';
 import OpportunitiesFilters from './OpportunitiesFilters';
 import ThemedDropdown from './ThemedDropdown';
+import Fuse from 'fuse.js';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -36,6 +37,7 @@ export default function OpportunitiesList({
   getPendingOpportunities,
 }) {
   const [displayOpps, setDisplayOpps] = useState([]);
+  const [search, setSearch] = useState('');
 
   // Component first renders
   useEffect(() => {
@@ -45,7 +47,32 @@ export default function OpportunitiesList({
   // Update displayed opportunities when filters are updated
   useEffect(() => {
     applyFilters();
-  }, [locationFilter, oppTypeFilter, orgTypeFilter]);
+  }, [locationFilter, oppTypeFilter, orgTypeFilter, search]);
+
+  // Fuzzy search on given searchData
+  // If the search bar is empty, the searchData is all the opps
+  // Function is called at the end of applyFilters() with the
+  // filtered data set
+  const searchOpportunity = (query, searchData=opportunities) => {
+    if (!query) {
+      setDisplayOpps(searchData);
+      return;
+    }
+    const fuse = new Fuse(searchData, {
+      // more parameters can be added for search
+      keys: ['eventname', 'description'],
+    });
+    const result = fuse.search(query);
+    const finalResult = [];
+    if (result.length) {
+      result.forEach((item) => {
+        finalResult.push(item.item);
+      });
+      setDisplayOpps(finalResult);
+    } else {
+      setDisplayOpps([]);
+    }
+  };
 
   const applyFilters = () => {
     // Set all filters to lowercase for comparison
@@ -82,7 +109,9 @@ export default function OpportunitiesList({
       return location && oppType && orgType;
     });
 
-    setDisplayOpps(copyOpps);
+    // setDisplayOpps(copyOpps);
+    // searches the filtered opp list
+    searchOpportunity(search, copyOpps);
   };
 
   return (
@@ -95,6 +124,7 @@ export default function OpportunitiesList({
           <TextField
             placeholder='Search'
             size='small'
+            onChange={(e) => setSearch(e.target.value)}
             InputProps={{
               style: {
                 fontSize: '0.9rem',
