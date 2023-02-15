@@ -27,7 +27,7 @@ export const TimeInput = ({name, control, label, register}) => {
             name={name}
             renderInput={(params) => <TextField {...params}
               sx={{
-                input: {color: '#fdc700'},
+                input: {color: '#00C2FF'},
                 backgroundColor: 'rgb(255, 255, 255)',
                 marginBottom: '10px',
               }}

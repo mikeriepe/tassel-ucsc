@@ -27,7 +27,7 @@ export const DateInput = ({name, control, label, register, minDate}) => {
             renderInput={(params) => <TextField {...params}
               name={name}
               sx={{
-                input: {color: '#fdc700'},
+                input: {color: '#00C2FF'},
                 backgroundColor: 'rgb(255, 255, 255)',
                 marginBottom: '5px',
               }}/>}

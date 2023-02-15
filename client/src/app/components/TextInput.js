@@ -17,7 +17,7 @@ export const TextInput = ({name, control, label, register}) => {
         <Box>
           <TextField
             sx={{
-              input: {color: '#fdc700'},
+              input: {color: '#00C2FF'},
               backgroundColor: 'rgb(255, 255, 255)',
               marginBottom: '5px',
             }}

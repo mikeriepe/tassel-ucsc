@@ -445,7 +445,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
               </FormLabel>
               <IconButton
                 size='small'
-                sx = {{color: '#fdc700'}}
+                sx = {{color: '#00C2FF'}}
                 aria-label="additional opportunity role"
                 onClick={handleAdditionalRoleClick}
               >
