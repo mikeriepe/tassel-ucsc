@@ -181,6 +181,7 @@ export default function FetchWrapper() {
         allOpportunities &&
           <Opportunities
             getPendingOpportunities={getPendingOpportunities}
+            getCreatedOpportunities={getCreatedOpportunities}
             joinedOpportunities={joinedOpportunities}
             createdOpportunities={createdOpportunities}
             pastOpportunities={pastOpportunities}
@@ -203,9 +204,11 @@ function Opportunities({
   pendingOpportunities,
   allOpportunities,
   getPendingOpportunities,
+  getCreatedOpportunities,
 }) {
   const {userProfile} = useAuth();
 
+  // TODO: change default tabs
   const [tab, setTab] = useState(0);
   const [locationFilter, setLocationFilter] = useState([]);
   const [oppTypeFilter, setOppTypeFilter] = useState([]);
@@ -288,6 +291,7 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
+          getCreatedOpportunities={getCreatedOpportunities}
         />,
     },
   ];
@@ -308,7 +312,6 @@ function Opportunities({
     eventdata: '',
     startdate: new Date(),
     enddate: new Date(),
-    organizationtype: '',
     opportunitytype: '',
     starttime: new Date(),
     endtime: new Date(),
@@ -354,6 +357,7 @@ function Opportunities({
             progress: undefined,
           });
           handleModalClose();
+          getCreatedOpportunities();
         })
         .catch((error) => {
           console.log(error);

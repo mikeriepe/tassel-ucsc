@@ -3,8 +3,8 @@ import React, {useState, useEffect} from 'react';
 import {StepLabel, IconButton, FormHelperText} from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Skeleton from '@mui/material/Skeleton';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -19,7 +19,7 @@ import ThemedButton from '../components/ThemedButton';
 import {TextInput} from './TextInput';
 import {TimeInput} from './TimeInput.js';
 import {DropdownInput} from './DropdownInput';
-import {RadioInput} from './RadioInput';
+import {CheckboxInput} from './CheckboxInput';
 import {DateInput} from './DateInput';
 
 
@@ -32,19 +32,12 @@ import {DateInput} from './DateInput';
  */
 export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const [opportunityTypes, setOpportunityTypes] = useState([]);
-  const [organizationTypes, setOrganizationTypes] = useState([]);
-  const [organizations, setOrganizations] = useState([]);
 
-  const [currOrganizationType, setCurrOrganizationType] = useState(
-    defaultValues.organizationtype ?
-    defaultValues.organizationtype :
-    null,
-  );
   const [currLocationType, setCurrLocationType] = useState(
       defaultValues.locationtype,
   );
   const [currSponsorType, setCurrSponsorType] = useState(
-      defaultValues.organizationtype ?
+      defaultValues.organization ?
       'organization sponsor' :
       'user sponsor',
   );
@@ -58,7 +51,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const validationSchema = Yup.object().shape({
     eventname: Yup.string().required('Event name is required'),
     locationtype: Yup.string().required('Location type is required'),
-    sponsortype: Yup.string().required('Sponsor type is required'),
+    organizationsponsor: Yup.string().notRequired(),
     eventlocation: Yup.object().shape({
       'address': Yup.string().when([], {
         is: () => currLocationType != 'remote',
@@ -101,11 +94,6 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
         .date()
         .min(Yup.ref('startdate'), 'End date must be after start date')
         .required('End date is required'),
-    organizationtype: Yup.string().when([], {
-      is: () => currSponsorType == 'organization sponsor',
-      then: Yup.string().required('Organization type is required'),
-      otherwise: Yup.string().notRequired(),
-    }),
     opportunitytype: Yup.string().required('Opportunity type is required'),
     starttime: Yup
         .date()
@@ -141,63 +129,11 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
         });
   };
 
-  const getOrganizationTypes = () => {
-    fetch(`/api/getOrganizationTypes`)
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then((json) => {
-          const orgTypes = [];
-          json.map((type, index) => (
-            orgTypes.push({
-              label: type.name,
-              value: type.name,
-            })
-          ));
-          setOrganizationTypes(orgTypes);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Error retrieving organization types');
-        });
-  };
-
-  const getOrganizations = () => {
-    fetch(`/api/getOrganizations/${currOrganizationType}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then((json) => {
-          const orgs = [];
-          json.map((type, index) => (
-            orgs.push({
-              label: type.name,
-              value: type.name,
-            })
-          ));
-          setOrganizations(orgs);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Error retrieving organizations');
-        });
-  };
-
   const handleSponsorChange = (e) => {
-    const value = e.target.value;
-    console.log(value);
-    setCurrSponsorType(value);
-  };
-
-  const handleOrganizationTypeChange = (e) => {
-    const value = e.target.value;
-    setCurrOrganizationType(value);
+    setCurrSponsorType(
+      currSponsorType == 'user sponsor' ?
+      'organization sponsor' : 'user sponsor',
+    );
   };
 
   const handleLocationTypeChange = (e) => {
@@ -282,17 +218,6 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
     },
   ];
 
-  const sponsorTypeOptions = [
-    {
-      label: 'User Sponsored',
-      value: 'user sponsor',
-    },
-    {
-      label: 'Organization Sponsored',
-      value: 'organization sponsor',
-    },
-  ];
-
   const {
     register,
     control,
@@ -305,13 +230,8 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   });
 
   useEffect(() => {
-    getOrganizationTypes();
     getOpportunityTypes();
   }, []);
-
-  useEffect(() => {
-    getOrganizations();
-  }, [currOrganizationType]);
 
   return (
     <Paper
@@ -385,33 +305,24 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             />
           </Box>
 
-          <RadioInput
-            name='sponsortype'
+          <CheckboxInput
+            name='organizationsponsor'
             control={control}
-            label='Opportunity Sponsor'
-            options={sponsorTypeOptions}
+            label='Organization Sponsor'
             customOnChange={handleSponsorChange}
-            register={register}
-            defaultValue='user sponsor'
+            defaultChecked={
+              currSponsorType == 'organization sponsor'
+            }
           />
 
           {/* ORGANIZATION DETAILS */}
           {
             currSponsorType == 'organization sponsor' &&
               <Box>
-                <DropdownInput
-                  name='organizationtype'
-                  control={control}
-                  label='Organization Type'
-                  options={organizationTypes}
-                  customOnChange={handleOrganizationTypeChange}
-                  register={register}
-                />
-                <DropdownInput
+                <TextInput
                   name='organization'
                   control={control}
                   label='Organization'
-                  options={organizations}
                   register={register}
                 />
               </Box>
@@ -623,7 +534,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
       >
         <ThemedButton
           aria-label='Next step button'
-          color={'blue'}
+          color={'yellow'}
           variant={'themed'}
           onClick={onClose}
         >
@@ -631,7 +542,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
         </ThemedButton>
         <ThemedButton
           aria-label='Next step button'
-          color={'yellow'}
+          color={'blue'}
           variant={'themed'}
           onClick={() => {
             console.log('SAVE CLICKED');
@@ -662,27 +573,24 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             // Make sure no values written
             // to DB that do not match location/sponsor type
             if (values.locationtype == 'in-person') {
-              values.eventzoomlink = '';
+              setValue('eventzoomlink', '');
             }
 
             if (values.locationtype == 'remote') {
-              values.eventlocation.zip = null;
-              values.eventlocation.city = null;
-              values.eventlocation.state = null;
-              values.eventlocation.address = null;
+              setValue('eventlocation.zip', '');
+              setValue('eventlocation.city', '');
+              setValue('eventlocation.state', '');
+              setValue('eventlocation.address', '');
 
-              values.eventlocation = {};
+              setValue('eventlocation', {});
             }
 
-            // TODO: null or empty string?
             if (currSponsorType == 'user sponsor') {
-              values.organization = null;
-              values.organizationtype = null;
+              setValue('organization', '');
             }
 
             // set curr roles in values
             setValue('roles', currRoles);
-
             handleSubmit(onSubmit)();
           }}
         >

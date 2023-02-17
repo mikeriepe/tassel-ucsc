@@ -1,7 +1,7 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 

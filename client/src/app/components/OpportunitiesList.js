@@ -35,6 +35,7 @@ export default function OpportunitiesList({
   orgTypeFilter,
   setOrgTypeFilter,
   getPendingOpportunities,
+  getCreatedOpportunities,
 }) {
   const [displayOpps, setDisplayOpps] = useState([]);
   const [search, setSearch] = useState('');
@@ -154,6 +155,7 @@ export default function OpportunitiesList({
             type={type}
             opportunity={opportunity}
             getPendingOpportunities={getPendingOpportunities}
+            getCreatedOpportunities={getCreatedOpportunities}
           />
         ))}
       </MuiBox>
