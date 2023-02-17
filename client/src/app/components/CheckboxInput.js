@@ -11,6 +11,8 @@ export const CheckboxInput = ({
   name,
   control,
   label,
+  customOnChange,
+  defaultChecked,
 }) => {
   return (
     <FormControl component="fieldset">
@@ -29,7 +31,18 @@ export const CheckboxInput = ({
             fieldState: {error},
             formState,
           }) => (
-            <Checkbox value={value} onChange={onChange}>
+            <Checkbox
+              value={value}
+              defaultChecked={
+                defaultChecked ? defaultChecked : false
+              }
+              onChange={(e) => {
+                if (customOnChange) {
+                  customOnChange(e);
+                }
+                onChange(e);
+              }}
+            >
             </Checkbox>
           )}
         />
