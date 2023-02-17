@@ -210,7 +210,6 @@ function Opportunities({
 }, props) {
   const {userProfile} = useAuth();
   const location = useLocation();
-  console.log(location);
 
   let defaultTab = null;
   if (location.state === null) {
