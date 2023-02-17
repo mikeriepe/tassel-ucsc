@@ -140,8 +140,8 @@ const MoreIcon = ({anchorEl, open, handleClick, handleClose}) => (
 );
 
 /**
- * creates Profile
- * @return {HTML} Profile component
+ * creates Profile header
+ * @return {HTML} Profile header component
  */
 export default function ProfileHeader({data}) {
   const handleError = (e) => {

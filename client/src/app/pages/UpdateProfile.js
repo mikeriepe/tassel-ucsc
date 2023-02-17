@@ -69,6 +69,13 @@ export default function UpdateProfile() {
   const [showDeleteVolunteerModal,
     setShowDeleteVolunteerModal] = useState(false);
 
+  if (userProfile.experience === null) {
+    userProfile.experience = {};
+  }
+  if (userProfile.volunteeringexperience === null) {
+    userProfile.volunteeringexperience = {};
+  }
+
   const [values, setValues] = useState({
     1: {
       graduationyear: userProfile.graduationyear,

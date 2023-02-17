@@ -208,6 +208,18 @@ a, a:hover, a:focus, a:active {
   font-size: 0.7rem;
 }
 
+.text-small {
+  font-size: .9rem;
+}
+
+.text-medium {
+  font-size: 1.3rem;
+}
+
+.text-large {
+  font-size: 2rem;
+}
+
 .text-light {
   font-weight: 400;
 }
@@ -300,6 +312,10 @@ a, a:hover, a:focus, a:active {
 
 .hover-highlight:hover {
   background: var(--tertiary-gray-bright);
+}
+
+.hover-highlight-link:hover {
+  color: var(--secondary-yellow-main);
 }
 
 .navbar-height {

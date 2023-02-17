@@ -666,11 +666,6 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             }
 
             if (values.locationtype == 'remote') {
-              values.eventlocation.zip = null;
-              values.eventlocation.city = null;
-              values.eventlocation.state = null;
-              values.eventlocation.address = null;
-
               values.eventlocation = {};
             }
 

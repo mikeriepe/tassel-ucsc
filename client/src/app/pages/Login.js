@@ -108,7 +108,7 @@ export default function Login() {
         .then((json) => {
           console.log(json);
           setUserProfile(json);
-          navigate(`/myprofile`);
+          navigate(`/dashboard`);
         })
         .catch((err) => {
           console.log(err);

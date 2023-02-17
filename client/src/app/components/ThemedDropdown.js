@@ -29,11 +29,15 @@ const BootstrapInput = styled((props) => (
  * Themed dropdown
  * @return {JSX}
  */
-export default function ThemedDropdown({menuItems}) {
+export default function ThemedDropdown({menuItems, sortSelection}) {
   const [menuName, setMenuName] = useState('Recommended');
 
   const handleChange = (event) => {
     setMenuName(event.target.value);
+    // make sure to call the function if it's defined
+    if (typeof sortSelection == 'function') {
+      sortSelection(event.target.value);
+    }
   };
 
   return (

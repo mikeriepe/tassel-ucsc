@@ -38,6 +38,7 @@ export default function OpportunitiesList({
 }) {
   const [displayOpps, setDisplayOpps] = useState([]);
   const [search, setSearch] = useState('');
+  const [dropdownSelect, setDropdownSelect] = useState('Recommended');
 
   // Component first renders
   useEffect(() => {
@@ -47,7 +48,24 @@ export default function OpportunitiesList({
   // Update displayed opportunities when filters are updated
   useEffect(() => {
     applyFilters();
-  }, [locationFilter, oppTypeFilter, orgTypeFilter, search]);
+  }, [locationFilter, oppTypeFilter, orgTypeFilter, search, dropdownSelect]);
+
+  const handleDropdown = ((dropdown) => {
+    setDropdownSelect(dropdown);
+  });
+
+  const handleSort = ((opps) => {
+    if (dropdownSelect === 'Alphabet') {
+      opps.sort((a, b) => a.eventname.localeCompare(b.eventname));
+    } else if (dropdownSelect === 'Major') {
+      // 'zzz' puts the null values at the end
+      opps.sort((a, b) => (a.subject ? a.subject : 'zzz')
+          .localeCompare(b.subject ? b.subject : 'zzz'));
+    }
+    // Recommended sorting will be implemented here
+    console.log('Recommended sorting');
+    return opps;
+  });
 
   // Fuzzy search on given searchData
   // If the search bar is empty, the searchData is all the opps
@@ -110,6 +128,7 @@ export default function OpportunitiesList({
     });
 
     // setDisplayOpps(copyOpps);
+    handleSort(copyOpps);
     // searches the filtered opp list
     searchOpportunity(search, copyOpps);
   };
@@ -146,7 +165,10 @@ export default function OpportunitiesList({
               },
             }}
           />
-          <ThemedDropdown menuItems={['Recommended', 'Alphabet', 'Major']} />
+          <ThemedDropdown
+            menuItems={['Recommended', 'Alphabet', 'Major']}
+            sortSelection={handleDropdown}
+          />
         </div>
         {displayOpps.map((opportunity, index) => (
           <OpportunitiesCard
