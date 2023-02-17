@@ -23,7 +23,7 @@ const uuid = require('uuid');
 exports.opportunityUpdate = async (req, res) => {
   // console.log(req.body.userid);
   try {
-    const opportunityId = await opportunityModel.updateProfile(req.body);
+    const opportunityId = await opportunityModel.updateOpportunity(req.body);
     res.status(200).send({opportunityId});
   }
   catch (error) {
