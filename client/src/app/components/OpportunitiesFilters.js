@@ -47,7 +47,7 @@ export default function OpportunityFilters({
   const [orgTypes, setOrgTypes] = useState([]);
   const [collapseLocation, setCollapseLocation] = useState(true);
   const [collapseOppType, setCollapseOppType] = useState(true);
-  const [collapseOrgType, setCollapseOrgType] = useState(true);
+  // const [collapseOrgType, setCollapseOrgType] = useState(true);
 
   const handleCheckAll = () => {
     setLocationFilter(locations);
@@ -88,6 +88,7 @@ export default function OpportunityFilters({
   };
 
   // Handle checkboxes for org types
+  /*
   const handleToggleOrgType = (value) => () => {
     const currentIndex = orgTypeFilter.indexOf(value);
     const newOrgTypeFilter = [...orgTypeFilter];
@@ -99,6 +100,7 @@ export default function OpportunityFilters({
     }
     setOrgTypeFilter(newOrgTypeFilter);
   };
+  */
 
   const handleCollapseLocation = () => {
     setCollapseLocation(!collapseLocation);
@@ -108,9 +110,11 @@ export default function OpportunityFilters({
     setCollapseOppType(!collapseOppType);
   };
 
+  /*
   const handleCollapseOrgType = () => {
     setCollapseOrgType(!collapseOrgType);
   };
+  */
 
   const getOpportunityTypes = () => {
     fetch(`/api/getOpportunityTypes`)
@@ -277,6 +281,7 @@ export default function OpportunityFilters({
             </Collapse>
           </div>
           {/* Organization Types Filters */}
+          {/*
           <div className='flex-vertical flow-tiny'>
             <MuiBox
               className='
@@ -325,6 +330,7 @@ export default function OpportunityFilters({
               </FormGroup>
             </Collapse>
           </div>
+          */}
         </div>
       </Paper>
     </Box>
