@@ -9,6 +9,7 @@ import useAuth from '../util/AuthContext';
 import OpportunityForm from '../components/OpportunityForm';
 import {Modal} from '@mui/material';
 import {toast} from 'react-toastify';
+import {useLocation} from 'react-router-dom';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -194,6 +195,7 @@ export default function FetchWrapper() {
 
 /**
  * creates opportunities page
+ * @param {string} props
  * @return {HTML} opportunities page
  */
 function Opportunities({
@@ -203,10 +205,23 @@ function Opportunities({
   pendingOpportunities,
   allOpportunities,
   getPendingOpportunities,
-}) {
+}, props) {
   const {userProfile} = useAuth();
+  const location = useLocation();
+  console.log(location);
 
-  const [tab, setTab] = useState(0);
+  let defaultTab = null;
+  if (location.state === null) {
+    defaultTab = 0;
+  } else if (location.state.defaultTab === 'browse') {
+    defaultTab = 4;
+  } else if (location.state.defaultTab === 'upcoming') {
+    defaultTab = 0;
+  } else {
+    defaultTab = 0;
+  }
+
+  const [tab, setTab] = useState(defaultTab);
   const [locationFilter, setLocationFilter] = useState([]);
   const [oppTypeFilter, setOppTypeFilter] = useState([]);
   const [orgTypeFilter, setOrgTypeFilter] = useState([]);
