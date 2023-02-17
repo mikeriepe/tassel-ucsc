@@ -18,8 +18,8 @@ const Page = styled((props) => (
 }));
 
 /**
- * creates Calendar
- * @return {HTML} Calendar component
+ * creates Profile
+ * @return {HTML} Profile component
  */
 export default function ViewProfile() {
   const [profile, setProfile] = useState(null);
