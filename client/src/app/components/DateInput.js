@@ -1,7 +1,7 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 
@@ -27,7 +27,7 @@ export const DateInput = ({name, control, label, register, minDate}) => {
             renderInput={(params) => <TextField {...params}
               name={name}
               sx={{
-                input: {color: '#fdc700'},
+                input: {color: '#00C2FF'},
                 backgroundColor: 'rgb(255, 255, 255)',
                 marginBottom: '5px',
               }}/>}

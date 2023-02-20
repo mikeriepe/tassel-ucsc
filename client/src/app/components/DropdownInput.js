@@ -39,7 +39,7 @@ export const DropdownInput = ({
             <Select
               {...register(name)}
               sx={{
-                input: {color: '#fdc700'},
+                input: {color: '#00C2FF'},
                 backgroundColor: 'rgb(255, 255, 255)',
                 marginBottom: '5px',
                 width: '-webkit-fill-available',

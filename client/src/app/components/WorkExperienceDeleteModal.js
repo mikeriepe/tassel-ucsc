@@ -186,7 +186,7 @@ export default function WorkExperienceDeleteModal({onClose}) {
                 onClose();
               }}
               aria-label='Next step button'
-              color={'blue'}
+              color={'yellow'}
               variant={'themed'}
               sx={{
                 marginRight: '10px',

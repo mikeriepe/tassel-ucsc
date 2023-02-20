@@ -169,6 +169,7 @@ export default function OpportunitiesCard({
   type,
   opportunity,
   getPendingOpportunities,
+  getCreatedOpportunities,
 }) {
   const [creator, setCreator] = useState('');
 
@@ -248,6 +249,9 @@ export default function OpportunitiesCard({
             progress: undefined,
           });
           handleOppModalClose();
+          if (getCreatedOpportunities) {
+            getCreatedOpportunities();
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -279,6 +283,9 @@ export default function OpportunitiesCard({
             progress: undefined,
           });
           handleDeleteModalClose();
+          if (getCreatedOpportunities) {
+            getCreatedOpportunities();
+          }
         })
         .catch((error) => {
           console.log(error);

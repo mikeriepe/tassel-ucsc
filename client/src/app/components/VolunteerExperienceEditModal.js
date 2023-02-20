@@ -236,7 +236,7 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
                 onClose();
               }}
               aria-label='Next step button'
-              color={'blue'}
+              color={'yellow'}
               variant={'themed'}
               sx={{
                 marginRight: '10px',
@@ -246,7 +246,7 @@ export default function VolunteerExperienceEditModal({onClose, index}) {
             </ThemedButton>
             <ThemedButton
               aria-label='Next step button'
-              color={'yellow'}
+              color={'blue'}
               variant={'themed'}
               onClick={handleSubmit(onSubmit)}
             >

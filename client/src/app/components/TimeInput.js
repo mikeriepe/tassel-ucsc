@@ -1,7 +1,7 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import TextField from '@mui/material/TextField';
-import TimePicker from '@mui/lab/TimePicker';
+import {TimePicker} from '@mui/x-date-pickers';
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
 
@@ -27,7 +27,7 @@ export const TimeInput = ({name, control, label, register}) => {
             name={name}
             renderInput={(params) => <TextField {...params}
               sx={{
-                input: {color: '#fdc700'},
+                input: {color: '#00C2FF'},
                 backgroundColor: 'rgb(255, 255, 255)',
                 marginBottom: '10px',
               }}
