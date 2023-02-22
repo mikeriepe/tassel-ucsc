@@ -148,7 +148,7 @@ export default function FetchWrapper() {
   };
 
   const getAllOpportunities = () => {
-    fetch(`/api/getOpportunities`)
+    fetch(`/api/getOpportunities/${userProfile.profileid}`)
         .then((res) => {
           if (!res.ok) {
             throw res;
@@ -156,7 +156,13 @@ export default function FetchWrapper() {
           return res.json();
         })
         .then((json) => {
+          // return all opps - pending opps
+          // const diff = json.filter(({eventid: id1}) =>
+          //   !pendingOpportunities.some(({eventid: id2}) =>
+          //     id2 === id1));
           setAllOpportunities(json);
+          // console.log(pendingOpportunities);
+          // console.log(diff);
         })
         .catch((err) => {
           console.log(err);
@@ -183,6 +189,7 @@ export default function FetchWrapper() {
           <Opportunities
             getPendingOpportunities={getPendingOpportunities}
             getCreatedOpportunities={getCreatedOpportunities}
+            getAllOpportunities={getAllOpportunities}
             joinedOpportunities={joinedOpportunities}
             createdOpportunities={createdOpportunities}
             pastOpportunities={pastOpportunities}
@@ -207,6 +214,7 @@ function Opportunities({
   allOpportunities,
   getPendingOpportunities,
   getCreatedOpportunities,
+  getAllOpportunities,
 }, props) {
   const {userProfile} = useAuth();
   const location = useLocation();
@@ -243,6 +251,7 @@ function Opportunities({
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
           getPendingOpportunities={getPendingOpportunities}
+          getAllOpportunities={getAllOpportunities}
         />,
     },
     {
@@ -259,6 +268,7 @@ function Opportunities({
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
           getPendingOpportunities={getPendingOpportunities}
+          getAllOpportunities={getAllOpportunities}
         />,
     },
     {

@@ -8,9 +8,22 @@ const uuid = require('uuid');
  * @param {*} req
  * @param {*} res
  */
- exports.getOpportunities = async (_, res) => {
+ exports.getOpportunities = async (req, res) => {
   const opportunities = await opportunityModel.getOpportunities();
-  res.status(201).send(opportunities);
+  // get pending opps
+  const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
+  const pendingOpps = [];
+  for (let index = 0; index < requests.length; index++) {
+    const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
+    pendingOpps.push(opportunity);
+  }
+  //Find values that are in result1 but not in result2
+  var uniqueResultOne = opportunities.filter(function(obj) {
+    return !pendingOpps.some(function(objj) {
+        return obj.eventid == objj.eventid;
+    });
+  });
+  res.status(201).send(uniqueResultOne);
 };
 
 
