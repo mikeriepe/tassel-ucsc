@@ -6,7 +6,8 @@ import CompressedTabBar from '../components/CompressedTabBar';
 import PageHeader from '../components/PageHeader';
 import ThemedButton from '../components/ThemedButton';
 import ViewOpportunityAbout from '../components/ViewOpportunityAbout';
-import ViewOpportunityFindPeople from '../components/ViewOpportunityFindPeople';
+// import ViewOpportunityFindPeople
+// from '../components/ViewOpportunityFindPeople';
 import ViewOpportunityForums from '../components/ViewOpportunityForums';
 import ViewOpportunityMembers from '../components/ViewOpportunityMembers';
 import ViewOpportunityRequests from '../components/ViewOpportunityRequests';
@@ -224,10 +225,14 @@ function ViewOpportunity({opportunity}) {
       name: 'Requests',
       component: <ViewOpportunityRequests />,
     },
+    // Find people tab will be implemented in Spring 2023
+    // For now it will stay hidden
+    /*
     {
       name: 'Find People',
       component: <ViewOpportunityFindPeople />,
     },
+    */
   ];
 
   const handleIsCreator = () => {
