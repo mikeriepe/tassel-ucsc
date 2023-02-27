@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import MuiAvatar from '@mui/material/Avatar';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+
 
 const Avatar = ({image}, props) => (
   <MuiAvatar sx={{height: '30px', width: '30px'}} src={image} {...props} />
@@ -15,12 +16,29 @@ const Avatar = ({image}, props) => (
  */
 export default function ViewOpportunityRequestCard({
   request,
-  requester,
-  getRequester,
   isItemSelected,
   labelId,
   handleClick,
 }) {
+  const [requester, setRequester] = useState(null);
+
+  const getRequester = (requester) => {
+    fetch(`/api/getProfileByProfileId/${requester}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setRequester(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving requester profile, please try again');
+        });
+  };
+
   useEffect(() => {
     getRequester(request.requester);
   }, []);
@@ -46,20 +64,27 @@ export default function ViewOpportunityRequestCard({
   return (
     <TableRow
       hover
-      onClick={(event) => handleClick(event, request.requester)}
+      onClick={(event) => {
+        // only handle click if the request is pending
+        if (request.status === 'Pending') {
+          handleClick(event, request.requester);
+        }
+      }}
       role='checkbox'
       aria-checked={isItemSelected}
       tabIndex={-1}
       selected={isItemSelected}
     >
       <TableCell padding='checkbox'>
-        <Checkbox
-          color='primary'
-          checked={isItemSelected}
-          inputProps={{
-            'aria-labelledby': labelId,
-          }}
-        />
+        {request.status === 'Pending' &&
+          <Checkbox
+            color='primary'
+            checked={isItemSelected}
+            inputProps={{
+              'aria-labelledby': labelId,
+            }}
+          />
+        }
       </TableCell>
       <TableCell
         component='th'

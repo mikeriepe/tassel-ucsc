@@ -112,12 +112,19 @@ function EnhancedTableHead({
   order,
   orderBy,
   numSelected,
-  rowCount,
   onRequestSort,
+  requests,
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+
+  let numberOfPendings = 0;
+  for (let i = 0; i < requests.length; i++) {
+    if (requests[i].status === 'Pending') {
+      numberOfPendings++;
+    }
+  }
 
   return (
     <TableHead>
@@ -125,8 +132,8 @@ function EnhancedTableHead({
         <TableCell padding='checkbox'>
           <Checkbox
             color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            indeterminate={numSelected > 0 && numSelected < numberOfPendings}
+            checked={numSelected > 0 && numSelected === numberOfPendings}
             onChange={onSelectAllClick}
             inputProps={{
               'aria-label': 'select all requests',
@@ -165,11 +172,162 @@ EnhancedTableHead.propTypes = {
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
-const EnhancedTableToolbar = (props) => {
-  const {numSelected} = props;
+
+/**
+ * @return {JSX}
+ */
+function EnhancedTableToolbar({
+  numSelected,
+  selected,
+  requests,
+  updateRequests,
+  resetSelected,
+}) {
+  const approveRequests = async () => {
+    // prepare the post data
+    // required params requestId and opportunityid
+    // right now it will only approve one request
+    // a for loop is required to approve multiple requests
+    const selectedRequests = [];
+    for (let i = 0; i < selected.length; i++) {
+      for (let j = 0; j < requests.length; j++) {
+        if (selected[i] === requests[j].requester) {
+          // push the request and its index
+          selectedRequests.push([requests[j], j]);
+        }
+      }
+    }
+
+    for (let i = 0; i < selectedRequests.length; i++) {
+      const toBeApproved = {
+        requestId: selectedRequests[i][0].requestid,
+        opportunityid: selectedRequests[i][0].opportunityid,
+        requester: selectedRequests[i][0].requester,
+        role: selectedRequests[i][0].role,
+      };
+      console.log(toBeApproved);
+      await fetch(`/api/approveRequest`, {
+        method: 'POST',
+        body: JSON.stringify(toBeApproved),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res;
+          })
+          .then((json) => {
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
+    const updatedRequests = [...requests];
+    for (let i = 0; i < selectedRequests.length; i++) {
+      updatedRequests[selectedRequests[i][1]].requeststatus = 'approved';
+      updatedRequests[selectedRequests[i][1]].status = 'Approved';
+    }
+    updateRequests(updatedRequests);
+    resetSelected();
+  };
+
+  const denyRequests = async () => {
+    const selectedRequests = [];
+    for (let i = 0; i < selected.length; i++) {
+      for (let j = 0; j < requests.length; j++) {
+        if (selected[i] === requests[j].requester) {
+          // push the request and its index
+          selectedRequests.push([requests[j], j]);
+        }
+      }
+    }
+    for (let i = 0; i < selectedRequests.length; i++) {
+      const toBeRejected = {
+        requestId: selectedRequests[i][0].requestid,
+        // opportunityid: request.opportunityid,
+      };
+      await fetch(`/api/rejectRequest`, {
+        method: 'POST',
+        body: JSON.stringify(toBeRejected),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res.json();
+          })
+          .then((json) => {
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
+    const updatedRequests = [...requests];
+    for (let i = 0; i < selectedRequests.length; i++) {
+      updatedRequests[selectedRequests[i][1]].requeststatus = 'rejected';
+      updatedRequests[selectedRequests[i][1]].status = 'Denied';
+    }
+    updateRequests(updatedRequests);
+    resetSelected();
+  };
+  /*
+  const postRequestToOpportunity = (requestData) => {
+    fetch(`/api/postRequest`, {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+        .then((res) => {
+          if (res.status === 201) {
+            toast.success(`Applied to ${opportunity.eventname}`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            getPendingOpportunities();
+            getAllOpportunities();
+          } else if (res.status === 409) {
+            toast.warning(`You Already Applied to This Event`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            toast.error(`Something Went Wrong. Please Try Again.`, {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Something Went Wrong. Please Try Again.');
+        });
+  };
+  */
 
   return (
     <Toolbar
@@ -200,10 +358,28 @@ const EnhancedTableToolbar = (props) => {
           className='flex-horizontal flex-flow-large'
           sx={{marginRight: '5px'}}
         >
-          <ThemedButton color='yellow' variant='gradient' size='small'>
+          <ThemedButton
+            color='yellow'
+            variant='gradient'
+            size='small'
+            onClick={() => {
+              approveRequests();
+              // console.log(selected);
+              // console.log(requests);
+            }}
+          >
             Approve
           </ThemedButton>
-          <ThemedButton color='gray' variant='themed' size='small'>
+          <ThemedButton
+            color='gray'
+            variant='themed'
+            size='small'
+            onClick={() => {
+              denyRequests();
+              // console.log(selected);
+              // console.log(requests);
+            }}
+          >
             Deny
           </ThemedButton>
         </Box>
@@ -302,6 +478,10 @@ export default function FetchWrapper() {
         });
   };
 
+  const updateRequests = (updatedRequests) => {
+    setRequests(updatedRequests);
+  };
+
   useEffect(() => {
     getPendingRequestsReceived();
     getApprovedRequests();
@@ -310,7 +490,10 @@ export default function FetchWrapper() {
 
   return (
     <>
-      {requests && <ViewOpportunityRequests requests={requests} />}
+      {requests && <ViewOpportunityRequests
+        requests={requests}
+        updateRequests={updateRequests}
+      />}
     </>
   );
 }
@@ -319,13 +502,13 @@ export default function FetchWrapper() {
  * Enhanced table
  * @return {JSX}
  */
-function ViewOpportunityRequests({requests}) {
+function ViewOpportunityRequests({requests, updateRequests}) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [requester, setRequester] = useState(null);
+  // const [requester, setRequester] = useState(null);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -335,7 +518,13 @@ function ViewOpportunityRequests({requests}) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      // const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = [];
+      for (let i = 0; i < requests.length; i++) {
+        if (requests[i].status === 'Pending') {
+          newSelecteds.push(requests[i].requester);
+        }
+      }
       setSelected(newSelecteds);
       return;
     }
@@ -362,6 +551,10 @@ function ViewOpportunityRequests({requests}) {
     setSelected(newSelected);
   };
 
+  const resetSelected = () => {
+    setSelected([]);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -377,24 +570,6 @@ function ViewOpportunityRequests({requests}) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const getRequester = (requester) => {
-    fetch(`/api/getProfileByProfileId/${requester}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then((json) => {
-          console.log(json);
-          setRequester(json);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Error retrieving requester profile, please try again');
-        });
-  };
-
   return (
     <Box sx={{width: 'auto'}}>
       <Paper
@@ -407,7 +582,13 @@ function ViewOpportunityRequests({requests}) {
           borderRadius: '10px',
         }}
       >
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          selected={selected}
+          requests={requests}
+          updateRequests={updateRequests}
+          resetSelected={resetSelected}
+        />
         <TableContainer>
           <Table aria-labelledby='tableTitle'>
             <EnhancedTableHead
@@ -416,7 +597,7 @@ function ViewOpportunityRequests({requests}) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={requests.length}
+              requests={requests}
             />
             <TableBody>
               {requests
@@ -431,8 +612,6 @@ function ViewOpportunityRequests({requests}) {
                       <ViewOpportunityRequestCard
                         key={`request-${index}`}
                         request={request}
-                        requester={requester}
-                        getRequester={getRequester}
                         isItemSelected={isItemSelected}
                         labelId={labelId}
                         handleClick={handleClick}
