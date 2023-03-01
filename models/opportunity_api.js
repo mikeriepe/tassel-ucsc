@@ -20,7 +20,10 @@ const uuid = require('uuid');
   //Find values that are in result1 but not in result2
   var uniqueResultOne = opportunities.filter(function(obj) {
     return !pendingOpps.some(function(objj) {
-        return obj.eventid == objj.eventid;
+        if (obj !== undefined && objj !== undefined) {
+          return obj.eventid == objj.eventid;
+        }
+        return false;
     });
   });
   res.status(201).send(uniqueResultOne);
@@ -81,10 +84,11 @@ exports.opportunityUpdate = async (req, res) => {
   const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
   const pendingOpps = [];
   for (let index = 0; index < requests.length; index++) {
-    const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
-    pendingOpps.push(opportunity);
+    if (requests[index].requeststatus === 'pending') {
+      const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
+      pendingOpps.push(opportunity);
+    }
   }
-  // console.log(pendingOpps);
   res.status(201).send(pendingOpps);
 };
 
