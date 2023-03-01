@@ -122,13 +122,18 @@ function EnhancedTableHead({
   numSelected,
   onRequestSort,
   requests,
+  rowsPerPage,
+  page,
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
+  // number of pending requests on current page
   let numberOfPendings = 0;
-  for (let i = 0; i < requests.length; i++) {
+  for (let i = page * rowsPerPage;
+    i < requests.length && i < (page * rowsPerPage + rowsPerPage);
+    i++) {
     if (requests[i].status === 'Pending') {
       numberOfPendings++;
     }
@@ -335,56 +340,6 @@ function EnhancedTableToolbar({
           progress: undefined,
         });
   };
-  /*
-  const postRequestToOpportunity = (requestData) => {
-    fetch(`/api/postRequest`, {
-      method: 'POST',
-      body: JSON.stringify(requestData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-        .then((res) => {
-          if (res.status === 201) {
-            toast.success(`Applied to ${opportunity.eventname}`, {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-            getPendingOpportunities();
-            getAllOpportunities();
-          } else if (res.status === 409) {
-            toast.warning(`You Already Applied to This Event`, {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } else {
-            toast.error(`Something Went Wrong. Please Try Again.`, {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Something Went Wrong. Please Try Again.');
-        });
-  };
-  */
 
   return (
     <Toolbar
@@ -577,7 +532,9 @@ function ViewOpportunityRequests({requests, updateRequests}) {
     if (event.target.checked) {
       // const newSelecteds = rows.map((n) => n.name);
       const newSelecteds = [];
-      for (let i = 0; i < requests.length; i++) {
+      for (let i = page * rowsPerPage;
+        i < requests.length && i < (page * rowsPerPage + rowsPerPage);
+        i++) {
         if (requests[i].status === 'Pending') {
           newSelecteds.push(requests[i].requester);
         }
@@ -649,6 +606,8 @@ function ViewOpportunityRequests({requests, updateRequests}) {
         <TableContainer>
           <Table aria-labelledby='tableTitle'>
             <EnhancedTableHead
+              rowsPerPage={rowsPerPage}
+              page={page}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}

@@ -78,11 +78,15 @@ export default function ViewOpportunityRequestCard({
       <TableRow
         hover
         onClick={(event) => {
+          if (!isItemSelected) {
+            setOpen(true);
+          } else {
+            setOpen(false);
+          }
           // only handle click if the request is pending
           if (request.status === 'Pending') {
             handleClick(event, request.requester);
           }
-          setOpen(!open);
         }}
         role='checkbox'
         aria-checked={isItemSelected}
