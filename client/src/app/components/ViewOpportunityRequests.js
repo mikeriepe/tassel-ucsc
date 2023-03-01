@@ -21,6 +21,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ThemedButton from './ThemedButton';
 import ViewOpportunityRequestCard from './ViewOpportunityRequestCard';
 import useAuth from '../util/AuthContext';
+import {toast} from 'react-toastify';
+
 
 /**
  * Create request data
@@ -225,6 +227,18 @@ function EnhancedTableToolbar({
           })
           .catch((err) => {
             console.log(err);
+            toast.error(
+                `Something Went Wrong. Please Try Again.`,
+                {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+            return;
           });
     }
     const updatedRequests = [...requests];
@@ -234,6 +248,18 @@ function EnhancedTableToolbar({
     }
     updateRequests(updatedRequests);
     resetSelected();
+    const reqStr = selectedRequests.length > 1 ? 'requests' : 'request';
+    toast.success(
+        `Successfully approved ${selectedRequests.length} ${reqStr}`,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
   };
 
   const denyRequests = async () => {
@@ -268,6 +294,18 @@ function EnhancedTableToolbar({
           })
           .catch((err) => {
             console.log(err);
+            toast.error(
+                `Something Went Wrong. Please Try Again.`,
+                {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+            return;
           });
     }
     const updatedRequests = [...requests];
@@ -277,6 +315,18 @@ function EnhancedTableToolbar({
     }
     updateRequests(updatedRequests);
     resetSelected();
+    const reqStr = selectedRequests.length > 1 ? 'requests' : 'request';
+    toast.success(
+        `Successfully rejected ${selectedRequests.length} ${reqStr}`,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
   };
   /*
   const postRequestToOpportunity = (requestData) => {

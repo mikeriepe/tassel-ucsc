@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import MuiAvatar from '@mui/material/Avatar';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import {useNavigate} from 'react-router-dom';
 
 
 const Avatar = ({image}, props) => (
@@ -21,6 +22,11 @@ export default function ViewOpportunityRequestCard({
   handleClick,
 }) {
   const [requester, setRequester] = useState(null);
+  const navigate = useNavigate();
+  const navigateToProfile = (profileid) => {
+    console.log(profileid);
+    navigate(`/Profile/${profileid}`);
+  };
 
   const getRequester = (requester) => {
     fetch(`/api/getProfileByProfileId/${requester}`)
@@ -92,8 +98,17 @@ export default function ViewOpportunityRequestCard({
         scope='row'
         padding='none'
       >
-        <div className='flex-horizontal flex-align-center flex-flow-large'>
-          <Avatar />
+        <div
+          className='flex-horizontal flex-align-center flex-flow-large'
+        >
+          <div
+            onClick={() => navigateToProfile(request.requester)}
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            <Avatar/>
+          </div>
           <p>{`${requester?.firstname} ${requester?.lastname}`}</p>
         </div>
       </TableCell>
