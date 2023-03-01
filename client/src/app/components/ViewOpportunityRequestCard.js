@@ -6,6 +6,11 @@ import MuiAvatar from '@mui/material/Avatar';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import {useNavigate} from 'react-router-dom';
+import Collapse from '@mui/material/Collapse';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 
 
 const Avatar = ({image}, props) => (
@@ -21,6 +26,7 @@ export default function ViewOpportunityRequestCard({
   labelId,
   handleClick,
 }) {
+  const [open, setOpen] = useState(false);
   const [requester, setRequester] = useState(null);
   const navigate = useNavigate();
   const navigateToProfile = (profileid) => {
@@ -68,84 +74,112 @@ export default function ViewOpportunityRequestCard({
   };
 
   return (
-    <TableRow
-      hover
-      onClick={(event) => {
-        // only handle click if the request is pending
-        if (request.status === 'Pending') {
-          handleClick(event, request.requester);
-        }
-      }}
-      role='checkbox'
-      aria-checked={isItemSelected}
-      tabIndex={-1}
-      selected={isItemSelected}
-    >
-      <TableCell padding='checkbox'>
-        {request.status === 'Pending' &&
-          <Checkbox
-            color='primary'
-            checked={isItemSelected}
-            inputProps={{
-              'aria-labelledby': labelId,
-            }}
-          />
-        }
-      </TableCell>
-      <TableCell
-        component='th'
-        id={labelId}
-        scope='row'
-        padding='none'
-      >
-        <div
-          className='flex-horizontal flex-align-center flex-flow-large'
-        >
-          <div
-            onClick={() => navigateToProfile(request.requester)}
-            style={{
-              cursor: 'pointer',
-            }}
-          >
-            <Avatar/>
-          </div>
-          <p>{`${requester?.firstname} ${requester?.lastname}`}</p>
-        </div>
-      </TableCell>
-      <TableCell align='left'>
-        <p>{/* request.role not implemented yet */}None</p>
-      </TableCell>
-      <TableCell align='left'>
-        <p>{formatDate(request.requestdatetime)}</p>
-      </TableCell>
-      <TableCell align='left'>
-        <Chip
-          label={request.status}
-          variant='outlined'
-          color={
-            request.status === 'Approved' ? 'success' :
-            request.status === 'Denied' ? 'error' :
-            request.status === 'Pending' ? 'secondary' :
-            'primary'
+    <>
+      <TableRow
+        hover
+        onClick={(event) => {
+          // only handle click if the request is pending
+          if (request.status === 'Pending') {
+            handleClick(event, request.requester);
           }
-          size='small'
-          icon={
-            <Box
-              style={{
-                marginLeft: '10px',
-                height: '6px',
-                width: '6px',
-                background:
-                request.status === 'Approved' ? 'var(--success-green-main)' :
-                request.status === 'Denied' ? 'var(--error-red-main)' :
-                request.status === 'Pending' ? 'var(--secondary-yellow-main)' :
-                'var(--primary-blue-main)',
-                borderRadius: '50%',
+          setOpen(!open);
+        }}
+        role='checkbox'
+        aria-checked={isItemSelected}
+        tabIndex={-1}
+        selected={isItemSelected}
+      >
+        <TableCell padding='checkbox'>
+          {request.status === 'Pending' &&
+            <Checkbox
+              color='primary'
+              checked={isItemSelected}
+              inputProps={{
+                'aria-labelledby': labelId,
               }}
             />
           }
-        />
-      </TableCell>
-    </TableRow>
+        </TableCell>
+        <TableCell
+          component='th'
+          id={labelId}
+          scope='row'
+          padding='none'
+        >
+          <div
+            className='flex-horizontal flex-align-center flex-flow-large'
+          >
+            <div
+              onClick={() => navigateToProfile(request.requester)}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              <Avatar/>
+            </div>
+            <p>{`${requester?.firstname} ${requester?.lastname}`}</p>
+          </div>
+        </TableCell>
+        <TableCell align='left'>
+          <p>{request.role === '' ? 'None' : request.role}</p>
+        </TableCell>
+        <TableCell align='left'>
+          <p>{formatDate(request.requestdatetime)}</p>
+        </TableCell>
+        <TableCell align='left'>
+          <Chip
+            label={request.status}
+            variant='outlined'
+            color={
+              request.status === 'Approved' ? 'success' :
+              request.status === 'Denied' ? 'error' :
+              request.status === 'Pending' ? 'secondary' :
+              'primary'
+            }
+            size='small'
+            icon={
+              <Box
+                style={{
+                  marginLeft: '10px',
+                  height: '6px',
+                  width: '6px',
+                  background:
+                  request.status === 'Approved' ? 'var(--success-green-main)' :
+                  request.status === 'Denied' ? 'var(--error-red-main)' :
+                  request.status === 'Pending' ?
+                  'var(--secondary-yellow-main)' : 'var(--primary-blue-main)',
+                  borderRadius: '50%',
+                }}
+              />
+            }
+          />
+        </TableCell>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{margin: 1}}>
+              <Typography gutterBottom component="div">
+                Request Message:
+              </Typography>
+              <p>
+                {request.requestmessage === '' ?
+                '(This user did not leave a message)' :
+                request.requestmessage}
+              </p>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 }

@@ -103,6 +103,12 @@ const headCells = [
     disablePadding: false,
     label: 'Status',
   },
+  {
+    id: 'requestmessage',
+    numeric: false,
+    disablePadding: false,
+    // label: 'Message',
+  },
 ];
 
 /**
@@ -149,7 +155,8 @@ function EnhancedTableHead({
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+
+            {headCell.id !== 'requestmessage' && <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -160,7 +167,7 @@ function EnhancedTableHead({
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
-            </TableSortLabel>
+            </TableSortLabel>}
           </TableCell>
         ))}
       </TableRow>
