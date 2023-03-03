@@ -42,7 +42,6 @@ export default function FetchWrapper() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setFetchedData(json);
         })
         .catch((err) => {
@@ -60,7 +59,6 @@ export default function FetchWrapper() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setFetchedData((prevData) => ({
             ...prevData,
             roles: json,
@@ -108,8 +106,6 @@ function ViewOpportunity({opportunity}) {
 
   const [participants, setParticipants] =
   useState(opportunity?.userparticipants);
-  console.log(participants);
-  console.log(opportunity?.userparticipants);
 
   const updateParticipants = (newParticipants) => {
     setParticipants(newParticipants);
@@ -261,7 +257,6 @@ function ViewOpportunity({opportunity}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setCreator(json);
         })
         .catch((err) => {

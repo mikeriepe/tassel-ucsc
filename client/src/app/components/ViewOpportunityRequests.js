@@ -22,6 +22,12 @@ import ThemedButton from './ThemedButton';
 import ViewOpportunityRequestCard from './ViewOpportunityRequestCard';
 import useAuth from '../util/AuthContext';
 import {toast} from 'react-toastify';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import MuiBox from '@mui/material/Box';
+import MuiPaper from '@mui/material/Paper';
+import {styled} from '@mui/material/styles';
 
 
 /**
@@ -124,6 +130,7 @@ function EnhancedTableHead({
   requests,
   rowsPerPage,
   page,
+  displayReqs,
 }) {
   const createSortHandler = (property, requests) => (event) => {
     onRequestSort(event, property, requests);
@@ -132,7 +139,7 @@ function EnhancedTableHead({
   // number of pending requests on current page
   let numberOfReqs = 0;
   for (let i = page * rowsPerPage;
-    i < requests.length && i < (page * rowsPerPage + rowsPerPage);
+    i < displayReqs.length && i < (page * rowsPerPage + rowsPerPage);
     i++) {
     numberOfReqs++;
   }
@@ -198,7 +205,55 @@ function EnhancedTableToolbar({
   resetSelected,
   participants,
   updateParticipants,
+  updateDisplayReqs,
 }) {
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filterValues, setFilterValues] = useState([]);
+
+  const handleFilterClick = () => {
+    setOpenFilter(!openFilter);
+  };
+
+  useEffect(() => {
+    applyFilters();
+  }, [filterValues, requests]);
+
+  const applyFilters = () => {
+    const copyReqs = requests.filter((req) => {
+      const reqFilter = filterValues.length == 0 ?
+        true :
+        req.status ?
+        filterValues.indexOf(req.status) > -1 :
+        false;
+      return reqFilter;
+    });
+    updateDisplayReqs(copyReqs);
+  };
+
+  const handleToggleFilter = (value) => {
+    const currentIndex = filterValues.indexOf(value);
+    const newReqFilter = [...filterValues];
+    if (currentIndex === -1) {
+      newReqFilter.push(value);
+    } else {
+      newReqFilter.splice(currentIndex, 1);
+    }
+    setFilterValues(newReqFilter);
+  };
+
+  const Paper = styled((props) => (
+    <MuiPaper elevation={0} {...props} />
+  ))(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'auto',
+    width: 'auto',
+    background: 'white',
+    boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+    border: '0.5px solid rgba(0, 0, 0, 0.15)',
+    borderRadius: '10px',
+  }));
+
   const approveRequests = async () => {
     // prepare the post data
     // required params requestId and opportunityid
@@ -222,7 +277,6 @@ function EnhancedTableToolbar({
           requester: selectedRequests[i][0].requester,
           role: selectedRequests[i][0].role,
         };
-        console.log(toBeApproved);
         await fetch(`/api/approveRequest`, {
           method: 'POST',
           body: JSON.stringify(toBeApproved),
@@ -256,7 +310,6 @@ function EnhancedTableToolbar({
       }
     }
     const updatedRequests = [...requests];
-    console.log(participants);
     const updatedParticipants = [...participants];
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'approved';
@@ -459,8 +512,6 @@ function EnhancedTableToolbar({
             size='small'
             onClick={() => {
               approveRequests();
-              // console.log(selected);
-              // console.log(requests);
             }}
           >
             Approve
@@ -471,19 +522,116 @@ function EnhancedTableToolbar({
             size='small'
             onClick={() => {
               denyRequests();
-              // console.log(selected);
-              // console.log(requests);
             }}
           >
             Deny
           </ThemedButton>
         </Box>
       ) : (
-        <Tooltip title='Filter list'>
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Paper
+            sx={{paddingLeft: '8px'}}
+          >
+            <MuiBox
+              className='
+              flex-space-between
+              flex-align-center
+              clickable
+              no-highlight
+              '
+            >
+              <div className='flex-horizontal flow-tiny'>
+                <Collapse in={openFilter} timeout='auto' unmountOnExit>
+                  <FormGroup
+                    className='flex-horizontal flex-flow-small'
+                    sx={{paddingBlock: '8px'}}
+                  >
+                    <FormControlLabel
+                      className='no-highlight'
+                      control={
+                        <Checkbox
+                          color='secondary'
+                          size='small'
+                          onChange={() => {
+                            handleToggleFilter('Approved');
+                          }}
+                          checked={filterValues.indexOf('Approved') !== -1}
+                          tabIndex={-1}
+                          disableRipple
+                          sx={{paddingBlock: '1px'}}
+
+                        />
+                      }
+                      label={'Approved'}
+                      componentsProps={{
+                        typography: {
+                          fontSize: '0.8rem',
+                          fontWeight: '600',
+                          color: 'var(--text-disabled)',
+                        },
+                      }}
+                    />
+                    <FormControlLabel
+                      className='no-highlight'
+                      control={
+                        <Checkbox
+                          color='secondary'
+                          size='small'
+                          onChange={() => {
+                            handleToggleFilter('Denied');
+                          }}
+                          checked={filterValues.indexOf('Denied') !== -1}
+                          tabIndex={-1}
+                          disableRipple
+                          sx={{paddingBlock: '1px'}}
+                        />
+                      }
+                      label={'Denied'}
+                      componentsProps={{
+                        typography: {
+                          fontSize: '0.8rem',
+                          fontWeight: '600',
+                          color: 'var(--text-disabled)',
+                        },
+                      }}
+                    />
+                    <FormControlLabel
+                      className='no-highlight'
+                      control={
+                        <Checkbox
+                          color='secondary'
+                          size='small'
+                          onChange={() => {
+                            handleToggleFilter('Pending');
+                          }}
+                          checked={filterValues.indexOf('Pending') !== -1}
+                          tabIndex={-1}
+                          disableRipple
+                          sx={{paddingBlock: '1px'}}
+                        />
+                      }
+                      label={'Pending'}
+                      componentsProps={{
+                        typography: {
+                          fontSize: '0.8rem',
+                          fontWeight: '600',
+                          color: 'var(--text-disabled)',
+                        },
+                      }}
+                    />
+                  </FormGroup>
+                </Collapse>
+              </div>
+            </MuiBox>
+          </Paper>
+          <Tooltip
+            title='Filter list'
+          >
+            <IconButton onClick={handleFilterClick}>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        </>
       )}
     </Toolbar>
   );
@@ -514,7 +662,6 @@ export default function FetchWrapper({
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           if (json.length > 0) {
             json.map((request) => request.status = 'Pending'),
             setRequests((prevRequests) => ([
@@ -538,7 +685,6 @@ export default function FetchWrapper({
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           if (json.length > 0) {
             json.map((request) => request.status = 'Approved'),
             setRequests((prevRequests) => ([
@@ -562,7 +708,6 @@ export default function FetchWrapper({
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           if (json.length > 0) {
             json.map((request) => request.status = 'Denied'),
             setRequests((prevRequests) => ([
@@ -613,33 +758,17 @@ function ViewOpportunityRequests({
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [displayReqs, setDisplayReqs] = useState([...requests]);
   // const [requester, setRequester] = useState(null);
-  console.log(participants);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-    console.log(requests);
-    /*
-    const ord = isAsc ? 'desc' : 'asc';
-    if (property === 'name'){
-      //FIGURE OUT ORDERING
-    }
-    if (property === 'role'){
-      //FIGURE OUT ORDERING
-    }
-    if (property === 'date'){
-      //FIGURE OUT ORDERING
-    }
-    if (property === 'status'){
-      //FIGURE OUT ORDERING
-    }
-    console.log(requests);
-    console.log(property);
-    console.log(isAsc ? 'desc' : 'asc');
-    */
   };
 
+  const updateDisplayReqs = (newRequests) => {
+    setDisplayReqs(newRequests);
+  };
   const getRequesterNames = async () => {
     for (let i = 0; i < requests.length; i++) {
       await fetch(`/api/getProfileByProfileId/${requests[i].requester}`)
@@ -657,7 +786,6 @@ function ViewOpportunityRequests({
             alert('Error retrieving requester profile, please try again');
           });
     }
-    console.log(requests);
   };
 
   useEffect(() => {
@@ -668,7 +796,7 @@ function ViewOpportunityRequests({
     if (event.target.checked) {
       // const newSelecteds = rows.map((n) => n.name);
       const newSelecteds = [];
-      const temp = requests.sort(getComparator(order, orderBy));
+      const temp = displayReqs.sort(getComparator(order, orderBy));
       for (let i = page * rowsPerPage;
         i < temp.length && i < (page * rowsPerPage + rowsPerPage);
         i++) {
@@ -739,6 +867,7 @@ function ViewOpportunityRequests({
           resetSelected={resetSelected}
           updateParticipants={updateParticipants}
           participants={participants}
+          updateDisplayReqs={updateDisplayReqs}
         />
         <TableContainer>
           <Table aria-labelledby='tableTitle'>
@@ -751,9 +880,10 @@ function ViewOpportunityRequests({
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               requests={requests}
+              displayReqs={displayReqs}
             />
             <TableBody>
-              {requests
+              {displayReqs
                   .slice()
                   .sort(getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -781,7 +911,7 @@ function ViewOpportunityRequests({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={requests.length}
+          count={displayReqs.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
