@@ -80,7 +80,7 @@ function getComparator(order, orderBy) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'firstname',
     numeric: false,
     disablePadding: true,
     label: 'Name',
@@ -92,7 +92,7 @@ const headCells = [
     label: 'Requested Role',
   },
   {
-    id: 'date',
+    id: 'requestdatetime',
     numeric: false,
     disablePadding: false,
     label: 'Date of Request',
@@ -125,8 +125,8 @@ function EnhancedTableHead({
   rowsPerPage,
   page,
 }) {
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+  const createSortHandler = (property, requests) => (event) => {
+    onRequestSort(event, property, requests);
   };
 
   // number of pending requests on current page
@@ -164,7 +164,7 @@ function EnhancedTableHead({
             {headCell.id !== 'requestmessage' && <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={createSortHandler(headCell.id, requests)}
             >
               <span className='text-bold'>{headCell.label}</span>
               {orderBy === headCell.id ? (
@@ -198,6 +198,8 @@ function EnhancedTableToolbar({
   requests,
   updateRequests,
   resetSelected,
+  participants,
+  updateParticipants,
 }) {
   const approveRequests = async () => {
     // prepare the post data
@@ -254,10 +256,15 @@ function EnhancedTableToolbar({
           });
     }
     const updatedRequests = [...requests];
+    console.log(participants);
+    const updatedParticipants = [...participants];
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'approved';
       updatedRequests[selectedRequests[i][1]].status = 'Approved';
+      updatedParticipants.
+          push(updatedRequests[selectedRequests[i][1]].requester);
     }
+    updateParticipants(updatedParticipants);
     updateRequests(updatedRequests);
     resetSelected();
     const reqStr = selectedRequests.length > 1 ? 'requests' : 'request';
@@ -413,7 +420,10 @@ EnhancedTableToolbar.propTypes = {
 /**
  * @return {JSX}
  */
-export default function FetchWrapper() {
+export default function FetchWrapper({
+  updateParticipants,
+  participants,
+}) {
   const params = useParams();
   const {userProfile} = useAuth();
   const [requests, setRequests] = useState([]);
@@ -505,6 +515,8 @@ export default function FetchWrapper() {
       {requests && <ViewOpportunityRequests
         requests={requests}
         updateRequests={updateRequests}
+        updateParticipants={updateParticipants}
+        participants={participants}
       />}
     </>
   );
@@ -514,19 +526,67 @@ export default function FetchWrapper() {
  * Enhanced table
  * @return {JSX}
  */
-function ViewOpportunityRequests({requests, updateRequests}) {
+function ViewOpportunityRequests({
+  requests,
+  updateRequests,
+  updateParticipants,
+  participants,
+}) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   // const [requester, setRequester] = useState(null);
-
+  console.log(participants);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    console.log(requests);
+    /*
+    const ord = isAsc ? 'desc' : 'asc';
+    if (property === 'name'){
+      //FIGURE OUT ORDERING
+    }
+    if (property === 'role'){
+      //FIGURE OUT ORDERING
+    }
+    if (property === 'date'){
+      //FIGURE OUT ORDERING
+    }
+    if (property === 'status'){
+      //FIGURE OUT ORDERING
+    }
+    console.log(requests);
+    console.log(property);
+    console.log(isAsc ? 'desc' : 'asc');
+    */
   };
+
+  const getRequesterNames = async () => {
+    for (let i = 0; i < requests.length; i++) {
+      await fetch(`/api/getProfileByProfileId/${requests[i].requester}`)
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res.json();
+          })
+          .then((json) => {
+            requests[i].firstname = json.firstname;
+          })
+          .catch((err) => {
+            console.log(err);
+            alert('Error retrieving requester profile, please try again');
+          });
+    }
+    console.log(requests);
+  };
+
+  useEffect(() => {
+    getRequesterNames();
+  }, [requests]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -602,6 +662,8 @@ function ViewOpportunityRequests({requests, updateRequests}) {
           requests={requests}
           updateRequests={updateRequests}
           resetSelected={resetSelected}
+          updateParticipants={updateParticipants}
+          participants={participants}
         />
         <TableContainer>
           <Table aria-labelledby='tableTitle'>
@@ -623,7 +685,6 @@ function ViewOpportunityRequests({requests, updateRequests}) {
                   .map((request, index) => {
                     const isItemSelected = isSelected(request.requester);
                     const labelId = `enhanced-table-checkbox-${index}`;
-
                     return (
                       <ViewOpportunityRequestCard
                         key={`request-${index}`}

@@ -106,6 +106,15 @@ function ViewOpportunity({opportunity}) {
   const [requestedRole, setRequestedRole] = React.useState('');
   // REMOVE REQUESTED ROLE STATE
 
+  const [participants, setParticipants] =
+  useState(opportunity?.userparticipants);
+  console.log(participants);
+  console.log(opportunity?.userparticipants);
+
+  const updateParticipants = (newParticipants) => {
+    setParticipants(newParticipants);
+  };
+
   const handleModalClose = () => {
     setRequestedRole('');
     setshowReqForm(false);
@@ -223,7 +232,10 @@ function ViewOpportunity({opportunity}) {
     },
     {
       name: 'Requests',
-      component: <ViewOpportunityRequests />,
+      component: <ViewOpportunityRequests
+        updateParticipants={updateParticipants}
+        participants={participants}
+      />,
     },
     // Find people tab will be implemented in Spring 2023
     // For now it will stay hidden
@@ -323,6 +335,7 @@ function ViewOpportunity({opportunity}) {
                 profileid: creator?.profileid,
               }}
               members={opportunity?.assignedroles}
+              participants={participants}
             />
           </MuiBox>
           <RequestModal

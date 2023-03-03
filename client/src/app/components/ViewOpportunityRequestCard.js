@@ -30,7 +30,6 @@ export default function ViewOpportunityRequestCard({
   const [requester, setRequester] = useState(null);
   const navigate = useNavigate();
   const navigateToProfile = (profileid) => {
-    console.log(profileid);
     navigate(`/Profile/${profileid}`);
   };
 
@@ -53,7 +52,7 @@ export default function ViewOpportunityRequestCard({
 
   useEffect(() => {
     getRequester(request.requester);
-  }, []);
+  }, [request]);
 
   const formatDate = (date) => {
     const dateOptions = {
@@ -78,14 +77,16 @@ export default function ViewOpportunityRequestCard({
       <TableRow
         hover
         onClick={(event) => {
-          if (!isItemSelected) {
-            setOpen(true);
-          } else {
-            setOpen(false);
-          }
           // only handle click if the request is pending
           if (request.status === 'Pending') {
+            if (!isItemSelected) {
+              setOpen(true);
+            } else {
+              setOpen(false);
+            }
             handleClick(event, request.requester);
+          } else {
+            setOpen(!open);
           }
         }}
         role='checkbox'

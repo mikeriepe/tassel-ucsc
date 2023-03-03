@@ -44,7 +44,12 @@ const Avatar = ({image}, props) => (
  * Members section for view opportunity
  * @return {JSX}
  */
-export default function ViewOpportunityMembers({isCreator, owner, members}) {
+export default function ViewOpportunityMembers({
+  isCreator,
+  owner,
+  members,
+  participants,
+}) {
   const navigate = useNavigate();
   const [profiles, setProfiles] = useState([]);
 
@@ -72,12 +77,16 @@ export default function ViewOpportunityMembers({isCreator, owner, members}) {
   };
 
   useEffect(() => {
+    setProfiles([]);
     Object.keys(members).forEach(function(role) {
       members[role].map((profileid) => {
         getProfile(profileid, role);
       });
     });
-  }, []);
+    for (let i = 0; i < participants.length; i++) {
+      getProfile(participants[i], 'General Participant');
+    }
+  }, [participants, members]);
 
   return (
     <Paper>
@@ -106,23 +115,28 @@ export default function ViewOpportunityMembers({isCreator, owner, members}) {
             <p>Owner</p>
           </div>
         </Member>
-        {profiles && profiles.map((profile, index) => (
-          <Member
-            key={`member-${index}`}
-            handleClick={handleClick}
-            profileid={profile.profileid}
-          >
-            <Avatar image={profile.profilepicture} />
-            <div>
-              <div className='flex-align-center'>
-                <p className='text-bold text-blue'>
-                  {`${profile.firstname} ${profile.lastname}`}
-                </p>
-              </div>
-              <p>{profile.role}</p>
-            </div>
-          </Member>
-        ))}
+        {profiles && profiles
+            .sort(function(a, b) {
+              return (a.firstname > b.firstname) ? 1 :
+                    ((b.firstname > a.firstname) ? -1 : 0);
+            })
+            .map((profile, index) => (
+              <Member
+                key={`member-${index}`}
+                handleClick={handleClick}
+                profileid={profile.profileid}
+              >
+                <Avatar image={profile.profilepicture} />
+                <div>
+                  <div className='flex-align-center'>
+                    <p className='text-bold text-blue'>
+                      {`${profile.firstname} ${profile.lastname}`}
+                    </p>
+                  </div>
+                  <p>{profile.role}</p>
+                </div>
+              </Member>
+            ))}
       </div>
     </Paper>
   );
