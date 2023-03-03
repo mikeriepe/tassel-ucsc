@@ -200,6 +200,13 @@ a, a:hover, a:focus, a:active {
   text-align: center;
 }
 
+.text-center-vert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
 .text-tiny {
   font-size: 0.6rem;
 }

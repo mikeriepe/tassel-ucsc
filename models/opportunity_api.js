@@ -3,7 +3,7 @@ const requestModel = require('./request_model');
 const uuid = require('uuid');
 
 /**
- * GETs all opportunities
+ * GETs all ACTIVE opportunities
  * retrieves all active opportunities.
  * @param {*} req
  * @param {*} res
@@ -29,6 +29,17 @@ const uuid = require('uuid');
   res.status(201).send(uniqueResultOne);
 };
 
+/**
+ * GETs all opportunities
+ * retrieves all active opportunities.
+ * @param {*} req
+ * @param {*} res
+ */
+exports.getAllOpportunities = async (_, res) => {
+  const opportunities = await opportunityModel.getAllOpportunities();
+  res.status(201).send(opportunities);
+};
+
 
 /**
 * UPDATE an opportunity
@@ -37,7 +48,7 @@ const uuid = require('uuid');
 * @param {*} res
 */
 exports.opportunityUpdate = async (req, res) => {
-  // console.log(req.body.userid);
+  console.log(req.body);
   try {
     const opportunityId = await opportunityModel.updateOpportunity(req.body);
     res.status(200).send({opportunityId});
