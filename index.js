@@ -119,7 +119,7 @@ app.post('/api/changeProfileRequestResponse', authApi.check, profileApi.changePr
 //  Opportunity CRUD operations
 //
 //
-app.get('/api/getOpportunities', authApi.check, opportunityApi.getOpportunities);
+app.get('/api/getOpportunities/:profileid', authApi.check, opportunityApi.getOpportunities);
 
 app.get('/api/getAllOpportunities', authApi.check, opportunityApi.getAllOpportunities);
 

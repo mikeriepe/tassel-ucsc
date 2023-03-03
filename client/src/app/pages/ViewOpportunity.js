@@ -6,7 +6,8 @@ import CompressedTabBar from '../components/CompressedTabBar';
 import PageHeader from '../components/PageHeader';
 import ThemedButton from '../components/ThemedButton';
 import ViewOpportunityAbout from '../components/ViewOpportunityAbout';
-import ViewOpportunityFindPeople from '../components/ViewOpportunityFindPeople';
+// import ViewOpportunityFindPeople
+// from '../components/ViewOpportunityFindPeople';
 import ViewOpportunityForums from '../components/ViewOpportunityForums';
 import ViewOpportunityMembers from '../components/ViewOpportunityMembers';
 import ViewOpportunityRequests from '../components/ViewOpportunityRequests';
@@ -41,7 +42,6 @@ export default function FetchWrapper() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setFetchedData(json);
         })
         .catch((err) => {
@@ -59,7 +59,6 @@ export default function FetchWrapper() {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setFetchedData((prevData) => ({
             ...prevData,
             roles: json,
@@ -104,6 +103,13 @@ function ViewOpportunity({opportunity}) {
   const [requestMessage, setRequestMessage] = React.useState('');
   const [requestedRole, setRequestedRole] = React.useState('');
   // REMOVE REQUESTED ROLE STATE
+
+  const [participants, setParticipants] =
+  useState(opportunity?.userparticipants);
+
+  const updateParticipants = (newParticipants) => {
+    setParticipants(newParticipants);
+  };
 
   const handleModalClose = () => {
     setRequestedRole('');
@@ -222,12 +228,19 @@ function ViewOpportunity({opportunity}) {
     },
     {
       name: 'Requests',
-      component: <ViewOpportunityRequests />,
+      component: <ViewOpportunityRequests
+        updateParticipants={updateParticipants}
+        participants={participants}
+      />,
     },
+    // Find people tab will be implemented in Spring 2023
+    // For now it will stay hidden
+    /*
     {
       name: 'Find People',
       component: <ViewOpportunityFindPeople />,
     },
+    */
   ];
 
   const handleIsCreator = () => {
@@ -244,7 +257,6 @@ function ViewOpportunity({opportunity}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
           setCreator(json);
         })
         .catch((err) => {
@@ -318,6 +330,7 @@ function ViewOpportunity({opportunity}) {
                 profileid: creator?.profileid,
               }}
               members={opportunity?.assignedroles}
+              participants={participants}
             />
           </MuiBox>
           <RequestModal

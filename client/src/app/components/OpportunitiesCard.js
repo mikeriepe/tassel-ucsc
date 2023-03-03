@@ -78,7 +78,8 @@ const OutlinedIconButton = ({
   onClick,
   opportunityid,
   profileid,
-  getPendingOpportunities}, props) => (
+  getPendingOpportunities,
+  getAllOpportunities}, props) => (
   <ButtonBase
     component='div'
     onMouseDown={(e) => {
@@ -106,6 +107,7 @@ const OutlinedIconButton = ({
               })
                   .then(() => {
                     getPendingOpportunities();
+                    getAllOpportunities();
                   });
             })
             .catch((err) => {
@@ -170,6 +172,7 @@ export default function OpportunitiesCard({
   opportunity,
   getPendingOpportunities,
   getCreatedOpportunities,
+  getAllOpportunities,
 }) {
   const [creator, setCreator] = useState('');
 
@@ -312,6 +315,7 @@ export default function OpportunitiesCard({
               progress: undefined,
             });
             getPendingOpportunities();
+            getAllOpportunities();
           } else if (res.status === 409) {
             toast.warning(`You Already Applied to This Event`, {
               position: 'top-right',
@@ -442,6 +446,7 @@ export default function OpportunitiesCard({
                     opportunityid={opportunity.eventid}
                     profileid={userProfile.profileid}
                     getPendingOpportunities={getPendingOpportunities}
+                    getAllOpportunities={getAllOpportunities}
                     onClick={ type === 'created' ?
                       handleDeleteModalOpen : null
                     }
