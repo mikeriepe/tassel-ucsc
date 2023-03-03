@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import MuiPaper from '@mui/material/Paper';
+import MuiAvatar from '@mui/material/Avatar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -25,9 +26,11 @@ import ThemedButton from './ThemedButton';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {profileStatusToText} from '../util/ProfileStatus';
+import {profileStatusToText, profileStatusToColor} from '../util/ProfileStatus';
 import CircularProgress from '@mui/material/CircularProgress';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {styled} from '@mui/material/styles';
+import {toast} from 'react-toastify';
 import '../stylesheets/ApprovalTable.css';
 
 const Page = styled((props) => (
@@ -56,6 +59,19 @@ const Card = styled((props) => (
   borderRadius: '10px',
 }));
 
+const Avatar = ({image}, props) => (
+  <MuiAvatar
+    {...props}
+    src={image}
+    sx={{
+      height: '2.5rem',
+      width: '2.5rem',
+      border: '0.5px solid rgba(0, 0, 0, 0.15)',
+      marginRight: '1rem',
+    }}
+  />
+);
+
 /**
  * row for account table
  * @param {*} props
@@ -80,14 +96,27 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell className='data-cell'>
-          {profileStatusToText(row.status)}
-        </TableCell>
-        <TableCell className='data-cell' component='th' scope='row'>
-          {`${row.firstname} ${row.lastname}`}
+        {/* eslint-disable-next-line max-len */}
+        <TableCell className='data-cell' component='th' scope='row'
+          sx={{display: 'flex',
+            flexDirection: 'row'}}>
+          <Avatar image={row.profilepicture} />
+          {/* eslint-disable-next-line max-len */}
+          <div className='text-center-vert'>{`${row.firstname} ${row.lastname}`}</div>
         </TableCell>
         <TableCell className='data-cell'>{row.useremail}</TableCell>
         <TableCell className='data-cell'>{row.graduationyear}</TableCell>
+        <TableCell className='data-cell'>
+          <div style={{display: 'flex',
+            flexDirection: 'row',
+            color: profileStatusToColor(row.status)}}>
+            <FiberManualRecordIcon sx={{
+              fontSize: '1em',
+              paddingTop: '.21rem',
+              paddingRight: '.21rem'}}/>
+            <div>{profileStatusToText(row.status)}</div>
+          </div>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={12}>
@@ -114,6 +143,10 @@ export default function ApprovalAccounts() {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [requestInfo, setRequestInfo] = useState('');
+  const [sortNameOrder, setSortNameOrder] = useState('');
+  const [sortEmailOrder, setSortEmailOrder] = useState('');
+  const [sortYearOrder, setSortYearOrder] = useState('');
+  const [sortStatusOrder, setSortStatusOrder] = useState('');
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -129,13 +162,11 @@ export default function ApprovalAccounts() {
   };
 
   const handleDialogSubmit = () => {
-    console.log(requestInfo);
     const status = 2;
     const profiles = selected.map((profile) => {
       const info = accounts.find((account) => account.useremail == profile);
       info.status = status;
       info.requestinfo = requestInfo;
-      console.log(info);
       return info;
     });
     setLoading(true);
@@ -157,7 +188,7 @@ export default function ApprovalAccounts() {
             console.log(res.json());
             setDialogOpen(false);
             setRequestInfo('');
-            getAccounts();
+            getAccounts('status', true);
           })
           .catch((err) => {
             console.log(err);
@@ -166,7 +197,95 @@ export default function ApprovalAccounts() {
     }
   };
 
-  const getAccounts = () => {
+  const sortAccounts = (json, sortBy, reset) => {
+    if (reset === true) {
+      setAccounts(json.sort(function(a, b) {
+        return a.status - b.status;
+      }));
+      setSortStatusOrder('asc');
+      return;
+    }
+    if (sortBy === 'status') {
+      if (sortStatusOrder === '') {
+        console.log(sortStatusOrder);
+        console.log('1');
+        setAccounts(json.sort(function(a, b) {
+          return a.status - b.status;
+        }));
+        setSortStatusOrder('asc');
+      } else if (sortStatusOrder === 'asc') {
+        console.log(sortStatusOrder);
+        console.log('2');
+        setAccounts(json.sort(function(a, b) {
+          return b.status - a.status;
+        }));
+        setSortStatusOrder('desc');
+      } else if (sortStatusOrder === 'desc') {
+        console.log(sortStatusOrder);
+        console.log('3');
+        setAccounts(json.sort(function(a, b) {
+          return a.status - b.status;
+        }));
+        setSortStatusOrder('asc');
+      }
+    }
+    if (sortBy === 'name') {
+      if (sortNameOrder === '') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.firstname > b.firstname) ? 1 : -1;
+        }));
+        setSortNameOrder('asc');
+      } else if (sortNameOrder === 'asc') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.firstname > b.firstname) ? -1 : 1;
+        }));
+        setSortNameOrder('desc');
+      } else if (sortNameOrder === 'desc') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.firstname > b.firstname) ? 1 : -1;
+        }));
+        setSortNameOrder('asc');
+      }
+    }
+    if (sortBy === 'email') {
+      if (sortEmailOrder === '') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.useremail > b.useremail) ? 1 : -1;
+        }));
+        setSortEmailOrder('asc');
+      } else if (sortEmailOrder === 'asc') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.useremail > b.useremail) ? -1 : 1;
+        }));
+        setSortEmailOrder('desc');
+      } else if (sortEmailOrder === 'desc') {
+        setAccounts(json.sort(function(a, b) {
+          return (a.useremail > b.useremail) ? 1 : -1;
+        }));
+        setSortEmailOrder('asc');
+      }
+    }
+    if (sortBy === 'year') {
+      if (sortYearOrder === '') {
+        setAccounts(json.sort(function(a, b) {
+          return a.graduationyear - b.graduationyear;
+        }));
+        setSortYearOrder('asc');
+      } else if (sortYearOrder === 'asc') {
+        setAccounts(json.sort(function(a, b) {
+          return b.graduationyear - a.graduationyear;
+        }));
+        setSortYearOrder('desc');
+      } else if (sortYearOrder === 'desc') {
+        setAccounts(json.sort(function(a, b) {
+          return a.graduationyear - b.graduationyear;
+        }));
+        setSortYearOrder('asc');
+      }
+    }
+  };
+
+  const getAccounts = (sortBy, reset) => {
     fetch(`/api/getProfilesForApproval`)
         .then((res) => {
           if (!res.ok) {
@@ -175,12 +294,12 @@ export default function ApprovalAccounts() {
           return res.json();
         })
         .then((json) => {
-          setAccounts(json);
+          sortAccounts(json, sortBy, reset);
           setLoading(false);
         })
         .catch((err) => {
           console.log(err);
-          alert('Error retrieving profile, please try again');
+          alert('Error retrieving profiles, please try again');
         });
   };
 
@@ -198,7 +317,6 @@ export default function ApprovalAccounts() {
   };
 
   const handleStatusAction = (event) => {
-    console.log(event);
     let status = 1;
     switch (event.target.textContent) {
       case 'Approve':
@@ -233,7 +351,8 @@ export default function ApprovalAccounts() {
               throw res;
             }
             console.log(res.json());
-            getAccounts();
+            getAccounts('status', true);
+            setSelected([]);
           })
           .catch((err) => {
             console.log(err);
@@ -242,18 +361,80 @@ export default function ApprovalAccounts() {
     }
   };
 
+  const handleAdminPromotion = (event) => {
+    const profiles = selected.map((profile) => {
+      const info = accounts.find((account) => account.useremail == profile);
+      return info;
+    });
+    setLoading(true);
+    // eslint-disable-next-line guard-for-in
+    for (let index = 0; index < profiles.length; index++) {
+      const profile = profiles[index];
+      fetch(`/api/userUpdatePromoteAdmin`, {
+        method: 'POST',
+        body: JSON.stringify(profile),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            console.log(res.json());
+            getAccounts('status', true);
+          })
+          .catch((err) => {
+            console.log(err);
+            alert('Error creating admin, please try again');
+          }); toast.success('Admin promoted successfully!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
+  const handleSort = (rowId) => {
+    setLoading(true);
+    if (rowId === 'name') {
+      getAccounts(rowId, false);
+    }
+    if (rowId === 'email') {
+      getAccounts(rowId, false);
+    }
+    if (rowId === 'year') {
+      getAccounts(rowId, false);
+    }
+    if (rowId === 'status') {
+      getAccounts(rowId, false);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    getAccounts();
+    getAccounts('status', true);
   }, []);
+
+  const getArrowDirection = (row) => {
+    if (row === 'name') {
+      return sortNameOrder;
+    } else if (row === 'email') {
+      return sortEmailOrder;
+    } else if (row === 'year') {
+      return sortYearOrder;
+    } else if (row === 'status') {
+      return sortStatusOrder;
+    }
+  };
 
   // TODO: make more fancy
   // https://mui.com/material-ui/react-table/#sorting-amp-selecting
   const headCells = [
-    {
-      id: 'status',
-      disablePadding: false,
-      label: 'Status',
-    },
     {
       id: 'name',
       disablePadding: false,
@@ -269,6 +450,11 @@ export default function ApprovalAccounts() {
       disablePadding: false,
       label: 'Grad Yr',
     },
+    {
+      id: 'status',
+      disablePadding: false,
+      label: 'Status',
+    },
   ];
 
   return (
@@ -281,7 +467,7 @@ export default function ApprovalAccounts() {
             }}
           >
             <ThemedButton
-              color={'yellow'}
+              color={'green'}
               variant={'gradient'}
               type={'submit'}
               style={{
@@ -339,8 +525,20 @@ export default function ApprovalAccounts() {
             >
             Deny
             </ThemedButton>
+            <ThemedButton
+              color={'yellow'}
+              variant={'gradient'}
+              type={'submit'}
+              style={{
+                fontSize: '0.875rem',
+                marginRight: '.5rem',
+              }}
+              onClick={handleAdminPromotion}
+            >
+                Promote Admin
+            </ThemedButton>
           </Box>
-          <Typography variant='h4'>Search Bar</Typography>
+          {/* <Typography variant='h4'>Search Bar</Typography> */}
         </Toolbar>
       </Card>
       <Card>
@@ -374,11 +572,13 @@ export default function ApprovalAccounts() {
                     padding={headCell.disablePadding ? 'none' : 'normal'}
                     // sortDirection={orderBy === headCell.id ? order : false}
                     id='table-head-cell'
+                    onClick={() => handleSort(headCell.id)}
                   >
                     <TableSortLabel
                     // active={orderBy === headCell.id}
-                    // direction={orderBy === headCell.id ? order : 'asc'}
-                    // onClick={createSortHandler(headCell.id)}
+                    // onClick={handleSort(headCell.id)}
+                      /* eslint-disable-next-line max-len */
+                      direction={getArrowDirection(headCell.id) !== '' ? getArrowDirection(headCell.id) : 'desc'}
                     >
                       {headCell.label}
                       {/* {orderBy === headCell.id ? (
@@ -397,7 +597,7 @@ export default function ApprovalAccounts() {
                 accounts.map((account) => {
                   return (
                     <Row
-                      key={account.useremail}
+                      key={account.profileid}
                       row={account}
                       handleSelect={handleSelect}
                     />

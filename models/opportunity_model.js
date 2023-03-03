@@ -5,13 +5,28 @@ const pool = new Pool();
 
 /**
  * getOpportunities
- * gets opportunities
+ * gets ~~ACTIVE~~ opportunities
  * @param {*} profileid
  */
  exports.getOpportunities = async () => {
   const query = {
     text: `SELECT * FROM opportunity 
            WHERE active = true`,
+    values: [],
+  };
+
+  const {rows} = await pool.query(query);
+  return rows;
+};
+
+/**
+ * getAllOpportunities
+ * gets all opportunities
+ * @param {*} profileid
+ */
+exports.getAllOpportunities = async () => {
+  const query = {
+    text: `SELECT * FROM opportunity`,
     values: [],
   };
 
@@ -122,6 +137,7 @@ const pool = new Pool();
 * @param {*} opportunity
 */
 exports.updateOpportunity= async (opportunity) => {
+  console.log(opportunity);
   const query = {
     text: `UPDATE opportunity
           SET usersponsors=($1), eventzoomlink=($2), organization=($3),

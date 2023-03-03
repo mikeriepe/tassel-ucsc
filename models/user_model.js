@@ -52,6 +52,31 @@ exports.getUser = async (email) => {
 };
 
 /**
+ * updateUser
+ *      updates a user in the database
+ *      Returns the updated user's id
+ * @param {*} userData
+ */
+exports.updateUser= async (userData) => {
+  // console.log(userData);
+  const query = {
+    text: `UPDATE account
+          SET userid=($1), useremail=($2), userpassword=($3),
+          active=($4), isadmin=($5), isapproved=($6)
+          WHERE userid=($1)
+          RETURNING userid`,
+    values: [userData.userid, userData.useremail,
+      userData.userpassword, userData.active,
+      userData.isadmin,
+      userData.isapproved],
+  };
+
+  // Returns the updated user object's id
+  const {rows} = await pool.query(query);
+  return rows[0].userid;
+};
+
+/**
  * Query to deactivate a specific user from the user table in
  * ACMatchMaker postgreSQL DB
  * @param {*} id
