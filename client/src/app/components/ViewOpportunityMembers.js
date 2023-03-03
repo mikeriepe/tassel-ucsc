@@ -81,6 +81,10 @@ export default function ViewOpportunityMembers({
     Object.keys(members).forEach(function(role) {
       members[role].map((profileid) => {
         getProfile(profileid, role);
+        const index = participants.indexOf(profileid);
+        if (index !== -1) {
+          participants.splice(index, 1);
+        }
       });
     });
     for (let i = 0; i < participants.length; i++) {
