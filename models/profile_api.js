@@ -62,8 +62,8 @@ exports.getActiveProfiles = async (_, res) => {
 // };
 
 /**
- * POSTs a profile object
- * sends the newly created id back.
+ * Updates a profile object
+ * sends the profile id back.
  * @param {*} req
  * @param {*} res
  */

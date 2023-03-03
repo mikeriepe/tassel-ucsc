@@ -138,7 +138,7 @@ exports.updateProfile= async (userProfile) => {
   const query = {
     text: `SELECT a.useremail, p.firstname, p.lastname,
             p.profilepicture, p.graduationyear, p.status,
-            p.requestinfo, p.requestresponse
+            p.requestinfo, p.requestresponse, p.profileid
             FROM profile AS p
             LEFT JOIN account AS a
             ON p.userid = a.userid

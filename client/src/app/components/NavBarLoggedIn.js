@@ -201,9 +201,9 @@ export default function NavBarLoggedIn() {
                 {/* TODO: replace with userProfile's first name */}
                 <Box className='text-xbold text-lineheight-16 text-dark'>
                   <p>
-                    {/* {`${userProfile.firstname}`}
+                    {`${userProfile.firstname}`}
                     &nbsp;
-                    {`${userProfile.lastname.charAt(0)}.`} */}
+                    {`${userProfile.lastname.charAt(0)}.`}
                   </p>
                 </Box>
               </ThemedButton>
@@ -213,7 +213,7 @@ export default function NavBarLoggedIn() {
       </Nav.AppBarLoggedIn>
       <Nav.Drawer variant='permanent' open={open}>
         <Nav.DrawerHeader>
-          <Link to='/dashboard'>
+          <Link to= {userProfile.status !== 4 ? '/myprofile' : '/dashboard' }>
             <Box onClick={() => handleTabClick(0)} sx={BrandStyling}>
               <StarRoundedIcon
                 className='icon-yellow'
@@ -234,6 +234,7 @@ export default function NavBarLoggedIn() {
             }
           </IconButton>
         </Nav.DrawerHeader>
+        {userProfile.status !== 4 ? <></> :
         <List>
           {pages.map((arr) => {
             const [label, route, icon] = arr;
@@ -275,6 +276,7 @@ export default function NavBarLoggedIn() {
             );
           })}
         </List>
+        }
         <Box sx={LogoutStyling}>
           <List>
             <Tooltip title='Logout' placement='right'>

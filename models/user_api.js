@@ -56,6 +56,20 @@ exports.userPost = async (req, res) => {
   }
 };
 
+/**
+ * Updates a user object to turn on admin flag
+ * sends the user id back.
+ * @param {*} req
+ * @param {*} res
+ */
+exports.userUpdatePromoteAdmin = async (req, res) => {
+  // console.log(req.body.userid);
+  const user = await userModel.getUser(req.body.useremail);
+  user[0].isadmin = true;
+  const userId = await userModel.updateUser(user[0]);
+  res.status(200).send({userId});
+};
+
 
 /**
  * GETs user objects
