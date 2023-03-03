@@ -78,16 +78,12 @@ export default function ViewOpportunityRequestCard({
         hover
         onClick={(event) => {
           // only handle click if the request is pending
-          if (request.status === 'Pending') {
-            if (!isItemSelected) {
-              setOpen(true);
-            } else {
-              setOpen(false);
-            }
-            handleClick(event, request.requester);
+          if (!isItemSelected) {
+            setOpen(true);
           } else {
-            setOpen(!open);
+            setOpen(false);
           }
+          handleClick(event, request.requester);
         }}
         role='checkbox'
         aria-checked={isItemSelected}
@@ -95,15 +91,13 @@ export default function ViewOpportunityRequestCard({
         selected={isItemSelected}
       >
         <TableCell padding='checkbox'>
-          {request.status === 'Pending' &&
-            <Checkbox
-              color='primary'
-              checked={isItemSelected}
-              inputProps={{
-                'aria-labelledby': labelId,
-              }}
-            />
-          }
+          <Checkbox
+            color='primary'
+            checked={isItemSelected}
+            inputProps={{
+              'aria-labelledby': labelId,
+            }}
+          />
         </TableCell>
         <TableCell
           component='th'

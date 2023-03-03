@@ -130,13 +130,11 @@ function EnhancedTableHead({
   };
 
   // number of pending requests on current page
-  let numberOfPendings = 0;
+  let numberOfReqs = 0;
   for (let i = page * rowsPerPage;
     i < requests.length && i < (page * rowsPerPage + rowsPerPage);
     i++) {
-    if (requests[i].status === 'Pending') {
-      numberOfPendings++;
-    }
+    numberOfReqs++;
   }
 
   return (
@@ -145,8 +143,8 @@ function EnhancedTableHead({
         <TableCell padding='checkbox'>
           <Checkbox
             color='primary'
-            indeterminate={numSelected > 0 && numSelected < numberOfPendings}
-            checked={numSelected > 0 && numSelected === numberOfPendings}
+            indeterminate={numSelected > 0 && numSelected < numberOfReqs}
+            checked={numSelected > 0 && numSelected === numberOfReqs}
             onChange={onSelectAllClick}
             inputProps={{
               'aria-label': 'select all requests',
@@ -217,43 +215,45 @@ function EnhancedTableToolbar({
     }
 
     for (let i = 0; i < selectedRequests.length; i++) {
-      const toBeApproved = {
-        requestId: selectedRequests[i][0].requestid,
-        opportunityid: selectedRequests[i][0].opportunityid,
-        requester: selectedRequests[i][0].requester,
-        role: selectedRequests[i][0].role,
-      };
-      console.log(toBeApproved);
-      await fetch(`/api/approveRequest`, {
-        method: 'POST',
-        body: JSON.stringify(toBeApproved),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-          .then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res;
-          })
-          .then((json) => {
-          })
-          .catch((err) => {
-            console.log(err);
-            toast.error(
-                `Something Went Wrong. Please Try Again.`,
-                {
-                  position: 'top-right',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
-            return;
-          });
+      if (selectedRequests[i][0].requeststatus !== 'approved') {
+        const toBeApproved = {
+          requestId: selectedRequests[i][0].requestid,
+          opportunityid: selectedRequests[i][0].opportunityid,
+          requester: selectedRequests[i][0].requester,
+          role: selectedRequests[i][0].role,
+        };
+        console.log(toBeApproved);
+        await fetch(`/api/approveRequest`, {
+          method: 'POST',
+          body: JSON.stringify(toBeApproved),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+            .then((res) => {
+              if (!res.ok) {
+                throw res;
+              }
+              return res;
+            })
+            .then((json) => {
+            })
+            .catch((err) => {
+              console.log(err);
+              toast.error(
+                  `Something Went Wrong. Please Try Again.`,
+                  {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+              return;
+            });
+      }
     }
     const updatedRequests = [...requests];
     console.log(participants);
@@ -261,8 +261,13 @@ function EnhancedTableToolbar({
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'approved';
       updatedRequests[selectedRequests[i][1]].status = 'Approved';
-      updatedParticipants.
-          push(updatedRequests[selectedRequests[i][1]].requester);
+      // delete the requester from the opp
+      const index = updatedParticipants
+          .indexOf(selectedRequests[i][0].requester);
+      if (index === -1) {
+        updatedParticipants.
+            push(updatedRequests[selectedRequests[i][1]].requester);
+      }
     }
     updateParticipants(updatedParticipants);
     updateRequests(updatedRequests);
@@ -292,46 +297,117 @@ function EnhancedTableToolbar({
       }
     }
     for (let i = 0; i < selectedRequests.length; i++) {
-      const toBeRejected = {
-        requestId: selectedRequests[i][0].requestid,
-        // opportunityid: request.opportunityid,
-      };
-      await fetch(`/api/rejectRequest`, {
-        method: 'POST',
-        body: JSON.stringify(toBeRejected),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-          .then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
+      // if it's already rejected don't send a request to the db
+      if (selectedRequests[i][0].requeststatus !== 'rejected') {
+        const toBeRejected = {
+          requestId: selectedRequests[i][0].requestid,
+          // opportunityid: request.opportunityid,
+        };
+        await fetch(`/api/rejectRequest`, {
+          method: 'POST',
+          body: JSON.stringify(toBeRejected),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+            .then((res) => {
+              if (!res.ok) {
+                throw res;
+              }
+              return res.json();
+            })
+            .then((json) => {
+            })
+            .catch((err) => {
+              console.log(err);
+              toast.error(
+                  `Something Went Wrong. Please Try Again.`,
+                  {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+              return;
+            });
+        // if it was previously approved
+        // delete the userparticipant from the opportunity
+        // and set the members
+        if (selectedRequests[i][0].requeststatus === 'approved') {
+          // first get the opportunity to update
+          let updatedOpp;
+          await fetch(`/api/getOpportunity/${
+            selectedRequests[i][0].opportunityid}`)
+              .then((res) => {
+                if (!res.ok) {
+                  throw res;
+                }
+                return res.json();
+              })
+              .then((json) => {
+                updatedOpp = json;
+              })
+              .catch((err) => {
+                console.log(err);
+                alert('Error retrieving selected opportunity');
+              });
+          // delete the requester from the opp
+          const index = updatedOpp.userparticipants
+              .indexOf(selectedRequests[i][0].requester);
+          if (index !== -1) {
+            updatedOpp.userparticipants.splice(index, 1);
+          }
+          // send the updated opportunity to the db
+          await fetch(`/api/updateOpportunity`, {
+            method: 'POST',
+            body: JSON.stringify(updatedOpp),
+            headers: {
+              'Content-Type': 'application/json',
+            },
           })
-          .then((json) => {
-          })
-          .catch((err) => {
-            console.log(err);
-            toast.error(
-                `Something Went Wrong. Please Try Again.`,
-                {
-                  position: 'top-right',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
-            return;
-          });
+              .then((res) => {
+                if (!res.ok) {
+                  throw res;
+                }
+                return res.json();
+              })
+              .then((json) => {
+              })
+              .catch((err) => {
+                console.log(err);
+                toast.error(
+                    `Something Went Wrong. Please Try Again.`,
+                    {
+                      position: 'top-right',
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                return;
+              });
+        }
+      }
     }
     const updatedRequests = [...requests];
+    const updatedParticipants = [...participants];
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'rejected';
       updatedRequests[selectedRequests[i][1]].status = 'Denied';
+      // delete the requester from the members
+      const index = updatedParticipants
+          .indexOf(selectedRequests[i][0].requester);
+      if (index !== -1) {
+        updatedParticipants.splice(index, 1);
+      }
     }
+    // don't forget to update members
+    updateParticipants(updatedParticipants);
     updateRequests(updatedRequests);
     resetSelected();
     const reqStr = selectedRequests.length > 1 ? 'requests' : 'request';
@@ -592,12 +668,11 @@ function ViewOpportunityRequests({
     if (event.target.checked) {
       // const newSelecteds = rows.map((n) => n.name);
       const newSelecteds = [];
+      const temp = requests.sort(getComparator(order, orderBy));
       for (let i = page * rowsPerPage;
-        i < requests.length && i < (page * rowsPerPage + rowsPerPage);
+        i < temp.length && i < (page * rowsPerPage + rowsPerPage);
         i++) {
-        if (requests[i].status === 'Pending') {
-          newSelecteds.push(requests[i].requester);
-        }
+        newSelecteds.push(temp[i].requester);
       }
       setSelected(newSelecteds);
       return;
