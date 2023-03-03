@@ -8,9 +8,25 @@ const uuid = require('uuid');
  * @param {*} req
  * @param {*} res
  */
- exports.getOpportunities = async (_, res) => {
+ exports.getOpportunities = async (req, res) => {
   const opportunities = await opportunityModel.getOpportunities();
-  res.status(201).send(opportunities);
+  // get pending opps
+  const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
+  const pendingOpps = [];
+  for (let index = 0; index < requests.length; index++) {
+    const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
+    pendingOpps.push(opportunity);
+  }
+  //Find values that are in result1 but not in result2
+  var uniqueResultOne = opportunities.filter(function(obj) {
+    return !pendingOpps.some(function(objj) {
+        if (obj !== undefined && objj !== undefined) {
+          return obj.eventid == objj.eventid;
+        }
+        return false;
+    });
+  });
+  res.status(201).send(uniqueResultOne);
 };
 
 /**
@@ -79,10 +95,11 @@ exports.opportunityUpdate = async (req, res) => {
   const requests = await requestModel.getUserOutgoingRequests(req.params.profileid);
   const pendingOpps = [];
   for (let index = 0; index < requests.length; index++) {
-    const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
-    pendingOpps.push(opportunity);
+    if (requests[index].requeststatus === 'pending') {
+      const opportunity = await opportunityModel.getOpportunity(requests[index].opportunityid);
+      pendingOpps.push(opportunity);
+    }
   }
-  // console.log(pendingOpps);
   res.status(201).send(pendingOpps);
 };
 

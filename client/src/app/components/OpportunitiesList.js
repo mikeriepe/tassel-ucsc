@@ -36,6 +36,7 @@ export default function OpportunitiesList({
   setOrgTypeFilter,
   getPendingOpportunities,
   getCreatedOpportunities,
+  getAllOpportunities,
 }) {
   const [displayOpps, setDisplayOpps] = useState([]);
   const [search, setSearch] = useState('');
@@ -44,6 +45,7 @@ export default function OpportunitiesList({
   // Component first renders
   useEffect(() => {
     setDisplayOpps(opportunities);
+    applyFilters();
   }, [opportunities]);
 
   // Update displayed opportunities when filters are updated
@@ -64,7 +66,7 @@ export default function OpportunitiesList({
           .localeCompare(b.subject ? b.subject : 'zzz'));
     }
     // Recommended sorting will be implemented here
-    console.log('Recommended sorting');
+    // console.log('Recommended sorting');
     return opps;
   });
 
@@ -178,6 +180,7 @@ export default function OpportunitiesList({
             opportunity={opportunity}
             getPendingOpportunities={getPendingOpportunities}
             getCreatedOpportunities={getCreatedOpportunities}
+            getAllOpportunities={getAllOpportunities}
           />
         ))}
       </MuiBox>
