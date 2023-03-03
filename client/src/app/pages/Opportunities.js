@@ -182,7 +182,6 @@ export default function FetchWrapper() {
         allOpportunities &&
           <Opportunities
             getPendingOpportunities={getPendingOpportunities}
-            getCreatedOpportunities={getCreatedOpportunities}
             joinedOpportunities={joinedOpportunities}
             createdOpportunities={createdOpportunities}
             pastOpportunities={pastOpportunities}
@@ -206,7 +205,6 @@ function Opportunities({
   pendingOpportunities,
   allOpportunities,
   getPendingOpportunities,
-  getCreatedOpportunities,
 }, props) {
   const {userProfile} = useAuth();
   const location = useLocation();
@@ -215,9 +213,9 @@ function Opportunities({
   if (location.state === null) {
     defaultTab = 0;
   } else if (location.state.defaultTab === 'browse') {
-    defaultTab = 0;
+    defaultTab = 4;
   } else if (location.state.defaultTab === 'upcoming') {
-    defaultTab = 2;
+    defaultTab = 0;
   } else {
     defaultTab = 0;
   }
@@ -230,59 +228,12 @@ function Opportunities({
 
   const tabs = [
     {
-      name: 'Browse',
-      component:
-        <OpportunitiesList
-          key='all'
-          type='all'
-          opportunities={allOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-          getPendingOpportunities={getPendingOpportunities}
-        />,
-    },
-    {
-      name: 'Pending',
-      component:
-        <OpportunitiesList
-          key='pending'
-          type='pending'
-          opportunities={pendingOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-          getPendingOpportunities={getPendingOpportunities}
-        />,
-    },
-    {
       name: 'Upcoming',
       component:
         <OpportunitiesList
           key='upcoming'
           type='upcoming'
           opportunities={joinedOpportunities}
-          locationFilter={locationFilter}
-          setLocationFilter={setLocationFilter}
-          oppTypeFilter={oppTypeFilter}
-          setOppTypeFilter={setOppTypeFilter}
-          orgTypeFilter={orgTypeFilter}
-          setOrgTypeFilter={setOrgTypeFilter}
-        />,
-    },
-    {
-      name: 'Completed',
-      component:
-        <OpportunitiesList
-          key='completed'
-          type='completed'
-          opportunities={pastOpportunities}
           locationFilter={locationFilter}
           setLocationFilter={setLocationFilter}
           oppTypeFilter={oppTypeFilter}
@@ -304,7 +255,53 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
-          getCreatedOpportunities={getCreatedOpportunities}
+        />,
+    },
+    {
+      name: 'Pending',
+      component:
+        <OpportunitiesList
+          key='pending'
+          type='pending'
+          opportunities={pendingOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
+        />,
+    },
+    {
+      name: 'Completed',
+      component:
+        <OpportunitiesList
+          key='completed'
+          type='completed'
+          opportunities={pastOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+        />,
+    },
+    {
+      name: 'Browse',
+      component:
+        <OpportunitiesList
+          key='all'
+          type='all'
+          opportunities={allOpportunities}
+          locationFilter={locationFilter}
+          setLocationFilter={setLocationFilter}
+          oppTypeFilter={oppTypeFilter}
+          setOppTypeFilter={setOppTypeFilter}
+          orgTypeFilter={orgTypeFilter}
+          setOrgTypeFilter={setOrgTypeFilter}
+          getPendingOpportunities={getPendingOpportunities}
         />,
     },
   ];
@@ -325,6 +322,7 @@ function Opportunities({
     eventdata: '',
     startdate: new Date(),
     enddate: new Date(),
+    organizationtype: '',
     opportunitytype: '',
     starttime: new Date(),
     endtime: new Date(),
@@ -339,7 +337,7 @@ function Opportunities({
     const newOpportunity = {
       assignedroles: {},
       eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
-      active: true,
+      active: false,
       userparticipants: [],
       preferences: {},
       usersponsors: {'creator': userProfile.profileid},
@@ -370,7 +368,6 @@ function Opportunities({
             progress: undefined,
           });
           handleModalClose();
-          getCreatedOpportunities();
         })
         .catch((error) => {
           console.log(error);

@@ -72,7 +72,8 @@ export default function ProfileAlert({data}) {
           icon={<WarningIcon fontSize="inherit" className='icon' />}
         >
           <div className='alert-text' color="warning">
-            Your account is <strong>pending</strong>
+            Your account is <strong>pending approval</strong>. <br />
+            In the mean time, tell us a little about yourself!
           </div>
         </Alert>
       }
@@ -89,7 +90,7 @@ export default function ProfileAlert({data}) {
         </Alert>
       }
 
-      {data.status == 4 &&
+      {/* {data.status == 4 &&
         <Alert
           style={{width: '800px', marginTop: '20px'}}
           severity="success"
@@ -99,7 +100,7 @@ export default function ProfileAlert({data}) {
             You have been <strong>approved</strong> by an admin!
           </div>
         </Alert>
-      }
+      } */}
 
       {data.status == 2 &&
         <Alert

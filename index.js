@@ -83,6 +83,8 @@ app.post('/api/userDeactivation', authApi.check, userApi.userDeactivate);
 
 app.post('/api/userCreation', userApi.userPost);
 
+app.post('/api/userUpdatePromoteAdmin', authApi.check, userApi.userUpdatePromoteAdmin);
+
 app.get('/api/verifyUserSession', authApi.check, userApi.verifyUserSession);
 
 app.get('/api/expireUserSession', authApi.check, userApi.expireUserSession);
@@ -118,6 +120,8 @@ app.post('/api/changeProfileRequestResponse', authApi.check, profileApi.changePr
 //
 //
 app.get('/api/getOpportunities', authApi.check, opportunityApi.getOpportunities);
+
+app.get('/api/getAllOpportunities', authApi.check, opportunityApi.getAllOpportunities);
 
 app.get('/api/getJoinedOpportunities/:profileid', authApi.check, opportunityApi.getJoinedOpportunities);
 
