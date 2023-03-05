@@ -90,7 +90,7 @@ export default function ViewOpportunityMembers({
     for (let i = 0; i < participants.length; i++) {
       getProfile(participants[i], 'General Participant');
     }
-  }, [participants, members]);
+  }, [participants]);
 
   return (
     <Paper>
@@ -120,9 +120,18 @@ export default function ViewOpportunityMembers({
           </div>
         </Member>
         {profiles && profiles
-            .sort(function(a, b) {
-              return (a.firstname > b.firstname) ? 1 :
-                    ((b.firstname > a.firstname) ? -1 : 0);
+            .sort((a, b) => {
+              // a GP b NOT GP
+              if (a.role !== 'General Participant' &&
+                  b.role === 'General Participant') {
+                return -1;
+              } else if (b.role !== 'General Participant' &&
+                  a.role === 'General Participant') {
+                // b GP a NOT GP
+                return 1;
+              }
+              // both not GP or both GP
+              return a.firstname.localeCompare(b.firstname);
             })
             .map((profile, index) => (
               <Member
