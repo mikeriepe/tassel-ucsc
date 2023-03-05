@@ -193,6 +193,7 @@ export default function FetchWrapper() {
             pastOpportunities={pastOpportunities}
             pendingOpportunities={pendingOpportunities}
             allOpportunities={allOpportunities}
+            getAllOpportunities={getAllOpportunities}
           />
       }
     </>
@@ -211,6 +212,7 @@ function Opportunities({
   pendingOpportunities,
   allOpportunities,
   getPendingOpportunities,
+  getAllOpportunities,
 }, props) {
   const {userProfile} = useAuth();
   const location = useLocation();
@@ -277,6 +279,7 @@ function Opportunities({
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
           getPendingOpportunities={getPendingOpportunities}
+          getAllOpportunities={getAllOpportunities}
         />,
     },
     {
@@ -308,6 +311,7 @@ function Opportunities({
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
           getPendingOpportunities={getPendingOpportunities}
+          getAllOpportunities={getAllOpportunities}
         />,
     },
   ];
