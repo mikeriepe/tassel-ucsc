@@ -61,8 +61,7 @@ exports.getAllOpportunities = async () => {
  exports.getCreatedOpportunities = async (profileid) => {
   const query = {
     text: `SELECT * FROM opportunity 
-           WHERE usersponsors->>'creator' = $1
-           AND active = true`,
+           WHERE usersponsors->>'creator' = $1`,
     values: [profileid],
   };
 

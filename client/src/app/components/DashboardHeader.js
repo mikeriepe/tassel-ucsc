@@ -31,7 +31,7 @@ export default function DashboardHeader({data}) {
   const [joinedOpportunities, setJoinedOpportunities] = useState([]);
 
   const getJoinedOpportunities = () => {
-    fetch(`/api/getPendingOpportunities/${userProfile.profileid}`)
+    fetch(`/api/getJoinedOpportunities/${userProfile.profileid}`)
         .then((res) => {
           if (!res.ok) {
             throw res;
