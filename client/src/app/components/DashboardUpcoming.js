@@ -3,6 +3,8 @@ import MuiBox from '@mui/material/Box';
 import useAuth from '../util/AuthContext';
 import {Link} from 'react-router-dom';
 import {Grid} from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import DashboardOppThumbnail from './DashboardOppThumbnail';
 
@@ -49,9 +51,10 @@ const Text = ({children}, props) => (
 export default function DashboardUpcoming({data}) {
   const {userProfile} = useAuth();
   const [joinedOpportunities, setJoinedOpportunities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getJoinedOpportunities = () => {
-    fetch(`/api/getPendingOpportunities/${userProfile.profileid}`)
+    fetch(`/api/getJoinedOpportunities/${userProfile.profileid}`)
         .then((res) => {
           if (!res.ok) {
             throw res;
@@ -60,6 +63,7 @@ export default function DashboardUpcoming({data}) {
         })
         .then((json) => {
           setJoinedOpportunities(json);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -84,38 +88,46 @@ export default function DashboardUpcoming({data}) {
   }
 
   return (
-    <UpcomingSection className='grid-flow-large'>
-      <div
-        className='flex-space-between flex-align-center'
-        style={{background: 'var(--background-primary)'}}
-      >
-        <Text>
-          <h2 className='text-dark ellipsis text-medium'>
-            Upcoming Events
-          </h2>
-        </Text>
-        <div className='flex-space-between flex-align-center'>
-          <Link className='text-bold text-blue ellipsis text-small
-          hover-highlight-link'
-          to= '/opportunities' state= {{defaultTab: 'upcoming'}}>
-            {linkText}
-          </Link>
+    <>
+      {
+      loading ?
+      <Box sx={{display: 'flex'}} style={{padding: '2rem'}}>
+        <CircularProgress />
+      </Box> :
+      <UpcomingSection className='grid-flow-large'>
+        <div
+          className='flex-space-between flex-align-center'
+          style={{background: 'var(--background-primary)'}}
+        >
+          <Text>
+            <h2 className='text-dark ellipsis text-medium'>
+              Upcoming Events
+            </h2>
+          </Text>
+          <div className='flex-space-between flex-align-center'>
+            <Link className='text-bold text-blue ellipsis text-small
+            hover-highlight-link'
+            to= '/opportunities' state= {{defaultTab: 'upcoming'}}>
+              {linkText}
+            </Link>
+          </div>
         </div>
-      </div>
-      {(numOpps > 0) ?
-      <Grid container spacing={{xs: 2, md: 3}}>
-        {displayOpps.map((opportunity, index) => (
-          <Grid item xs={2} sm={4} md={4} key={index}>
-            <DashboardOppThumbnail
-              key={`opportunity-${index}`}
-              opportunity={opportunity}
-            />
-          </Grid>
-        ))}
-      </Grid> :
-      <h5 className='text-bold ellipsis'>
-      Explore more events below!
-      </h5> }
-    </UpcomingSection>
+        {(numOpps > 0) ?
+        <Grid container spacing={{xs: 2, md: 3}}>
+          {displayOpps.map((opportunity, index) => (
+            <Grid item xs={2} sm={4} md={4} key={index}>
+              <DashboardOppThumbnail
+                key={`opportunity-${index}`}
+                opportunity={opportunity}
+              />
+            </Grid>
+          ))}
+        </Grid> :
+        <h5 className='text-bold ellipsis'>
+        Explore more events below!
+        </h5> }
+      </UpcomingSection>
+      }
+    </>
   );
 }
