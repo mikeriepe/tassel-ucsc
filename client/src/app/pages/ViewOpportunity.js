@@ -104,8 +104,16 @@ function ViewOpportunity({opportunity}) {
   const [requestedRole, setRequestedRole] = React.useState('');
   // REMOVE REQUESTED ROLE STATE
 
+  // list of all the participants
   const [participants, setParticipants] =
   useState(opportunity?.userparticipants);
+
+  // list of assigned roles in the opportunity
+  const [members, setMembers] = useState(opportunity?.assignedroles);
+
+  const updateMembers = (newMembers) => {
+    setMembers(newMembers);
+  };
 
   const updateParticipants = (newParticipants) => {
     setParticipants(newParticipants);
@@ -231,6 +239,8 @@ function ViewOpportunity({opportunity}) {
       component: <ViewOpportunityRequests
         updateParticipants={updateParticipants}
         participants={participants}
+        updateMembers={updateMembers}
+        members={members}
       />,
     },
     // Find people tab will be implemented in Spring 2023
@@ -329,7 +339,7 @@ function ViewOpportunity({opportunity}) {
                 avatar: creator?.profilepicture,
                 profileid: creator?.profileid,
               }}
-              members={opportunity?.assignedroles}
+              members={members}
               participants={participants}
             />
           </MuiBox>
