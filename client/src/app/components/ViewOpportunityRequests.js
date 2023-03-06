@@ -206,6 +206,8 @@ function EnhancedTableToolbar({
   participants,
   updateParticipants,
   updateDisplayReqs,
+  members,
+  updateMembers,
 }) {
   const [openFilter, setOpenFilter] = useState(false);
   const [filterValues, setFilterValues] = useState([]);
@@ -311,17 +313,44 @@ function EnhancedTableToolbar({
     }
     const updatedRequests = [...requests];
     const updatedParticipants = [...participants];
+    const updatedMembers = {...members};
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'approved';
       updatedRequests[selectedRequests[i][1]].status = 'Approved';
-      // delete the requester from the opp
+      // add the requester to the opp
+      // if he already isn't in the opp
+      // to prevent double rendering of approving users twice
       const index = updatedParticipants
           .indexOf(selectedRequests[i][0].requester);
       if (index === -1) {
         updatedParticipants.
             push(updatedRequests[selectedRequests[i][1]].requester);
       }
+      // add the approved requesters that request roles
+      const reqRole = updatedRequests[selectedRequests[i][1]].role;
+      // a role is requested
+      if (reqRole) {
+        // if there are already people in that role push the requester
+        // into the existing list
+        if (members[reqRole]) {
+          const temp = [...members[reqRole]];
+          // check if the person already exists
+          const index = temp
+              .indexOf(selectedRequests[i][0].requester);
+          if (index === -1) {
+            temp.
+                push(updatedRequests[selectedRequests[i][1]].requester);
+          }
+          // set the state to new list
+          updatedMembers[reqRole] = temp;
+        } else {
+          // if nobody exists in that role create a list and push it
+          const temp = [updatedRequests[selectedRequests[i][1]].requester];
+          updatedMembers[reqRole] = temp;
+        }
+      }
     }
+    updateMembers(updatedMembers);
     updateParticipants(updatedParticipants);
     updateRequests(updatedRequests);
     resetSelected();
@@ -388,6 +417,7 @@ function EnhancedTableToolbar({
             });
         // if it was previously approved
         // delete the userparticipant from the opportunity
+        // delete the assignedrole as well
         // and set the members
         if (selectedRequests[i][0].requeststatus === 'approved') {
           // first get the opportunity to update
@@ -412,6 +442,18 @@ function EnhancedTableToolbar({
               .indexOf(selectedRequests[i][0].requester);
           if (index !== -1) {
             updatedOpp.userparticipants.splice(index, 1);
+          }
+          // delete the assigned role
+          const reqRole = selectedRequests[i][0].role;
+          // a role was requested
+          if (reqRole) {
+            const assignedRoles = updatedOpp.assignedroles;
+            const temp = assignedRoles[reqRole];
+            const index = temp
+                .indexOf(selectedRequests[i][0].requester);
+            if (index !== -1) {
+              temp.splice(index, 1);
+            }
           }
           // send the updated opportunity to the db
           await fetch(`/api/updateOpportunity`, {
@@ -449,6 +491,7 @@ function EnhancedTableToolbar({
     }
     const updatedRequests = [...requests];
     const updatedParticipants = [...participants];
+    const updatedMembers = {...members};
     for (let i = 0; i < selectedRequests.length; i++) {
       updatedRequests[selectedRequests[i][1]].requeststatus = 'rejected';
       updatedRequests[selectedRequests[i][1]].status = 'Denied';
@@ -458,8 +501,28 @@ function EnhancedTableToolbar({
       if (index !== -1) {
         updatedParticipants.splice(index, 1);
       }
+
+      // delete the rejected requesters that request roles
+      const reqRole = updatedRequests[selectedRequests[i][1]].role;
+      // a role is requested
+      if (reqRole) {
+        // if there are already people in that role pop the requester
+        // from the existing list
+        if (members[reqRole]) {
+          const temp = [...members[reqRole]];
+          // check if the person already exists
+          // remove if exists else do nothing
+          const index = temp
+              .indexOf(selectedRequests[i][0].requester);
+          if (index !== -1) {
+            temp.splice(index, 1);
+          }
+          // set the state to new list
+          updatedMembers[reqRole] = temp;
+        }
+      }
     }
-    // don't forget to update members
+    updateMembers(updatedMembers);
     updateParticipants(updatedParticipants);
     updateRequests(updatedRequests);
     resetSelected();
@@ -647,6 +710,8 @@ EnhancedTableToolbar.propTypes = {
 export default function FetchWrapper({
   updateParticipants,
   participants,
+  updateMembers,
+  members,
 }) {
   const params = useParams();
   const {userProfile} = useAuth();
@@ -738,6 +803,8 @@ export default function FetchWrapper({
         updateRequests={updateRequests}
         updateParticipants={updateParticipants}
         participants={participants}
+        updateMembers={updateMembers}
+        members={members}
       />}
     </>
   );
@@ -752,6 +819,8 @@ function ViewOpportunityRequests({
   updateRequests,
   updateParticipants,
   participants,
+  updateMembers,
+  members,
 }) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -868,6 +937,8 @@ function ViewOpportunityRequests({
           updateParticipants={updateParticipants}
           participants={participants}
           updateDisplayReqs={updateDisplayReqs}
+          members={members}
+          updateMembers={updateMembers}
         />
         <TableContainer>
           <Table aria-labelledby='tableTitle'>

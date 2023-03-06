@@ -1,6 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import MuiBox from '@mui/material/Box';
 import useAuth from '../util/AuthContext';
+import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import DashboardPendingOppCard from './DashboardPendingOppCard';
+import DashboardPendingReqCard from './DashboardPendingReqCard';
+import TablePagination from '@mui/material/TablePagination';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
 
 const PendingSection = ({children}, props) => (
   <MuiBox className='grid-flow-large'
@@ -12,7 +25,7 @@ const PendingSection = ({children}, props) => (
       marginLeft: '3em',
       marginRight: '3em',
       height: '100%',
-      width: 'calc(100% - 6em)',
+      width: 'calc(100% - 2.3em)',
       lineHeight: 1.5,
     }}
     {...props}
@@ -43,9 +56,36 @@ const Text = ({children}, props) => (
  */
 export default function DashboardPendingReqs({data}) {
   const {userProfile} = useAuth();
-  const [joinedOpportunities, setJoinedOpportunities] = useState([]);
+  const [createdOpps, setCreatedOpps] = useState([]);
+  const [pendingOpps, setPendingOpps] = useState([]);
+  const [page, setPage] = useState(0);
+  const [selectedReq, setSelectedReq] = useState('Incoming Requests');
+  // set this value to change rows per pending requests page
+  const rowsPerPage = 3;
+  const handleChangeSelected = (event) => {
+    setSelectedReq(event.target.value);
+  };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const getCreatedOpportunities = () => {
+    fetch(`/api/getCreatedOpportunities/${userProfile.profileid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setCreatedOpps(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving joined opportunities');
+        });
+  };
 
-  const getJoinedOpportunities = () => {
+  const getPendingOpportunities = () => {
     fetch(`/api/getPendingOpportunities/${userProfile.profileid}`)
         .then((res) => {
           if (!res.ok) {
@@ -54,29 +94,29 @@ export default function DashboardPendingReqs({data}) {
           return res.json();
         })
         .then((json) => {
-          setJoinedOpportunities(json);
+          setPendingOpps(json);
         })
         .catch((err) => {
           console.log(err);
-          alert('Error retrieving joined opportunities');
+          alert('Error retrieving past opportunities');
         });
   };
 
+
   useEffect(() => {
-    getJoinedOpportunities();
+    getCreatedOpportunities();
+    getPendingOpportunities();
   }, []);
 
-  const numOpps = joinedOpportunities.length;
-
-  let displayOpps = [];
-  if (numOpps > 3) {
-    for (let i = 0; i < 3; i++) {
-      displayOpps.push(joinedOpportunities[i]);
-    }
-  } else {
-    displayOpps = joinedOpportunities;
+  let emptyCreatedRows = 0;
+  let emptyPendingRows = 0;
+  // if the user is on the last page
+  if (Math.floor(createdOpps.length / rowsPerPage) === page) {
+    emptyCreatedRows = rowsPerPage - (createdOpps.length % rowsPerPage);
   }
-
+  if (Math.floor(pendingOpps.length / rowsPerPage) === page) {
+    emptyPendingRows = rowsPerPage - (pendingOpps.length % rowsPerPage);
+  }
   return (
     <PendingSection>
       <Text>
@@ -84,6 +124,98 @@ export default function DashboardPendingReqs({data}) {
           Pending Requests
         </h2>
       </Text>
+      <Paper
+        elevation={0}
+        sx={{
+          width: 'auto',
+          mt: '1em',
+          boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+          borderRadius: '10px',
+        }}
+      >
+        <div
+          className='flex-horizontal flex-align-center flex-flow-large'
+          style={{justifyContent: 'space-between'}}
+        >
+          <Box sx={{minWidth: 120}}>
+            <FormControl
+              variant="standard"
+              style={{padding: '1em'}}
+            >
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedReq}
+                label="Selected Requests Page"
+                onChange={handleChangeSelected}
+              >
+                <MenuItem
+                  value={'Incoming Requests'}
+                >
+                    Incoming Requests
+                </MenuItem>
+                <MenuItem
+                  value={'Outgoing Requests'}
+                >
+                  Outgoing Requests
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <TablePagination
+            component='div'
+            count={selectedReq === 'Incoming Requests' ?
+                createdOpps.length : pendingOpps.length
+            }
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[]}
+          />
+        </div>
+        <TableContainer>
+          <Table aria-labelledby='tableTitle'>
+            <TableBody>
+              {selectedReq === 'Incoming Requests' && createdOpps
+                  .slice()
+                  .sort((a, b) => a.eventname.localeCompare(b.eventname))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((opp, index) => {
+                    return (
+                      <DashboardPendingOppCard
+                        key={`opportunity-${index}`}
+                        opportunity={opp}
+                      />
+                    );
+                  })
+              }
+              {selectedReq === 'Incoming Requests' && emptyCreatedRows > 0 && (
+                <TableRow style={{height: 95 * emptyCreatedRows}}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+              {selectedReq === 'Outgoing Requests' && pendingOpps
+                  .slice()
+                  .sort((a, b) => a.eventname.localeCompare(b.eventname))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((opp, index) => {
+                    return (
+                      <DashboardPendingReqCard
+                        key={`opportunity-${index}`}
+                        opportunity={opp}
+                      />
+                    );
+                  })
+              }
+              {selectedReq === 'Outgoing Requests' && emptyPendingRows > 0 && (
+                <TableRow style={{height: 95 * emptyPendingRows}}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </PendingSection>
   );
 }

@@ -405,7 +405,7 @@ export default function OpportunitiesCard({
 
   useEffect(() => {
     getOpportunityCreator(opportunity);
-  }, []);
+  }, [opportunity]);
 
   return (
     <>
