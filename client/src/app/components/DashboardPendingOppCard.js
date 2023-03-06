@@ -131,7 +131,7 @@ export default function DashboardPendingOppCard({
       <TableRow
         hover
         tabIndex={-1}
-        style={{height: 100, cursor: 'pointer'}}
+        style={{height: 95, cursor: 'pointer'}}
         onClick={()=> navigateToOpp(opportunity.eventid)}
       >
         <TableCell

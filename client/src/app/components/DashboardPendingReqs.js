@@ -25,7 +25,7 @@ const PendingSection = ({children}, props) => (
       marginLeft: '3em',
       marginRight: '3em',
       height: '100%',
-      width: 'calc(100% - 3em)',
+      width: 'calc(100% - 2.3em)',
       lineHeight: 1.5,
     }}
     {...props}
@@ -190,7 +190,7 @@ export default function DashboardPendingReqs({data}) {
                   })
               }
               {selectedReq === 'Incoming Requests' && emptyCreatedRows > 0 && (
-                <TableRow style={{height: 100 * emptyCreatedRows}}>
+                <TableRow style={{height: 95 * emptyCreatedRows}}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -208,7 +208,7 @@ export default function DashboardPendingReqs({data}) {
                   })
               }
               {selectedReq === 'Outgoing Requests' && emptyPendingRows > 0 && (
-                <TableRow style={{height: 100 * emptyPendingRows}}>
+                <TableRow style={{height: 95 * emptyPendingRows}}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
