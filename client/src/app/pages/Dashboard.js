@@ -45,7 +45,7 @@ export default function Dashboard() {
               <DashboardBrowse data={userProfile} />
               <DashboardCreate data={userProfile} />
             </Grid>
-            <Grid item xs={6} md={8}>
+            <Grid item xs={6} md={9}>
               <DashboardPendingReqs data={userProfile} />
             </Grid>
           </Grid>
