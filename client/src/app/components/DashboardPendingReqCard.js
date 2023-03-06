@@ -102,7 +102,10 @@ export default function DashboardPendingReqCard({
             </div>
           </div>
         </TableCell>
-        <TableCell>
+        <TableCell
+          align='right'
+          style={{paddingRight: '6em'}}
+        >
           <Chip
             label={'Pending'}
             variant='outlined'
