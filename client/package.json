@@ -11,7 +11,7 @@
     "@mui/icons-material": "^5.3.1",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.0",
-    "@mui/x-date-pickers": "^5.0.19",
+    "@mui/x-date-pickers": "^5.0.20",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

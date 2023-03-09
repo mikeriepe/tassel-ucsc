@@ -2,8 +2,8 @@ import Box from '@mui/material/Box';
 import React from 'react';
 import {StepLabel} from '@mui/material';
 import Paper from '@mui/material/Paper';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
 
