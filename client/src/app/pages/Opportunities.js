@@ -194,6 +194,7 @@ export default function FetchWrapper() {
             pendingOpportunities={pendingOpportunities}
             allOpportunities={allOpportunities}
             getAllOpportunities={getAllOpportunities}
+            getCreatedOpportunities={getCreatedOpportunities}
           />
       }
     </>
@@ -213,6 +214,7 @@ function Opportunities({
   allOpportunities,
   getPendingOpportunities,
   getAllOpportunities,
+  getCreatedOpportunities,
 }, props) {
   const {userProfile} = useAuth();
   const location = useLocation();
@@ -263,6 +265,7 @@ function Opportunities({
           setOppTypeFilter={setOppTypeFilter}
           orgTypeFilter={orgTypeFilter}
           setOrgTypeFilter={setOrgTypeFilter}
+          getCreatedOpportunities={getCreatedOpportunities}
         />,
     },
     {
@@ -378,6 +381,9 @@ function Opportunities({
             progress: undefined,
           });
           handleModalClose();
+        })
+        .then(() => {
+          getCreatedOpportunities();
         })
         .catch((error) => {
           console.log(error);

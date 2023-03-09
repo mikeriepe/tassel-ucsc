@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {styled} from '@mui/material';
 import MuiBox from '@mui/material/Box';
 import useAuth from '../util/AuthContext';
@@ -8,6 +8,7 @@ import DashboardBrowse from '../components/DashboardBrowse';
 import {Grid} from '@mui/material';
 import DashboardCreate from '../components/DashboardCreate';
 import DashboardPendingReqs from '../components/DashboardPendingReqs';
+
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -25,6 +26,24 @@ const Page = styled((props) => (
  */
 export default function Dashboard() {
   const {userProfile} = useAuth();
+  const [createdOpps, setCreatedOpps] = useState([]);
+
+  const getCreatedOpportunities = () => {
+    fetch(`/api/getCreatedOpportunities/${userProfile.profileid}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setCreatedOpps(json);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving joined opportunities');
+        });
+  };
 
   return (
     <Page>
@@ -43,10 +62,16 @@ export default function Dashboard() {
             }}>
             <Grid item xs={6} md={3}>
               <DashboardBrowse data={userProfile} />
-              <DashboardCreate data={userProfile} />
+              <DashboardCreate
+                data={userProfile}
+                getCreatedOpportunities={getCreatedOpportunities}
+              />
             </Grid>
             <Grid item xs={6} md={9}>
-              <DashboardPendingReqs data={userProfile} />
+              <DashboardPendingReqs
+                createdOpps={createdOpps}
+                getCreatedOpportunities={getCreatedOpportunities}
+              />
             </Grid>
           </Grid>
         </>

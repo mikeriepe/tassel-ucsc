@@ -72,7 +72,7 @@ const formValues = {
  * creates Dashboard header
  * @return {HTML} Dashboard header component
  */
-export default function DashboardCreate() {
+export default function DashboardCreate({getCreatedOpportunities}) {
   const {userProfile} = useAuth();
   const [showOppForm, setShowOppForm] = useState(false);
 
@@ -115,6 +115,7 @@ export default function DashboardCreate() {
             progress: undefined,
           });
           handleModalClose();
+          getCreatedOpportunities();
         })
         .catch((error) => {
           console.log(error);
