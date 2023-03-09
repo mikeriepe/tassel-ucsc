@@ -84,7 +84,7 @@ export default function DashboardCreate() {
     const newOpportunity = {
       assignedroles: {},
       eventbanner: 'https://www.sorenkaplan.com/wp-content/uploads/2017/07/Testing.jpg',
-      active: false,
+      active: null,
       userparticipants: [],
       preferences: {},
       usersponsors: {'creator': userProfile.profileid},

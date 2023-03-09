@@ -114,7 +114,7 @@ export default function ViewOpportunityRequestCard({
                 cursor: 'pointer',
               }}
             >
-              <Avatar/>
+              <Avatar image={requester?.profilepicture}/>
             </div>
             <p>{`${requester?.firstname} ${requester?.lastname}`}</p>
           </div>
