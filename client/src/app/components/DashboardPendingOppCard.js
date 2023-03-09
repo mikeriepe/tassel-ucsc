@@ -154,9 +154,9 @@ export default function DashboardPendingOppCard({
           </div>
         </TableCell>
         <TableCell>
-          <RequestsText>
+          {requests.length ? <RequestsText>
             {requests.length}
-          </RequestsText>
+          </RequestsText> : null}
         </TableCell>
       </TableRow>
     </>
