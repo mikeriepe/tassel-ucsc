@@ -72,7 +72,7 @@ const formValues = {
  * creates Dashboard header
  * @return {HTML} Dashboard header component
  */
-export default function DashboardCreate() {
+export default function DashboardCreate({getCreatedOpportunities}) {
   const {userProfile} = useAuth();
   const [showOppForm, setShowOppForm] = useState(false);
 
@@ -102,9 +102,9 @@ export default function DashboardCreate() {
           if (!res.ok) {
             throw res;
           }
-          return res;
+          return res.json();
         })
-        .then((json) => {
+        .then(async (res) => {
           toast.success('Opportunity Created', {
             position: 'top-right',
             autoClose: 5000,
@@ -115,6 +115,35 @@ export default function DashboardCreate() {
             progress: undefined,
           });
           handleModalClose();
+          // insert the roles into role table
+          for (let i = 0; i < newOpportunity.roles.length; i++) {
+            const newRole = {
+              opportunityid: res.opportunityid,
+              // keeping it null until it's fully implemented
+              tagid: 'c7e29de9-5b88-49fe-a3f5-750a3a62aee5',
+              responsibility: '',
+              isfilled: false,
+              rolename: newOpportunity.roles[i],
+              qualifications: [],
+            };
+            // console.log(newRole);
+            await fetch(`/api/postRole`, {
+              method: 'POST',
+              body: JSON.stringify(newRole),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+                .then((res) => {
+                  // console.log(res);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+          }
+        })
+        .then(() => {
+          getCreatedOpportunities();
         })
         .catch((error) => {
           console.log(error);

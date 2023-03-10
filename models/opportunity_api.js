@@ -127,7 +127,7 @@ exports.opportunityUpdate = async (req, res) => {
   try {
     const opportunityId = await opportunityModel.postOpportunity(req.body, newUUID);
     console.log(opportunityId);
-    res.status(201).send({opportunityId});
+    res.status(201).json({opportunityid: opportunityId});
   }
   catch (error) {
     // console.log(error);

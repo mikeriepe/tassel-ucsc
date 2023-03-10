@@ -70,10 +70,10 @@ export default function FetchWrapper() {
         });
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (params.opportunityid) {
-      getOpportunity();
-      getOpportunityRoles();
+      await getOpportunity();
+      await getOpportunityRoles();
     }
   }, []);
 
