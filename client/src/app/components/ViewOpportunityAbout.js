@@ -297,31 +297,35 @@ function RolesCard({
               <AccordionDetails
                 className='flex-vertical flex-flow-large flow-small'
               >
-                <div className='flex-vertical'>
-                  <p className='text-bold'>Responsibilites</p>
-                  <p className='text-xsmall text-gray'>
-                    {role.responsibility}
-                  </p>
-                </div>
-                <div className='flex-vertical'>
-                  <p className='text-bold'>
-                    Preferred Qualifications
-                  </p>
-                  <ul style={{padding: 0, margin: 0}}>
-                    {role.qualifications ?
-                      role.qualifications.map((qualification, index) => (
-                        <p
-                          className='text-xsmall text-gray'
-                          key={`qualification-${index}`}
-                        >
-                          {`· ${qualification}`}
-                        </p>
-                      )) : (
-                        <p className='text-xsmall text-gray'>None</p>
-                      )
-                    }
-                  </ul>
-                </div>
+                { role.responsibility ?
+                  <div className='flex-vertical'>
+                    <p className='text-bold'>Responsibilites</p>
+                    <p className='text-xsmall text-gray'>
+                      {role.responsibility}
+                    </p>
+                  </div> : ''
+                }
+                { role.qualifications ?
+                  <div className='flex-vertical'>
+                    <p className='text-bold'>
+                      Preferred Qualifications
+                    </p>
+                    <ul style={{padding: 0, margin: 0}}>
+                      {role.qualifications ?
+                        role.qualifications.map((qualification, index) => (
+                          <p
+                            className='text-xsmall text-gray'
+                            key={`qualification-${index}`}
+                          >
+                            {`· ${qualification}`}
+                          </p>
+                        )) : (
+                          <p className='text-xsmall text-gray'>None</p>
+                        )
+                      }
+                    </ul>
+                  </div> : ''
+                }
               </AccordionDetails>
             </Accordion>
           ))

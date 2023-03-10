@@ -73,7 +73,7 @@ export default function FetchWrapper() {
   useEffect(async () => {
     if (params.opportunityid) {
       await getOpportunity();
-      getOpportunityRoles();
+      await getOpportunityRoles();
     }
   }, []);
 
