@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import json
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -32,7 +31,7 @@ user = {
     'eventid': userId,
     'eventname': None, 
     'organization': None,
-    'description': 'Sales', # TODO: user about
+    'description': 'Sales',
     'eventdata': 'Dynamic Assurance Associate mollit adipisicing sit in ipsum Central Tactics Specialist Central Tactics Specialist',
 }
 df = pd.concat([df, pd.DataFrame(user, index=[0])], ignore_index=True)
@@ -47,7 +46,6 @@ df['description'] = df['description'].apply(clean_text)
 df['eventdata'] = df['eventdata'].apply(clean_text)
 
 # remove irrelevant columns
-# TODO: remove other irrelevant columns from actual data
 new_df = df.drop(['eventid'],axis=1)
 
 # add 'data' column with event name, organization, description
@@ -77,6 +75,7 @@ df = pd.DataFrame(
 ).reset_index()
 
 # choose 10 closest opps matching user
+# TODO: change so ordered list of opps returned for sorting
 recs = pd.DataFrame(df.nlargest(11, userId)['eventid'])
 recs = recs[recs['eventid'] != userId]
 

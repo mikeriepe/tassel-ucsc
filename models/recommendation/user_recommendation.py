@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import json
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -51,7 +50,7 @@ df = pd.DataFrame.from_dict(user_json)
 
 # add target opportunity to dataframe so can
 # be compared to users
-oppId = 'asfdgfh' # TODO: will be actual opp id 
+oppId = 'asfdgfh' # TODO: will be actual opp id
 opp = {
     'profileid': oppId,
     'userid': None,
@@ -94,6 +93,7 @@ df = pd.DataFrame(
 ).reset_index()
 
 # choose 10 closest users matching opp
+# TODO: change so ordered list of users returned
 recs = pd.DataFrame(df.nlargest(11, oppId)['profileid'])
 recs = recs[recs['profileid'] != oppId]
 
