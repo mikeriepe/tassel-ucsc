@@ -44,7 +44,7 @@ export default function OpportunityFilters({
   // Get filter lists from the database
   const locations = ['In-Person', 'Remote', 'Hybrid'];
   const [oppTypes, setOppTypes] = useState([]);
-  const [orgTypes, setOrgTypes] = useState([]);
+  // const [orgTypes, setOrgTypes] = useState([]);
   const [collapseLocation, setCollapseLocation] = useState(true);
   const [collapseOppType, setCollapseOppType] = useState(true);
   // const [collapseOrgType, setCollapseOrgType] = useState(true);
@@ -52,13 +52,13 @@ export default function OpportunityFilters({
   const handleCheckAll = () => {
     setLocationFilter(locations);
     setOppTypeFilter(oppTypes);
-    setOrgTypeFilter(orgTypes);
+    // setOrgTypeFilter(orgTypes);
   };
 
   const handleCheckNone = () => {
     setLocationFilter([]);
     setOppTypeFilter([]);
-    setOrgTypeFilter([]);
+    // setOrgTypeFilter([]);
   };
 
   // Handle checkboxes for location
@@ -134,6 +134,7 @@ export default function OpportunityFilters({
         });
   };
 
+  /*
   const getOrganizationTypes = () => {
     fetch(`/api/getOrganizationTypes`)
         .then((res) => {
@@ -151,10 +152,11 @@ export default function OpportunityFilters({
           alert('Error retrieving organization types');
         });
   };
+  */
 
   useEffect(() => {
     getOpportunityTypes();
-    getOrganizationTypes();
+    // getOrganizationTypes();
   }, []);
 
   return (

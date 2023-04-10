@@ -54,9 +54,11 @@ const Text = ({children}, props) => (
  * creates Dashboard upcoming events section
  * @return {HTML} Dashboard upcoming events component
  */
-export default function DashboardPendingReqs({data}) {
+export default function DashboardPendingReqs({
+  createdOpps,
+  getCreatedOpportunities,
+}) {
   const {userProfile} = useAuth();
-  const [createdOpps, setCreatedOpps] = useState([]);
   const [pendingOpps, setPendingOpps] = useState([]);
   const [page, setPage] = useState(0);
   const [selectedReq, setSelectedReq] = useState('Incoming Requests');
@@ -67,22 +69,6 @@ export default function DashboardPendingReqs({data}) {
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
-  const getCreatedOpportunities = () => {
-    fetch(`/api/getCreatedOpportunities/${userProfile.profileid}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then((json) => {
-          setCreatedOpps(json);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Error retrieving joined opportunities');
-        });
   };
 
   const getPendingOpportunities = () => {

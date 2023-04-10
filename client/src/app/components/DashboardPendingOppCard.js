@@ -42,8 +42,9 @@ export default function DashboardPendingOppCard({
   };
 
   useEffect(() => {
+    setRequests([]);
     getPendingRequestsReceived();
-  }, []);
+  }, [opportunity]);
 
   const formatDate = (date) => {
     const dateOptions = {
@@ -153,9 +154,9 @@ export default function DashboardPendingOppCard({
           </div>
         </TableCell>
         <TableCell>
-          <RequestsText>
+          {requests.length ? <RequestsText>
             {requests.length}
-          </RequestsText>
+          </RequestsText> : null}
         </TableCell>
       </TableRow>
     </>
