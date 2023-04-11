@@ -100,10 +100,10 @@ exports.getAllOpportunities = async () => {
  exports.postOpportunity = async (opportunityInfo, newUUID) => {
   const query = {
     text: `INSERT INTO opportunity 
-             (eventid, usersponsors, locationtype, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime, subject, assignedroles) 
-             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16), ($17), ($18), ($19), ($20), ($21), ($22))
+             (eventid, usersponsors, locationtype, eventlocation, eventzoomlink, organization, description, preferences, eventdata, startdate, enddate, active, eventbanner, eventname, userparticipants, organizationtype, opportunitytype, roles, starttime, endtime, subject, assignedroles, keywords) 
+             VALUES (($1), ($2), ($3), ($4), ($5), ($6), ($7), ($8), ($9), ($10), ($11), ($12), ($13), ($14), ($15), ($16), ($17), ($18), ($19), ($20), ($21), ($22), ($23))
              RETURNING eventid`,
-    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.locationtype, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, opportunityInfo.active, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants, opportunityInfo.organizationtype, opportunityInfo.opportunitytype, opportunityInfo.roles, opportunityInfo.starttime, opportunityInfo.endtime, opportunityInfo.subject, opportunityInfo.assignedroles],
+    values: [newUUID, opportunityInfo.usersponsors, opportunityInfo.locationtype, opportunityInfo.eventlocation, opportunityInfo.eventzoomlink, opportunityInfo.organization, opportunityInfo.description, opportunityInfo.preferences, opportunityInfo.eventdata, opportunityInfo.startdate, opportunityInfo.enddate, opportunityInfo.active, opportunityInfo.eventbanner, opportunityInfo.eventname, opportunityInfo.userparticipants, opportunityInfo.organizationtype, opportunityInfo.opportunitytype, opportunityInfo.roles, opportunityInfo.starttime, opportunityInfo.endtime, opportunityInfo.subject, opportunityInfo.assignedroles, opportunityInfo.keywords],
   };
   const {rows} = await pool.query(query);
   // console.log(rows);
@@ -145,8 +145,9 @@ exports.updateOpportunity= async (opportunity) => {
             opportunitytype=($10), startdate=($11), enddate=($12),
             roles=($13), starttime=($14), endtime=($15),
             locationtype=($16), eventlocation=($17), eventdata=($18),
-            subject=($19), assignedroles=($20), userparticipants=($21)
-          WHERE eventid=($22)
+            subject=($19), assignedroles=($20), userparticipants=($21),
+            keywords=($22)
+          WHERE eventid=($23)
           RETURNING eventid`,
     values: [opportunity.usersponsors, opportunity.eventzoomlink, opportunity.organization,
       opportunity.description, opportunity.preferences, opportunity.active,
@@ -155,7 +156,7 @@ exports.updateOpportunity= async (opportunity) => {
       opportunity.roles, opportunity.starttime, opportunity.endtime,
       opportunity.locationtype, opportunity.eventlocation, opportunity.eventdata,
       opportunity.subject, opportunity.assignedroles, opportunity.userparticipants,
-      opportunity.eventid
+      opportunity.keywords, opportunity.eventid
     ],
   };
 

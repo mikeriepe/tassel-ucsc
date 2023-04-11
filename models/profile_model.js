@@ -93,15 +93,16 @@ exports.updateProfile= async (userProfile) => {
     text: `UPDATE profile
           SET userpreference=($1), graduationyear=($2), major=($3),
            experience=($4), volunteeringexperience=($5), about=($6),
-           userlocation=($7), availability=($8),profilepicture=($9)
-          WHERE userid=($10)
+           userlocation=($7), availability=($8),profilepicture=($9),
+           keywords=($10)
+          WHERE userid=($11)
           RETURNING profileid`,
     values: [userProfile.userpreference, userProfile.graduationyear,
       userProfile.major, userProfile.experience,
       userProfile.volunteeringexperience,
       userProfile.about, userProfile.userlocation,
       userProfile.availability, userProfile.profilepicture,
-      userProfile.userid],
+      userProfile.keywords, userProfile.userid],
   };
 
   // Returns the newly created profile object's id
