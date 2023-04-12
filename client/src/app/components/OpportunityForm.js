@@ -49,24 +49,29 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   );
   const [roleError, setRoleError] = useState('');
   const maxRoles = 3;
+  console.log(defaultValues.keywords);
+  // Selected tags by the user
+  const [selectedTags, setSelectedTags] = useState(
+    defaultValues.keywords ?
+    Object.values(defaultValues.keywords) :
+    [],
+  );
+
+  // Filtered alltags array
+  let filteredAllTags =
+    ['Networking', 'Career Development', 'Social Events', 'Mentorship',
+      'Fundraising', 'Volunteer Opportunities', 'Diversity & Inclusion',
+      'Health & Wellness', 'Community Service', 'Entrepreneurship',
+      'Arts & Culture', 'International Events', 'Technology & Innovation',
+      'Sustainability', 'Research Opportunities', 'Continuing Education',
+      'Professional Development', 'Leadership', 'Slug Events',
+      'Campus Tours & Open Houses'];
+  filteredAllTags = filteredAllTags.filter((x) => !selectedTags.includes(x));
 
   // All tags array hardcoded for now
   // Will be stored in the DB in the future
   // setAllTags
-  const [allTags, setAllTags] = useState(
-      ['Networking', 'Career Development', 'Social Events', 'Mentorship',
-        'Fundraising', 'Volunteer Opportunities', 'Diversity & Inclusion',
-        'Health & Wellness', 'Community Service', 'Entrepreneurship',
-        'Arts & Culture', 'International Events', 'Technology & Innovation',
-        'Sustainability', 'Research Opportunities', 'Continuing Education',
-        'Professional Development', 'Leadership', 'Slug Events',
-        'Campus Tours & Open Houses']);
-  // Selected tags by the user
-  // Initialized to empty when creating a new opportunity
-  // It should be initialized to already selected tags in the db
-  // if the form is used to edit an opp
-  // setSelectedTags
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [allTags, setAllTags] = useState(filteredAllTags);
 
   const validationSchema = Yup.object().shape({
     eventname: Yup.string().required('Event name is required'),
