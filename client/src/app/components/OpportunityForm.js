@@ -10,6 +10,8 @@ import FormLabel from '@mui/material/FormLabel';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {toast} from 'react-toastify';
+import Chip from '@mui/material/Chip';
+// import Stack from '@mui/material/Stack';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -47,6 +49,24 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   );
   const [roleError, setRoleError] = useState('');
   const maxRoles = 3;
+
+  // All tags array hardcoded for now
+  // Will be stored in the DB in the future
+  // setAllTags
+  const [allTags, setAllTags] = useState(
+      ['Networking', 'Career Development', 'Social Events', 'Mentorship',
+        'Fundraising', 'Volunteer Opportunities', 'Diversity & Inclusion',
+        'Health & Wellness', 'Community Service', 'Entrepreneurship',
+        'Arts & Culture', 'International Events', 'Technology & Innovation',
+        'Sustainability', 'Research Opportunities', 'Continuing Education',
+        'Professional Development', 'Leadership', 'Slug Events',
+        'Campus Tours & Open Houses']);
+  // Selected tags by the user
+  // Initialized to empty when creating a new opportunity
+  // It should be initialized to already selected tags in the db
+  // if the form is used to edit an opp
+  // setSelectedTags
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const validationSchema = Yup.object().shape({
     eventname: Yup.string().required('Event name is required'),
@@ -103,6 +123,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
         .min(Yup.ref('starttime'), 'End time must be after start time')
         .required('End time is required'),
     subject: Yup.string().required('Subject is required'),
+    keywords: Yup.object().notRequired(),
   });
 
   const getOpportunityTypes = () => {
@@ -233,6 +254,39 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
     getOpportunityTypes();
   }, []);
 
+  const handleDeleteTag = (tagIndexToDelete) => () => {
+    const tempSelectedTags = [...selectedTags];
+    // add the to be deleted tag back to all tags
+    const tempAllTags = [...allTags];
+    tempAllTags.push(tempSelectedTags[tagIndexToDelete]);
+    // delete the tag from the selected tags array
+    tempSelectedTags.splice(tagIndexToDelete, 1);
+    // update the arrays
+    setSelectedTags(tempSelectedTags);
+    setAllTags(tempAllTags);
+  };
+
+  const handleAddTag = (tagIndexToAdd) => () => {
+    const tempAllTags = [...allTags];
+    // add the tag to the selected tags array
+    const tempSelectedTags = [...selectedTags];
+    tempSelectedTags.push(tempAllTags[tagIndexToAdd]);
+
+    // delete the to be added tag from all tags array
+    tempAllTags.splice(tagIndexToAdd, 1);
+    // update the arrays
+    setSelectedTags(tempSelectedTags);
+    setAllTags(tempAllTags);
+  };
+
+  const convertTagsToObject = (tags) => {
+    const tagsObject = {};
+    for (let i = 0; i < tags.length; i++) {
+      tagsObject[`keyword${i}`] = tags[i];
+    }
+    return tagsObject;
+  };
+
   return (
     <Paper
       sx={{
@@ -336,7 +390,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             register={register}
           />
 
-          <Box sx={{marginTop: '5px'}}>
+          <Box sx={{marginTop: '5px', marginBottom: '10px'}}>
             <Box sx={{
               marginBottom: '5px',
               display: 'grid',
@@ -401,6 +455,81 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
             }
             <FormHelperText sx={{color: 'red'}}>{roleError}</FormHelperText>
           </Box>
+          <FormLabel value='keywords'
+            sx={{display: 'flex',
+              position: 'relative',
+              fontSize: '12pt',
+              height: '25px',
+              top: '6px',
+              ml: '2px',
+            }}
+          >
+            Tags
+          </FormLabel>
+          <Box sx={{marginTop: '5px'}}>
+            <Box sx={{
+              display: 'grid',
+              gridAutoFlow: 'column',
+              gridGap: '5px',
+              backgroundColor: 'rgb(255, 255, 255)',
+              minHeight: '40px',
+              display: 'block',
+              padding: '5px',
+              borderRadius: '5px',
+            }}>
+              {/* Show the selected tags here */}
+              {selectedTags.map((tag, index) => (
+                <Chip
+                  label={tag}
+                  key={`role${index}`}
+                  id={index.toString()}
+                  sx={{
+                    padding: '5px',
+                    margin: '2px',
+                  }}
+                  onDelete={handleDeleteTag(index)}
+                />
+              ))}
+            </Box>
+            <FormLabel value='AllKeywords'
+              sx={{display: 'flex',
+                position: 'relative',
+                fontSize: '12pt',
+                height: '25px',
+                top: '6px',
+                ml: '2px',
+                mb: '4px',
+              }}
+            >
+              Add Tags
+            </FormLabel>
+            <Box sx={{
+              display: 'grid',
+              gridAutoFlow: 'column',
+              gridGap: '5px',
+              backgroundColor: 'rgb(255, 255, 255)',
+              minHeight: '40px',
+              display: 'block',
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+            >
+              {/* Show the all the tags here */}
+              {allTags.map((tag, index) => (
+                <Chip
+                  label={tag}
+                  key={`role${index}`}
+                  id={index.toString()}
+                  sx={{
+                    padding: '5px',
+                    margin: '2px',
+                  }}
+                  onClick={handleAddTag(index)}
+                />
+              ))}
+            </Box>
+          </Box>
+
         </Box>
 
         {/* RIGHT SECTION */}
@@ -591,6 +720,11 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
 
             // set curr roles in values
             setValue('roles', currRoles);
+
+            // Convert the selected tags to an object
+            const tagstToSubmit = convertTagsToObject(selectedTags);
+            setValue('keywords', tagstToSubmit);
+
             handleSubmit(onSubmit)();
           }}
         >
