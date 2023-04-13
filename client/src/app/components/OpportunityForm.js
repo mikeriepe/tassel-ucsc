@@ -32,6 +32,26 @@ import {DateInput} from './DateInput';
  */
 export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const [opportunityTypes, setOpportunityTypes] = useState([]);
+  const [keywords, setKeywords] = useState(null);
+
+  const getKeywords = () => {
+    fetch(`/api/getKeywords`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log(json);
+          setKeywords(json);
+          console.log(keywords);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving keywords, please try again');
+        });
+  };
 
   const [currLocationType, setCurrLocationType] = useState(
       defaultValues.locationtype,
@@ -231,6 +251,7 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
 
   useEffect(() => {
     getOpportunityTypes();
+    getKeywords();
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, Box} from '@mui/material';
 import {styled} from '@mui/material';
 import MuiBox from '@mui/material/Box';
@@ -68,6 +68,25 @@ export default function UpdateProfile() {
   const [showVolunteerForm, setShowVolunteerForm] = useState(false);
   const [showDeleteVolunteerModal,
     setShowDeleteVolunteerModal] = useState(false);
+  const [keywords, setKeywords] = useState(null);
+
+  const getKeywords = () => {
+    fetch(`/api/getKeywords`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setKeywords(json);
+          console.log(keywords);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving keywords, please try again');
+        });
+  };
 
   if (userProfile.experience === null) {
     userProfile.experience = {};
@@ -119,6 +138,10 @@ export default function UpdateProfile() {
     updateLocalUserProfileData();
     updateProfile();
   };
+
+  useEffect(() => {
+    getKeywords();
+  }, []);
 
   return (
     <Page>
