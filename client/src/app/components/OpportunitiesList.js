@@ -60,16 +60,25 @@ export default function OpportunitiesList({
   });
 
   const profileKeywords = [];
-  const keys = Object.keys(userProfile.keywords);
-  keys.forEach(function(key) {
-    profileKeywords.push(userProfile.keywords[key]);
-  });
+  const numProfileKeywords = Object.keys(userProfile.keywords).length;
+  if (userProfile.keywords !== null && numProfileKeywords !== 0 ) {
+    const keys = Object.keys(userProfile.keywords);
+    keys.forEach(function(key) {
+      profileKeywords.push(userProfile.keywords[key]);
+    });
+  }
 
   const calcNumMatchKeywords = ((opp) => {
     const oppKeywords = [];
-    if (opp.keywords === null) {
+    if (opp.keywords === null || userProfile.keywords === null ||
+      numProfileKeywords === 0) {
       return 0;
     } else {
+      const numOppKeywords = Object.keys(opp.keywords).length;
+      console.log(numOppKeywords);
+      if (numOppKeywords === 0) {
+        return 0;
+      }
       const keys = Object.keys(opp.keywords);
       keys.forEach(function(key) {
         oppKeywords.push(userProfile.keywords[key]);
