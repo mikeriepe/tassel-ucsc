@@ -34,7 +34,14 @@ import {DateInput} from './DateInput';
  */
 export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   const [opportunityTypes, setOpportunityTypes] = useState([]);
-  const [keywords, setKeywords] = useState(null);
+
+  // Selected tags by the user
+  const [selectedTags, setSelectedTags] = useState(
+    defaultValues.keywords ?
+    Object.values(defaultValues.keywords) :
+    [],
+  );
+  const [allTags, setAllTags] = useState([]);
 
   const getKeywords = () => {
     fetch(`/api/getKeywords`)
@@ -45,9 +52,13 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
           return res.json();
         })
         .then((json) => {
-          console.log(json);
-          setKeywords(json);
-          console.log(keywords);
+          const tempKeywords = [];
+          for (let i = 0; i < json.length; i++) {
+            tempKeywords.push(json[i].value);
+          }
+          const filteredAllTags = tempKeywords.
+              filter((x) => !selectedTags.includes(x));
+          setAllTags(filteredAllTags);
         })
         .catch((err) => {
           console.log(err);
@@ -69,30 +80,10 @@ export default function OpportunityForm({onClose, defaultValues, onSubmit}) {
   );
   const [roleError, setRoleError] = useState('');
   const maxRoles = 3;
-  console.log(defaultValues.keywords);
-  // Selected tags by the user
-  const [selectedTags, setSelectedTags] = useState(
-    defaultValues.keywords ?
-    Object.values(defaultValues.keywords) :
-    [],
-  );
-
-  // Filtered alltags array
-  let filteredAllTags =
-    ['Networking', 'Career Development', 'Social Events', 'Mentorship',
-      'Fundraising', 'Volunteer Opportunities', 'Diversity & Inclusion',
-      'Health & Wellness', 'Community Service', 'Entrepreneurship',
-      'Arts & Culture', 'International Events', 'Technology & Innovation',
-      'Sustainability', 'Research Opportunities', 'Continuing Education',
-      'Professional Development', 'Leadership', 'Slug Events',
-      'Campus Tours & Open Houses'];
-  filteredAllTags = filteredAllTags.filter((x) => !selectedTags.includes(x));
-
   // All tags array hardcoded for now
   // Will be stored in the DB in the future
   // setAllTags
-  const [allTags, setAllTags] = useState(filteredAllTags);
-
+  // const [allTags, setAllTags] = useState(filteredAllTags);
   const validationSchema = Yup.object().shape({
     eventname: Yup.string().required('Event name is required'),
     locationtype: Yup.string().required('Location type is required'),
