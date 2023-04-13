@@ -60,7 +60,10 @@ export default function OpportunitiesList({
   });
 
   const profileKeywords = [];
-  const numProfileKeywords = Object.keys(userProfile.keywords).length;
+  let numProfileKeywords = 0;
+  if (userProfile.keywords !== null) {
+    numProfileKeywords = Object.keys(userProfile.keywords).length;
+  }
   if (userProfile.keywords !== null && numProfileKeywords !== 0 ) {
     const keys = Object.keys(userProfile.keywords);
     keys.forEach(function(key) {
