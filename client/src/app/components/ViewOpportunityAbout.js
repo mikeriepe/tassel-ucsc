@@ -10,6 +10,7 @@ import ThemedButton from './ThemedButton';
 import RequestModal from './RequestOpportunityModal';
 import useAuth from '../util/AuthContext';
 import {toast} from 'react-toastify';
+import Chip from '@mui/material/Chip';
 
 /**
  * About tab for view opportunity
@@ -22,6 +23,7 @@ export default function ViewOpportunityAbout({
   opportunityName,
   creator,
   opportunityid,
+  tags,
 }) {
   return (
     <>
@@ -32,6 +34,9 @@ export default function ViewOpportunityAbout({
         opportunityName={opportunityName}
         creator={creator}
         opportunityid={opportunityid}
+      />
+      <TagsCard
+        tags={tags}
       />
     </>
   );
@@ -66,6 +71,48 @@ function DescriptionCard({description}) {
       </h4>
       <p>{description}</p>
     </Description>
+  );
+}
+
+const TagsPaper = styled((props) => (
+  <MuiPaper elevation={0} {...props} />
+))(() => ({
+  display: 'block',
+  flexDirection: 'column',
+  marginTop: '1em',
+  padding: '1.5em 2em 1.5em 2em',
+  height: 'auto',
+  width: 'auto',
+  background: 'white',
+  boxShadow: '0px 4px 50px -15px rgba(0, 86, 166, 0.15)',
+  border: '0.5px solid rgba(0, 0, 0, 0.15)',
+  borderRadius: '10px',
+}));
+
+/**
+ * Opportunity tags card
+ * @return {JSX}
+ */
+function TagsCard({tags}) {
+  // convert tags to an array
+  const tagsArr = tags ? Object.values(tags) : [];
+  return (
+    <TagsPaper>
+      <h4 className='text-dark' style={{paddingBottom: '1.5em'}}>
+        Tags
+      </h4>
+      {tagsArr && tagsArr.map((tag, index) => (
+        <Chip
+          label={tag}
+          key={`role${index}`}
+          id={index.toString()}
+          sx={{
+            padding: '5px',
+            margin: '2px',
+          }}
+        />
+      ))}
+    </TagsPaper>
   );
 }
 
