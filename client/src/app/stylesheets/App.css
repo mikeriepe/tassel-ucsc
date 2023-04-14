@@ -336,10 +336,10 @@ a, a:hover, a:focus, a:active {
   display: inline-block;
   padding: 5px;
   margin: 5px;
-  background-color: #13A5DC;
-  border-radius: 10%;
+  background-color: #bdbdbd;
+  border-radius: 20px;
   font-size: 12px;
-  color: #fff;
+  color: #3C4047;
   cursor: pointer;
 
 }

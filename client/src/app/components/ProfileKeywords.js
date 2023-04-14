@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {styled} from '@mui/material';
 import MuiPaper from '@mui/material/Paper';
+import Chip from '@mui/material/Chip';
 
 const Keywords = styled((props) => (
   <MuiPaper elevation={0} {...props} />
@@ -22,14 +23,21 @@ const Keywords = styled((props) => (
  */
 export default function ProfileKeywords({data}) {
   const labels= data;
+  console.log(data);
   return (
     <Keywords>
-      <h4 className='text-dark'>Keywords</h4>
+      <h4 className='text-dark'>Interests</h4>
       <div>
-        {Object.keys(labels).map((key) => (
-          <div key={key} className="label-box">
-            <span className="label">{labels[key]}</span>
-          </div>
+        {Object.keys(labels).map((key, index) => (
+          <Chip
+            label={labels[key]}
+            key={`role${index}`}
+            id={index.toString()}
+            sx={{
+              padding: '5px',
+              margin: '2px',
+            }}
+          />
         ))}
       </div>
     </Keywords>

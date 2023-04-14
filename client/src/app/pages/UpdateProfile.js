@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Modal, Box} from '@mui/material';
 import {styled} from '@mui/material';
 import MuiBox from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import {toast} from 'react-toastify';
 import useAuth from '../util/AuthContext';
 import ThemedInput from '../components/ThemedInput';
 import ThemedButton from '../components/ThemedButton';
 import {InputContext} from '../components/ThemedInput';
-import CancelIcon from '@mui/icons-material/Cancel';
 import {Link} from 'react-router-dom';
 import WorkExperienceList from '../components/WorkExperienceList';
 import AddIcon from '@mui/icons-material/Add';
@@ -114,6 +114,7 @@ export default function UpdateProfile() {
         })
         .then((json) => {
           setKeywords(json);
+          console.log(json);
           const tempKeywords = [];
           for (let i = 0; i < json.length; i++) {
             tempKeywords.push(json[i].value);
@@ -357,13 +358,13 @@ export default function UpdateProfile() {
                     style={{background: 'var(--background-primary)'}}
                   >
                     <p className='text-bold'>
-                    Keywords
+                    Interests
                     </p>
                   </div>
                   <div className='flex'>
                     <div className='flex-justify-center'>
                       <p className='flex-justify-center
-                      text-bold'>Your Keywords
+                      text-bold'>Your Interests
                       </p>
                     </div>
                     <div>
@@ -371,13 +372,16 @@ export default function UpdateProfile() {
                     <div className='border'>
                       {selectedTags.map((label, index) => (
                         <div key={index} className="label-box">
-                          <span className="label"
-                          >
-                            {label}
-                            <CancelIcon className="delete-icon"
-                              onClick={handleDeleteTag(index)}
-                              fontSize='small'/>
-                          </span>
+                          <Chip
+                            label={label}
+                            key={`role${index}`}
+                            id={index.toString()}
+                            sx={{
+                              padding: '5px',
+                              margin: '2px',
+                            }}
+                            onDelete={handleDeleteTag(index)}
+                          />
 
                         </div>
                       ))}
@@ -386,18 +390,22 @@ export default function UpdateProfile() {
                     </div>
                     <div>
                       <p className='flex-justify-center
-                      text-bold '>All Keywords</p>
+                      text-bold '>Categories</p>
 
                       <div>
                         {keywords &&
                     <div className='border'>
                       {allTags.map((label, index) => (
-                        <div key={index} className="label-box">
-                          <span className="label" onClick={handleAddTag(index)}
-                          >
-                            {label}</span>
-
-                        </div>
+                        <Chip
+                          label={label}
+                          key={`role${index}`}
+                          id={index.toString()}
+                          sx={{
+                            padding: '5px',
+                            margin: '2px',
+                          }}
+                          onClick={handleAddTag(index)}
+                        />
                       ))}
                     </div>
                         }
