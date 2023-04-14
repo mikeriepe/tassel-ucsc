@@ -10,6 +10,7 @@ import ProfileHeader from '../components/ProfileHeader';
 import ProfileAbout from '../components/ProfileAbout';
 import ProfileWork from '../components/ProfileWork';
 import ProfileVolunteer from '../components/ProfileVolunteer';
+import ProfileKeywords from '../components/ProfileKeywords';
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -82,6 +83,7 @@ export default function Profile() {
           <ProfileAbout data={userProfile?.about}/>
           <ProfileWork data={userProfile?.experience} />
           <ProfileVolunteer data={userProfile?.volunteeringexperience} />
+          <ProfileKeywords data={userProfile?.keywords}/>
           {user && user.userid === userProfile.userid &&
             <Button onClick={handleDeactivateAccount}>
               Deactivate Account
