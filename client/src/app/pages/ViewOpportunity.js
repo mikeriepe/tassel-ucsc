@@ -225,6 +225,7 @@ function ViewOpportunity({opportunity}) {
           isCreator={isCreator && isCreator}
           description={opportunity?.description}
           roles={opportunity?.roles}
+          tags={opportunity?.keywords}
         />,
     },
     {
