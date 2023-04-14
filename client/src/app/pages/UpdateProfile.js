@@ -70,25 +70,6 @@ export default function UpdateProfile() {
   const [showVolunteerForm, setShowVolunteerForm] = useState(false);
   const [showDeleteVolunteerModal,
     setShowDeleteVolunteerModal] = useState(false);
-  const [keywords, setKeywords] = useState(null);
-
-  const getKeywords = () => {
-    fetch(`/api/getKeywords`)
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-        })
-        .then((json) => {
-          setKeywords(json);
-          console.log(keywords);
-        })
-        .catch((err) => {
-          console.log(err);
-          alert('Error retrieving keywords, please try again');
-        });
-  };
 
   const [keywords, setKeywords] = useState(null);
   const [selectedTags, setSelectedTags] = useState(
