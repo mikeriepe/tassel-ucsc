@@ -7,6 +7,7 @@ import useAuth from '../util/AuthContext';
 import ThemedInput from '../components/ThemedInput';
 import ThemedButton from '../components/ThemedButton';
 import {InputContext} from '../components/ThemedInput';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {Link} from 'react-router-dom';
 import WorkExperienceList from '../components/WorkExperienceList';
 import AddIcon from '@mui/icons-material/Add';
@@ -371,8 +372,12 @@ export default function UpdateProfile() {
                       {selectedTags.map((label, index) => (
                         <div key={index} className="label-box">
                           <span className="label"
-                            onClick={handleDeleteTag(index)}>
-                            {label}</span>
+                          >
+                            {label}
+                            <CancelIcon className="delete-icon"
+                              onClick={handleDeleteTag(index)}
+                              fontSize='small'/>
+                          </span>
 
                         </div>
                       ))}

@@ -346,7 +346,12 @@ a, a:hover, a:focus, a:active {
 .label-box{
 display: inline-block;
 }
-
+.delete-icon {
+  
+  margin-left: 5px;
+  color: #fff;
+  cursor: pointer;
+}
 .border{
   border-color: #8B95A5;
   border-style: solid;
