@@ -336,12 +336,23 @@ a, a:hover, a:focus, a:active {
   display: inline-block;
   padding: 5px;
   margin: 5px;
-  background-color: #C0C4CB;
+  background-color: #13A5DC;
   border-radius: 10%;
   font-size: 12px;
-  color: #7E8694;
+  color: #fff;
+  cursor: pointer;
 
 }
 .label-box{
 display: inline-block;
+}
+
+.border{
+  border-color: #8B95A5;
+  border-style: solid;
+  border-width: 0.75px;
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
 }

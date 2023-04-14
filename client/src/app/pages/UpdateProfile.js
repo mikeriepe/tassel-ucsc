@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, Box} from '@mui/material';
 import {styled} from '@mui/material';
 import MuiBox from '@mui/material/Box';
@@ -18,6 +18,7 @@ import VolunteerExperienceForm from '../components/VolunteerExperienceForm';
 import VolunteerExperienceDeleteModal from
   '../components/VolunteerExperienceDeleteModal';
 import VolunteerExperienceList from '../components/VolunteerExperienceList';
+
 
 const Page = styled((props) => (
   <MuiBox {...props} />
@@ -69,11 +70,71 @@ export default function UpdateProfile() {
   const [showDeleteVolunteerModal,
     setShowDeleteVolunteerModal] = useState(false);
 
+  const [keywords, setKeywords] = useState(null);
+  const [selectedTags, setSelectedTags] = useState(
+    userProfile.keywords ?
+    Object.values(userProfile.keywords) :
+    [],
+  );
+
+  const [allTags, setAllTags] = useState([]);
+  const handleDeleteTag = (tagIndexToDelete) => () => {
+    const tempSelectedTags = [...selectedTags];
+    // add the to be deleted tag back to all tags
+    const tempAllTags = [...allTags];
+    tempAllTags.push(tempSelectedTags[tagIndexToDelete]);
+    // delete the tag from the selected tags array
+    tempSelectedTags.splice(tagIndexToDelete, 1);
+    // update the arrays
+    setSelectedTags(tempSelectedTags);
+    setAllTags(tempAllTags);
+  };
+
+  const handleAddTag = (tagIndexToAdd) => () => {
+    const tempAllTags = [...allTags];
+    // add the tag to the selected tags array
+    const tempSelectedTags = [...selectedTags];
+    tempSelectedTags.push(tempAllTags[tagIndexToAdd]);
+
+    // delete the to be added tag from all tags array
+    tempAllTags.splice(tagIndexToAdd, 1);
+    // update the arrays
+    setSelectedTags(tempSelectedTags);
+    setAllTags(tempAllTags);
+  };
+
+  const getKeywords = () => {
+    fetch(`/api/getKeywords`)
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          setKeywords(json);
+          const tempKeywords = [];
+          for (let i = 0; i < json.length; i++) {
+            tempKeywords.push(json[i].value);
+          }
+          const filteredAllTags = tempKeywords.
+              filter((x) => !selectedTags.includes(x));
+          setAllTags(filteredAllTags);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Error retrieving keywords, please try again');
+        });
+  };
+
   if (userProfile.experience === null) {
     userProfile.experience = {};
   }
   if (userProfile.volunteeringexperience === null) {
     userProfile.volunteeringexperience = {};
+  }
+  if (userProfile.keywords === null) {
+    userProfile.keywords = {};
   }
 
   const [values, setValues] = useState({
@@ -82,6 +143,7 @@ export default function UpdateProfile() {
       major: userProfile.major,
       userlocation: userProfile.userlocation,
       about: userProfile.about,
+      keywords: userProfile.keywords,
     },
   });
   const updateProfile = () => {
@@ -114,11 +176,23 @@ export default function UpdateProfile() {
     userProfile.userlocation = values[1].userlocation;
     userProfile.about = values[1].about;
   };
-
+  const convertTagsToObject = (tags) => {
+    const tagsObject = {};
+    for (let i = 0; i < tags.length; i++) {
+      tagsObject[`keyword${i}`] = tags[i];
+    }
+    return tagsObject;
+  };
   const handleSubmit = (e) => {
+    const tagsToSubmit = convertTagsToObject(selectedTags);
+    userProfile.keywords = tagsToSubmit;
     updateLocalUserProfileData();
     updateProfile();
   };
+
+  useEffect(() => {
+    getKeywords();
+  }, []);
 
   return (
     <Page>
@@ -276,6 +350,58 @@ export default function UpdateProfile() {
                   <VolunteerExperienceList
                     volunteerExperience={userProfile.volunteeringexperience} />
                 </div>
+                <div className='grid-flow-small'>
+                  <div
+                    className='flex-space-between flex-align-center'
+                    style={{background: 'var(--background-primary)'}}
+                  >
+                    <p className='text-bold'>
+                    Keywords
+                    </p>
+                  </div>
+                  <div className='flex'>
+                    <div className='flex-justify-center'>
+                      <p className='flex-justify-center
+                      text-bold'>Your Keywords
+                      </p>
+                    </div>
+                    <div>
+                      {keywords &&
+                    <div className='border'>
+                      {selectedTags.map((label, index) => (
+                        <div key={index} className="label-box">
+                          <span className="label"
+                            onClick={handleDeleteTag(index)}>
+                            {label}</span>
+
+                        </div>
+                      ))}
+                    </div>
+                      }
+                    </div>
+                    <div>
+                      <p className='flex-justify-center
+                      text-bold '>All Keywords</p>
+
+                      <div>
+                        {keywords &&
+                    <div className='border'>
+                      {allTags.map((label, index) => (
+                        <div key={index} className="label-box">
+                          <span className="label" onClick={handleAddTag(index)}
+                          >
+                            {label}</span>
+
+                        </div>
+                      ))}
+                    </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
               </div>
               <div className='grid-flow-small'>
                 <div className='flex-flow-large'>
@@ -336,6 +462,7 @@ export default function UpdateProfile() {
         <VolunteerExperienceDeleteModal onClose={() =>
           setShowDeleteVolunteerModal(!showDeleteVolunteerModal)}/>
       </Modal>
+
     </Page>
   );
 }

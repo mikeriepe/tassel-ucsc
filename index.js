@@ -48,6 +48,8 @@ const majorApi = require('./models/major_api');
 // Role API
 const roleApi = require('./models/role_api');
 
+// Keywords API
+const keywordsApi = require('./models/keywords_api');
 
 require('dotenv').config();
 
@@ -234,6 +236,11 @@ app.post('/api/postRole', authApi.check, roleApi.postRole );
 app.put('/api/updateRoleFill', authApi.check, roleApi.updateRoleFill);
 
 app.delete('/api/deleteRole', authApi.check, roleApi.deleteRole);
+
+// Keywords CRUD operations
+//
+//
+app.get('/api/getKeywords', authApi.check, keywordsApi.getKeywords);
 
 // AUTH
 //
